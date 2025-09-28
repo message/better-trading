@@ -1,0 +1,282 @@
+/* Fontin Small Caps */
+@font-face {
+	font-family: "FontinSmallCaps";
+	font-weight: normal;
+	font-style: normal;
+	src: local("☺"), url('/fonts/fontin-smallcaps-webfont.woff') format("woff")
+}
+
+/* Fontin Regular */
+@font-face {
+	font-family: "FontinRegular";
+	font-weight: normal;
+	font-style: normal;
+	src: local("☺"), url('/fonts/fontin-regular-webfont.woff') format("woff")
+}
+
+/* Fontin Italic */
+@font-face {
+	font-family: "FontinItalic";
+	font-weight: normal;
+	font-style: normal;
+	src: local("☺"), url('/fonts/fontin-italic-webfont.woff') format("woff")
+}
+
+/* Fontin Bold */
+@font-face {
+	font-family: "FontinBold";
+	font-weight: normal;
+	font-style: normal;
+	src: local("☺"), url('/fonts/fontin-bold-webfont.woff') format("woff")
+}
+
+/* Cinzel Regular */
+@font-face {
+	font-family: "Cinzel";
+	font-weight: normal;
+	font-style: normal;
+	src: local("Cinzel-Regular"), url('/fonts/Cinzel-Regular.woff') format("woff")
+}
+
+/* Cinzel Medium */
+@font-face {
+	font-family: "Cinzel-Medium";
+	font-weight: normal;
+	font-style: normal;
+	src: local("Cinzel-Medium"), url('/fonts/Cinzel-Medium.woff') format("woff")
+}
+
+/* Optimus Princeps SemiBold */
+@font-face {
+	font-family: "OptimusPrincepsSemiBold";
+	font-weight: bold;
+	font-style: normal;
+	src: local("☺"), url('/fonts/OptimusPrincepsSemiBold.ttf') format("truetype")
+}
+
+/* Friz Quadrata C */
+@font-face {
+	font-family: "FrizQuadrataC";
+	font-weight: normal;
+	font-style: normal;
+	src: local("☺"), url('/fonts/FrizQuadrataC.woff') format("woff")
+}
+
+/* Daehan */
+@font-face {
+	font-family: "Daehan";
+	font-weight: normal;
+	font-style: normal;
+	src: local("☺"), url('/fonts/Daehan.woff') format("woff")
+}
+
+/* Noto Sans JP */
+@font-face {
+	font-family: "Noto Sans JP";
+	font-weight: normal;
+	font-style: normal;
+	src: local("☺"), url('/fonts/noto-sans-jp-v42-latin_japanese-regular.woff2') format("woff2"), url('/fonts/noto-sans-jp-v42-latin_japanese-regular.woff') format("woff")
+}
+
+/* Noto Serif JP */
+@font-face {
+	font-family: "Noto Serif JP";
+	font-weight: normal;
+	font-style: normal;
+	src: local("☺"), url('/fonts/noto-serif-jp-v21-latin_japanese-regular.woff2') format("woff2"), url('/fonts/noto-serif-jp-v21-latin_japanese-regular.woff') format("woff")
+}
+
+/* Quikhand */
+@font-face {
+	font-family: "Quikhand";
+	font-style: normal;
+	font-weight: normal;
+	src: local("Quikhand"), url('/fonts/Quikhand.woff') format("woff")
+}
+
+/* Caveat Bold */
+@font-face {
+	font-family: "Caveat-Bold";
+	font-style: normal;
+	font-weight: normal;
+	src: local("Caveat-Bold"), url('/fonts/Caveat-Bold.woff2') format("woff2")
+}
+
+html {
+	font-family: "FontinSmallCaps", Verdana, Arial, Helvetica, sans-serif;
+	font-size-adjust: .54;
+	font-weight: normal;
+}
+
+html[lang="zh-CN"] {
+	font-family: "Microsoft YaHei", Verdana, Arial, Helvetica, sans-serif;
+}
+
+html[lang="zh-TW"] {
+	font-family: 微軟正黑, "Microsoft JhengHei", 新明細體, Verdana, Arial, Helvetica, sans-serif;
+}
+
+html[lang="ru-RU"] {
+	font-family: FrizQuadrataC, Verdana, Arial, Helvetica, sans-serif;
+}
+
+html[lang="ko-KR"] {
+	font-family: "맑은 고딕", "Malgun Gothic", Verdana, Arial, Helvetica, sans-serif;
+	letter-spacing: -0.025em;
+}
+
+html[lang="ja-JP"] {
+	font-family: "Noto Sans JP", Verdana, Arial, Helvetica, sans-serif;
+	letter-spacing: -0.025em;
+}
+
+/* Fonts */
+
+a {
+	color: #E9CF9F
+}
+
+/* Base dark background applied immediately (before external CSS loads) */
+html, body,
+.sb-preparing-story, .sb-preparing-docs, .sb-previewBlock, .sb-previewBlock table {
+	background: #0A0A0A !important;
+	color: #FFFFFF !important;
+}
+
+/* Dark autodocs overrides: ensure all docs surfaces use extension dark background */
+.sbdocs, .sbdocs-wrapper, .sbdocs-content, .docs-story, [data-storybook='docs-root'] {
+	background-color: #0A0A0A !important;
+	color: #FFFFFF;
+}
+
+.sbdocs a {
+	color: #E9CF9F;
+}
+
+.sbdocs code, .sbdocs pre {
+	background: #1A1A1A;
+	color: #E9CF9F;
+}
+
+/* Tables in docs */
+.sbdocs table {
+	background: #121212;
+}
+
+.sbdocs th, .sbdocs td {
+	border-color: #222222;
+}
+
+/* --- Dark Theme Forced Overrides for Storybook Light Skeleton Elements --- */
+/* These overrides ensure any Storybook default (light) loader / skeleton styles conform to the
+   extension's dark theme. All potentially light backgrounds and borders are overridden with
+   !important to win against inline & higher-specificity Storybook styles. */
+:root {
+  --btwxt-bg-base: #0A0A0A;
+  --btwxt-bg-surface: #121212;
+  --btwxt-bg-elevated: #181818;
+  --btwxt-border-color: #222222;
+  --btwxt-border-color-subtle: #1A1A1A;
+  --btwxt-accent: #E9CF9F;
+}
+
+/* Loading overlays */
+.sb-preparing-story, .sb-preparing-docs {
+  background-color: var(--btwxt-bg-base) !important;
+  color: #FFFFFF !important;
+}
+
+/* Preview block (skeleton container) */
+.sb-previewBlock {
+  background: var(--btwxt-bg-base) !important;
+  border: 1px solid var(--btwxt-border-color) !important;
+  box-shadow: none !important;
+}
+
+.sb-previewBlock_header {
+  background: var(--btwxt-bg-surface) !important;
+  box-shadow: inset 0 -1px 0 0 var(--btwxt-border-color) !important;
+}
+
+.sb-previewBlock_body {
+  background: var(--btwxt-bg-base) !important;
+}
+
+.sb-previewBlock_icon {
+  background: #222222 !important;
+}
+
+/* Args table skeleton */
+.sb-argstableBlock-body td {
+  background: var(--btwxt-bg-elevated) !important;
+  border-color: var(--btwxt-border-color) !important;
+}
+
+.sb-argstableBlock-body tr:not(:first-child) {
+  border-top: 1px solid var(--btwxt-border-color) !important;
+}
+
+.sb-argstableBlock th span,
+.sb-argstableBlock td span,
+.sb-argstableBlock-body button {
+  background-color: #222222 !important;
+  color: transparent !important; /* keep hidden placeholder text */
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+/* Remove any residual light translucent placeholders */
+.sb-argstableBlock-body button {
+  background-image: none !important;
+}
+
+/* Remove light box-shadow on argstable container for consistency */
+.sb-argstableBlock-body { box-shadow: none !important; }
+
+/* General tables already dark, ensure consistency */
+.sb-previewBlock table,
+.sb-argstableBlock,
+.sb-argstableBlock-body {
+  background: var(--btwxt-bg-base) !important;
+}
+
+/* Harmonize borders inside docs & preview skeletons */
+.sbdocs table,
+.sbdocs th,
+.sbdocs td,
+.sb-argstableBlock-body td,
+.sb-argstableBlock-body tr {
+  border-color: var(--btwxt-border-color) !important;
+}
+
+/* Override Storybook shimmer/glow animation to a subtle dark pulse */
+@-webkit-keyframes sb-glow { /* dark replacement */
+  0%, 100% { background-color: #1A1A1A; }
+  50% { background-color: #222222; }
+}
+@keyframes sb-glow {
+  0%, 100% { background-color: #1A1A1A; }
+  50% { background-color: #222222; }
+}
+
+/* Ensure any element using the glow inherits our dark palette */
+.sb-previewBlock_icon,
+.sb-argstableBlock th span,
+.sb-argstableBlock td span,
+.sb-argstableBlock-body button,
+.sb-previewBlock_body [class*='skeleton'],
+.sb-previewBlock_body [data-skeleton] {
+  background-color: #1A1A1A !important;
+}
+
+/* Final safeguard: blanket override for any white / near-white backgrounds inside Storybook preview root */
+.sbdocs [style*='background: white'],
+.sbdocs [style*='background: #fff'],
+.sbdocs [style*='background:#fff'],
+.sbdocs [style*='background-color: white'],
+.sbdocs [style*='background-color: #fff'],
+.sb-previewBlock [style*='background: white'],
+.sb-previewBlock [style*='background: #fff'] {
+  background: var(--btwxt-bg-base) !important;
+}
+/* --- End dark overrides --- */

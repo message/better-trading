@@ -3,5 +3,8 @@
   "compilerOptions": {
     "allowImportingTsExtensions": true,
     "jsx": "react-jsx"
-  }
+  },
+  "exclude": [
+    "old-extension" // TODO: remove this when the old extension is deleted
+  ]
 }

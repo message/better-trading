@@ -1,0 +1,16 @@
+<!-- Applied to the Storybook manager (outer UI) document -->
+<meta name="color-scheme" content="dark" />
+<style>
+  /* Force dark shell so when preview iframe reloads there's no white flash */
+  html, body,
+  #storybook-preview-wrapper,
+  .css-mzrf51 {
+	  background: #0A0A0A !important;
+	  color: #FFFFFF !important;
+  }
+  /* Ensure the iframe element itself is dark before its content paints */
+  #storybook-preview-iframe { background:#0A0A0A !important; }
+  /* Remove default transitions that can cause brief light flickers */
+  * { transition: none !important; }
+</style>
+

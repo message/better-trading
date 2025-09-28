@@ -1,6 +1,7 @@
 import type { Preview } from '@storybook/react-vite';
 import React from 'react';
 import '../styles/app.scss';
+import { docsTheme } from './theme'; // added
 
 // The preview object configures global Storybook parameters & globals.
 const preview: Preview = {
@@ -37,6 +38,9 @@ const preview: Preview = {
         { name: 'transparent', value: 'transparent' },
         { name: 'white', value: '#FFFFFF' },
       ],
+    },
+    docs: { // added
+      theme: docsTheme,
     },
   },
 };

@@ -1,23 +1,23 @@
-import type { StorybookConfig } from "@storybook/react-vite";
+import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
   stories: [
-    "../{stories,components}/**/*.mdx",
-    "../{stories,components}/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    '../{stories,components}/**/*.mdx',
+    '../{stories,components}/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
   addons: [
-    "@storybook/addon-onboarding",
-    "@storybook/addon-links",
-    "@storybook/addon-docs",
-    "@chromatic-com/storybook", // decide on this or test-codegen
-    "storybook-addon-test-codegen" // decide on this or chromatic
+    '@storybook/addon-onboarding',
+    '@storybook/addon-links',
+    '@storybook/addon-docs',
+    '@chromatic-com/storybook', // decide on this or test-codegen
+    'storybook-addon-test-codegen', // decide on this or chromatic
   ],
-  staticDirs: ["static"],
+  staticDirs: ['static', '../public'],
   framework: {
-    name: "@storybook/react-vite",
+    name: '@storybook/react-vite',
     options: {
       builder: {
-        viteConfigPath: ".storybook/vite.config.ts",
+        viteConfigPath: '.storybook/vite.config.ts',
       },
     },
   },
