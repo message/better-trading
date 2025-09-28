@@ -1,0 +1,26 @@
+.bt-header__control {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--bt-color-white);
+	font-size: 20px;
+	line-height: 1;
+	text-decoration: none;
+	cursor: pointer;
+	transition: color var(--bt-transition-fast);
+}
+
+.bt-header__control:hover,
+.bt-header__control:focus-visible {
+	color: color-mix(in srgb, var(--bt-color-white) 80%, transparent 20%);
+}
+
+.bt-header__control:focus-visible {
+	outline: 2px solid rgba(255, 255, 255, 0.3);
+	outline-offset: 2px;
+}

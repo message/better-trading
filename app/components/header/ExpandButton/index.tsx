@@ -1,6 +1,7 @@
+import './style.css';
 import React from 'react';
-import { cx } from '../../lib/classnames';
-import { AngleLeftIcon } from '../icons';
+import { cx } from '../../../lib/classnames';
+import { AngleLeftIcon } from '../../icons';
 
 export interface ExpandButtonProps {
   visible: boolean;

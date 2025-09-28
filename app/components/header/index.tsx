@@ -1,9 +1,9 @@
 import './style.css';
 import React, { useCallback, useEffect, useState } from 'react';
-import { cx } from '../../lib/classnames';
+import { cx } from '@/app/lib/classnames';
 import logoUrl from '@/assets/images/logo.png';
-import { deleteLocalValue, getLocalValue, setLocalValue } from '../../lib/storage';
-import { RouteHash } from '../../lib/routes';
+import { deleteLocalValue, getLocalValue, setLocalValue } from '@/app/lib/storage';
+import { RouteHash } from '@/app/lib/routes';
 import CollapseButton from './CollapseButton';
 import BrandLink from './BrandLink';
 import ToggleRouteButton from './ToggleRouteButton';

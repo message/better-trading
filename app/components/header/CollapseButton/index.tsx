@@ -1,5 +1,6 @@
+import './style.css';
 import React from 'react';
-import { cx } from '../../lib/classnames';
+import { cx } from '../../../lib/classnames';
 
 export const CollapseButton: React.FC<{
   onClick: () => void;
