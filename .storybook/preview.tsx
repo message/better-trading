@@ -3,15 +3,33 @@ import React from "react";
 // Import extension global styles so components render with correct look & feel
 import "../styles/app.scss";
 
-// The preview object configures global Storybook parameters.
+// The preview object configures global Storybook parameters & globals.
 const preview: Preview = {
+  initialGlobals: {
+    locale: "en-US",
+  },
+  globalTypes: {
+    locale: {
+      name: "Locale",
+      description: "Active language locale (sets <html lang=...>)",
+      toolbar: {
+        icon: "globe",
+        items: [
+          { value: "en-US", right: "🇺🇸", title: "English" },
+          { value: "ru-RU", right: "🇷🇺", title: "Russian" },
+          { value: "zh-CN", right: "🇨🇳", title: "Simplified Chinese" },
+            { value: "zh-TW", right: "🇹🇼", title: "Traditional Chinese" },
+          { value: "ko-KR", right: "🇰🇷", title: "Korean" },
+          { value: "ja-JP", right: "🇯🇵", title: "Japanese" }
+        ],
+        showName: true,
+      },
+    },
+  },
   parameters: {
     controls: {
       matchers: {
-        // Any prop name containing 'background' or 'color' (case-insensitive)
-        // will be treated as a color control in Storybook's UI.
         color: /(background|color)$/i,
-        // Any prop name ending with 'Date' will be treated as a date control in Storybook's UI.
         date: /Date$/i,
       },
     },
@@ -27,7 +45,7 @@ const preview: Preview = {
 };
 
 export const decorators = [
-  (Story) => {
+  (Story: any, context: { globals?: Record<string, any> }) => {
     if (typeof document !== "undefined") {
       // Ensure our extension body class for styles that scope to body.bt-body
       document.body.classList.add("bt-body");
@@ -35,9 +53,16 @@ export const decorators = [
       document.body.style.backgroundColor = "#0a0a0a";
       document.body.style.color = "#fff";
       document.body.style.minHeight = "100vh";
+
+      // Apply selected locale to <html lang="...">
+      const locale = context.globals?.locale || "en-US";
+      if (document.documentElement.lang !== locale) {
+        document.documentElement.lang = locale;
+      }
     }
+
     return (
-      <div style={{ padding: "1rem" }}>
+      <div className="sb-font-wrapper" style={{ padding: "1rem" }}>
         <Story />
       </div>
     );

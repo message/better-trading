@@ -31,7 +31,7 @@ export default defineContentScript({
       anchor: 'body',
       append: 'last',
       onMount: (container) => {
-        container.id = 'better-trading';
+        container.id = 'better-trading-container';
         const root = ReactDOM.createRoot(container);
         root.render(<App />);
 

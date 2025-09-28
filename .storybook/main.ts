@@ -12,7 +12,7 @@ const config: StorybookConfig = {
     "@chromatic-com/storybook", // decide on this or test-codegen
     "storybook-addon-test-codegen" // decide on this or chromatic
   ],
-  staticDirs: ["fonts"],
+  staticDirs: ["static"],
   framework: {
     name: "@storybook/react-vite",
     options: {

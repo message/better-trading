@@ -1,36 +1,62 @@
 @use "../variables";
 
 body.bt-body {
-  overflow-y: scroll;
-  // Default font stack (customize or override via injected remote font in Storybook if needed)
-  font-family: var(--bt-font-stack, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+	overflow-y: scroll;
 
-  #app {
-    width: calc(100% - #{variables.$extension-width});
-    margin: 0;
-    transition: width 0.2s ease;
-  }
+	#app {
+		width: calc(100% - #{variables.$extension-width});
+		margin: 0;
+		transition: width 0.2s ease;
+	}
 
-  #better-trading-container {
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    overflow-y: auto;
-    width: variables.$extension-width;
-    padding: variables.$extension-y-padding variables.$extension-x-padding;
-    background-color: rgba(#0a0a0a, 0.8);
-    transition: right 0.2s ease;
-  }
+	#better-trading-container {
+		position: fixed;
+		z-index: 1000;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		overflow-y: auto;
+		width: variables.$extension-width;
+		padding: variables.$extension-y-padding variables.$extension-x-padding;
+		background-color: rgba(#0a0a0a, 0.8);
+		transition: right 0.2s ease;
+	}
 
-  &.bt-is-collapsed {
-    #app {
-      width: 100%;
-    }
+	&.bt-is-collapsed {
+		#app {
+			width: 100%;
+		}
 
-    #better-trading-container {
-      right: #{-1 * variables.$extension-width};
-    }
-  }
+		#better-trading-container {
+			right: #{-1 * variables.$extension-width};
+		}
+	}
+}
+
+html #better-trading-container {
+	font-family: "FontinSmallCaps", Verdana, Arial, Helvetica, sans-serif;
+	font-size-adjust: .54;
+	font-weight: normal;
+}
+
+html[lang="zh-CN"] #better-trading-container {
+	font-family: "Microsoft YaHei", Verdana, Arial, Helvetica, sans-serif;
+}
+
+html[lang="zh-TW"] #better-trading-container {
+	font-family: 微軟正黑, "Microsoft JhengHei", 新明細體, Verdana, Arial, Helvetica, sans-serif;
+}
+
+html[lang="ru-RU"] #better-trading-container {
+	font-family: FrizQuadrataC, Verdana, Arial, Helvetica, sans-serif;
+}
+
+html[lang="ko-KR"] #better-trading-container {
+	font-family: "맑은 고딕", "Malgun Gothic", Verdana, Arial, Helvetica, sans-serif;
+	letter-spacing: -0.025em;
+}
+
+html[lang="ja-JP"] #better-trading-container {
+	font-family: "Noto Sans JP", Verdana, Arial, Helvetica, sans-serif;
+	letter-spacing: -0.025em;
 }
