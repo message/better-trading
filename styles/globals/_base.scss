@@ -1,0 +1,34 @@
+@use "../variables";
+
+body.bt-body {
+  overflow-y: scroll;
+
+  #app {
+    width: calc(100% - #{variables.$extension-width});
+    margin: 0;
+    transition: width 0.2s ease;
+  }
+
+  #better-trading-container {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    width: variables.$extension-width;
+    padding: variables.$extension-y-padding variables.$extension-x-padding;
+    background-color: rgba(#0a0a0a, 0.8);
+    transition: right 0.2s ease;
+  }
+
+  &.bt-is-collapsed {
+    #app {
+      width: 100%;
+    }
+
+    #better-trading-container {
+      right: #{-1 * variables.$extension-width};
+    }
+  }
+}

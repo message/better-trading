@@ -1,0 +1,14 @@
+.results {
+  button.refresh,
+  button.copy,
+  button.searchBy {
+    display: block !important;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+
+    &:hover,
+    &:focus {
+      opacity: 1;
+    }
+  }
+}

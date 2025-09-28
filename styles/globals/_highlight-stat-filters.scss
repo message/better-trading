@@ -1,0 +1,5 @@
+@use "../variables";
+
+.bt-highlight-stat-filters {
+  background-color: rgba(variables.$gold-alt, 0.25);
+}

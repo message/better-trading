@@ -1,9 +1,0 @@
-.bt-form-container {
-	display: grid;
-	gap: 15px;
-}
-
-.bt-form-container--disabled button[type='submit'] {
-	opacity: 0.6;
-	pointer-events: none;
-}

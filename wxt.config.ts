@@ -10,7 +10,7 @@ const config: UserConfig = {
     permissions: ['activeTab', 'storage'],
 
   },
-  outDir: './dist',
+  // outDir: './dist',
   webExt: {
     chromiumArgs: [
       'https://www.pathofexile.com/trade',

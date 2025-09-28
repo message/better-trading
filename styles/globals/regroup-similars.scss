@@ -1,0 +1,7 @@
+div.row[bt-regroup-state='hidden'] {
+  display: none !important;
+}
+
+div.row[bt-regroup-state='visible'] {
+  background: rgba(#101010, 0.8) !important;
+}

@@ -1,4 +1,4 @@
-import './main.css';
+import '@/styles/app.scss'
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 
