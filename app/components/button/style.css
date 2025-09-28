@@ -6,7 +6,6 @@
   min-height: 32px;
   padding: 0 14px;
   border: 1px solid transparent;
-  border-radius: var(--bt-radius-sm);
   background-color: transparent;
   font-family: var(--bt-font-heading);
   font-size: 13px;

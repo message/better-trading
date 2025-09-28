@@ -4,7 +4,6 @@
   height: 32px;
   padding: 0 10px;
   border: 0;
-  border-radius: var(--bt-radius-sm);
   background-color: rgba(30, 33, 36, 0.95);
   font-family: var(--bt-font-body);
   font-size: 14px;

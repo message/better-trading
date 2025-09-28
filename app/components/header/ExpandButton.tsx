@@ -1,5 +1,6 @@
 import React from 'react';
 import { cx } from '../../lib/classnames';
+import { AngleLeftIcon } from '../icons';
 
 export interface ExpandButtonProps {
   visible: boolean;
@@ -16,10 +17,10 @@ const ExpandButton: React.FC<ExpandButtonProps> = ({ visible, onClick, label, lo
     onClick={onClick}
     aria-label={label}
   >
-    <i aria-hidden="true" className="fas fa-angle-left bt-header__expand-icon" />
+    {/* Decorative icon; accessibility handled by button aria-label */}
+    <AngleLeftIcon className="bt-header__expand-icon" />
     <img className="bt-header__expand-logo" src={logoUrl} alt={title} />
   </button>
 );
 
 export default ExpandButton;
-

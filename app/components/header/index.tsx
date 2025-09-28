@@ -93,7 +93,7 @@ const Header: React.FC<HeaderProps> = ({
       </div>
 
       <ExpandButton
-        visible={isCollapsed}
+        visible={true}
         onClick={handleExpand}
         label={i18n.t('header.expand')}
         logoUrl={logoUrl}

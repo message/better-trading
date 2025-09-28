@@ -8,7 +8,6 @@
   max-height: 150px;
   padding: 8px 12px;
   border: 1px solid var(--bt-color-gold-alt);
-  border-radius: var(--bt-radius-sm);
   background: rgba(0, 0, 0, 0.35);
   font-family: var(--bt-font-body);
   font-size: 13px;

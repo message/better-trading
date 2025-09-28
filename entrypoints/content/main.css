@@ -3,7 +3,6 @@
 :root {
 	--bt-font-heading: 'FontinSmallcaps', serif;
 	--bt-font-body: Verdana, Arial, Helvetica, sans-serif;
-	--bt-font-smallcaps: 'FontinSmallcaps', serif;
 
 	--bt-color-black: #161616;
 	--bt-color-gray: #373737;
@@ -20,10 +19,6 @@
 	--bt-color-yellow-alt: #7A7921;
 	--bt-color-green: #4B7E42;
 	--bt-color-green-alt: #5E9954;
-
-	--bt-radius-sm: 4px;
-	--bt-radius-md: 6px;
-	--bt-radius-lg: 10px;
 
 	--bt-transition-fast: 150ms ease;
 	--bt-transition-base: 200ms ease;
@@ -44,4 +39,16 @@ body, #better-trading-container {
 #better-trading-container *::before,
 #better-trading-container *::after {
 	box-sizing: inherit;
+}
+
+
+.bt-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-style: normal;
+	font-variant: normal;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }

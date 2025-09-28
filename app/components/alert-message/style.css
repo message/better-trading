@@ -4,7 +4,6 @@
   align-items: start;
   gap: 8px;
   padding: 10px 12px;
-  border-radius: var(--bt-radius-sm);
   font-size: 13px;
   line-height: 1.4;
   background: rgba(0, 0, 0, 0.4);
