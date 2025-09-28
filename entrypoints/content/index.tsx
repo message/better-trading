@@ -1,9 +1,27 @@
-import '@/styles/app.scss'
+import '@/styles/app.scss';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 
+// TODO: extract to separate package
+enum TradeDomain {
+  GLOBAL = 'pathofexile.com',
+  GLOBAL_WWW = 'www.pathofexile.com',
+  BRAZIL = 'br.pathofexile.com',
+  RUSSIA = 'ru.pathofexile.com',
+  THAILAND = 'th.pathofexile.com',
+  GERMANY = 'de.pathofexile.com',
+  FRANCE = 'fr.pathofexile.com',
+  SPAIN = 'es.pathofexile.com',
+  JAPAN = 'jp.pathofexile.com',
+  KOREA = 'poe.game.daum.net',
+}
+
+const WEB_ACCESSIBLE_MATCHES = Array.from(
+  new Set((Object.values(TradeDomain) as TradeDomain[]).map(domain => `https://${domain}/*`)),
+);
+
 export default defineContentScript({
-  matches: ['*://*/*'],
+  matches: WEB_ACCESSIBLE_MATCHES,
 
   async main(ctx) {
     console.log('Hello content script.');

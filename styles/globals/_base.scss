@@ -2,6 +2,8 @@
 
 body.bt-body {
   overflow-y: scroll;
+  // Default font stack (customize or override via injected remote font in Storybook if needed)
+  font-family: var(--bt-font-stack, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
 
   #app {
     width: calc(100% - #{variables.$extension-width});

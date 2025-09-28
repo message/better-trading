@@ -1,0 +1,27 @@
+@use "../../styles/variables";
+
+.alertMessage {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  color: variables.$white;
+
+  &.isAlert {
+    border: 1px solid variables.$red-alt;
+    background-color: variables.$red;
+  }
+
+  &.isWarning {
+    border: 1px solid variables.$yellow-alt;
+    background-color: variables.$yellow;
+  }
+
+  &.isSuccess {
+    border: 1px solid variables.$green-alt;
+    background-color: variables.$green;
+  }
+}
+
+.icon {
+  margin-right: 6px;
+}

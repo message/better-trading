@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import styles from './styles.module.scss';
 
 interface AlertMessageProps {
@@ -33,7 +34,7 @@ const AlertMessage: React.FC<AlertMessageProps> = ({
   const config = ALERT_CONFIG[type];
 
   return (
-    <div className={`${styles.alertMessage} ${config.className} ${className || ''}`} {...additionalProps}>
+    <div className={classnames(styles.alertMessage, config.className, className)} {...additionalProps}>
       <span className={styles.icon}>
         {config.icon}
       </span>
