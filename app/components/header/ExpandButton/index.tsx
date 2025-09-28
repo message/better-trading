@@ -1,4 +1,4 @@
-import './style.css';
+import styles from './style.module.css';
 import React from 'react';
 import { cx } from '../../../lib/classnames';
 import { AngleLeftIcon } from '../../icons';
@@ -14,13 +14,12 @@ export interface ExpandButtonProps {
 const ExpandButton: React.FC<ExpandButtonProps> = ({ visible, onClick, label, logoUrl, title }) => (
   <button
     type="button"
-    className={cx('bt-header__expand', visible && 'bt-header__expand--visible')}
+    className={cx(styles.root, visible && styles.visible)}
     onClick={onClick}
     aria-label={label}
   >
-    {/* Decorative icon; accessibility handled by button aria-label */}
-    <AngleLeftIcon className="bt-header__expand-icon" />
-    <img className="bt-header__expand-logo" src={logoUrl} alt={title} />
+    <AngleLeftIcon className={styles.icon} />
+    <img className={styles.logo} src={logoUrl} alt={title} />
   </button>
 );
 

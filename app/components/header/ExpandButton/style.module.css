@@ -1,4 +1,12 @@
-.bt-header__expand {
+/* CSS Module for ExpandButton (was style.css)
+   Class name mapping:
+   .root  => previous .bt-header__expand
+   .visible => previous .bt-header__expand--visible
+   .icon => previous .bt-header__expand-icon
+   .logo => previous .bt-header__expand-logo
+*/
+
+.root {
 	position: fixed;
 	top: 56px;
 	right: 0;
@@ -22,7 +30,6 @@
 	background-color var(--bt-transition-fast),
 	gap var(--bt-transition-fast);
 
-	/* Interaction states */
 	&:hover,
 	&:focus-visible {
 		background-color: color-mix(in srgb, var(--bt-color-blue) 85%, white 15%);
@@ -32,25 +39,24 @@
 		outline: 2px solid rgba(255, 255, 255, 0.3);
 		outline-offset: 2px;
 	}
-
-	/* Element parts */
-	.bt-header__expand-icon {
-		margin-right: 2px;
-		transition: margin-right var(--bt-transition-fast);
-	}
-
-	.bt-header__expand-logo {
-		height: 30px;
-		transition: transform var(--bt-transition-fast);
-	}
 }
 
-.bt-header__expand--visible {
+.icon {
+	margin-right: 2px;
+	transition: margin-right var(--bt-transition-fast);
+}
+
+.logo {
+	height: 30px;
+	transition: transform var(--bt-transition-fast);
+}
+
+.visible {
 	opacity: 1;
 	pointer-events: auto;
 
-	&:hover .bt-header__expand-icon,
-	&:focus-visible .bt-header__expand-icon {
+	&:hover .icon,
+	&:focus-visible .icon {
 		margin-right: 6px;
 	}
 }
