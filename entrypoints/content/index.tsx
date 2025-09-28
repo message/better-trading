@@ -17,7 +17,7 @@ export default defineContentScript({
             onMount: (container) => {
                 // Create wrapper inside the target container
                 const wrapper = document.createElement('div');
-                wrapper.id = 'better-trading-wrapper';
+                wrapper.id = 'better-trading-container';
                 container.append(wrapper);
 
                 const root = ReactDOM.createRoot(wrapper);
