@@ -1,15 +1,5 @@
 import './style.css';
-import React, {
-  HTMLAttributes,
-  MouseEvent as ReactMouseEvent,
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { HTMLAttributes, MouseEvent as ReactMouseEvent, PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../../lib/classnames';
 
@@ -44,14 +34,14 @@ type BaseItemProps = {
 
 type AnchorItemProps = BaseItemProps &
   Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof BaseItemProps> & {
-    href: string;
-  };
+  href: string;
+};
 
 type ButtonItemProps = BaseItemProps &
   Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof BaseItemProps | 'type'> & {
-    href?: undefined;
-    type?: 'button';
-  };
+  href?: undefined;
+  type?: 'button';
+};
 
 export type ContextualMenuItemProps = (AnchorItemProps | ButtonItemProps) & PropsWithChildren;
 

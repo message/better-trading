@@ -1,15 +1,15 @@
 .bt-bookmark-folder-icon {
-  display: block;
-  object-fit: contain;
+	display: block;
+	object-fit: contain;
 }
 
 .bt-bookmark-folder-icon--item {
-  width: 34px;
-  height: 34px;
-  margin: 3px 8px;
+	width: 34px;
+	height: 34px;
+	margin: 3px 8px;
 }
 
 .bt-bookmark-folder-icon--ascendancy {
-  width: 50px;
-  height: 40px;
+	width: 50px;
+	height: 40px;
 }

@@ -27,14 +27,14 @@ const ensureModalContainer = () => {
 const logoSrc = getExtensionUrl('assets/images/logo.png');
 
 const Modal: React.FC<ModalProps> = ({
-  title,
-  onClose,
-  isOpen = true,
-  className,
-  closeLabel = 'Close dialog',
-  children,
-  ...rest
-}) => {
+                                       title,
+                                       onClose,
+                                       isOpen = true,
+                                       className,
+                                       closeLabel = 'Close dialog',
+                                       children,
+                                       ...rest
+                                     }) => {
   const container = useMemo(() => ensureModalContainer(), []);
 
   const handleKeyUp = useCallback(

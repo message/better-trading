@@ -17,15 +17,15 @@ type LoadingContainerProps = {
 } & React.HTMLAttributes<HTMLDivElement>;
 
 const LoadingContainer: React.FC<LoadingContainerProps> = ({
-  task,
-  isLoading,
-  autoStart = true,
-  size = 'large',
-  className,
-  loaderLabel = 'Loading…',
-  children,
-  ...rest
-}) => {
+                                                             task,
+                                                             isLoading,
+                                                             autoStart = true,
+                                                             size = 'large',
+                                                             className,
+                                                             loaderLabel = 'Loading…',
+                                                             children,
+                                                             ...rest
+                                                           }) => {
   const shouldDisplayLoader = useMemo(() => {
     if (typeof isLoading === 'boolean') return isLoading;
     return task?.isRunning ?? false;

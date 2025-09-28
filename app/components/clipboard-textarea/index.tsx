@@ -13,13 +13,13 @@ type ClipboardTextareaProps = {
 } & React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 const ClipboardTextarea: React.FC<ClipboardTextareaProps> = ({
-  value,
-  copyLabel = 'Copy',
-  copiedLabel = 'Copied',
-  className,
-  onCopy,
-  ...textareaProps
-}) => {
+                                                               value,
+                                                               copyLabel = 'Copy',
+                                                               copiedLabel = 'Copied',
+                                                               className,
+                                                               onCopy,
+                                                               ...textareaProps
+                                                             }) => {
   const [hasCopied, setHasCopied] = useState(false);
 
   const handleFocus = useCallback((event: React.FocusEvent<HTMLTextAreaElement>) => {

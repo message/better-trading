@@ -1,36 +1,36 @@
 .bt-alert-message {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: start;
-  gap: 8px;
-  padding: 10px 12px;
-  font-size: 13px;
-  line-height: 1.4;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid transparent;
-  color: var(--bt-color-white);
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: start;
+	gap: 8px;
+	padding: 10px 12px;
+	font-size: 13px;
+	line-height: 1.4;
+	background: rgba(0, 0, 0, 0.4);
+	border: 1px solid transparent;
+	color: var(--bt-color-white);
 }
 
 .bt-alert-message__icon {
-  font-size: 16px;
-  margin-top: 2px;
+	font-size: 16px;
+	margin-top: 2px;
 }
 
 .bt-alert-message__content {
-  font-family: var(--bt-font-body);
+	font-family: var(--bt-font-body);
 }
 
 .bt-alert-message--warning {
-  border-color: var(--bt-color-yellow-alt);
-  background: color-mix(in srgb, var(--bt-color-yellow) 45%, transparent);
+	border-color: var(--bt-color-yellow-alt);
+	background: color-mix(in srgb, var(--bt-color-yellow) 45%, transparent);
 }
 
 .bt-alert-message--alert {
-  border-color: var(--bt-color-red-alt);
-  background: color-mix(in srgb, var(--bt-color-red) 45%, transparent);
+	border-color: var(--bt-color-red-alt);
+	background: color-mix(in srgb, var(--bt-color-red) 45%, transparent);
 }
 
 .bt-alert-message--success {
-  border-color: var(--bt-color-green-alt);
-  background: color-mix(in srgb, var(--bt-color-green) 45%, transparent);
+	border-color: var(--bt-color-green-alt);
+	background: color-mix(in srgb, var(--bt-color-green) 45%, transparent);
 }

@@ -13,14 +13,14 @@ type FormInputProps = {
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'>;
 
 const FormInput: React.FC<FormInputProps> = ({
-  label,
-  value,
-  autofocus,
-  onValueChange,
-  helper,
-  className,
-  ...rest
-}) => {
+                                               label,
+                                               value,
+                                               autofocus,
+                                               onValueChange,
+                                               helper,
+                                               className,
+                                               ...rest
+                                             }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {

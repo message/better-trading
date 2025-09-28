@@ -1,38 +1,38 @@
 .bt-form-checkbox {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	cursor: pointer;
 }
 
 .bt-form-checkbox__indicator {
-  position: relative;
-  width: 16px;
-  height: 16px;
-  border: 2px solid #634928;
-  border-radius: 2px;
-  transition: border-color var(--bt-transition-fast);
+	position: relative;
+	width: 16px;
+	height: 16px;
+	border: 2px solid #634928;
+	border-radius: 2px;
+	transition: border-color var(--bt-transition-fast);
 }
 
 .bt-form-checkbox__indicator::before {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 8px;
-  height: 8px;
-  background-color: var(--bt-color-white);
-  transform: scale(0);
-  transition: transform var(--bt-transition-fast);
+	content: '';
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 8px;
+	height: 8px;
+	background-color: var(--bt-color-white);
+	transform: scale(0);
+	transition: transform var(--bt-transition-fast);
 }
 
 .bt-form-checkbox__indicator--active::before {
-  transform: scale(1);
+	transform: scale(1);
 }
 
 .bt-form-checkbox__label {
-  font-family: var(--bt-font-heading);
-  font-size: 13px;
-  line-height: 1;
-  color: var(--bt-color-white);
+	font-family: var(--bt-font-heading);
+	font-size: 13px;
+	line-height: 1;
+	color: var(--bt-color-white);
 }

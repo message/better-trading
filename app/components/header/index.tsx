@@ -1,5 +1,5 @@
 import './style.css';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { cx } from '../../lib/classnames';
 import logoUrl from '@/assets/images/logo.png';
 import { deleteLocalValue, getLocalValue, setLocalValue } from '../../lib/storage';

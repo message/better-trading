@@ -1,20 +1,20 @@
 .bt-form-field {
-  display: block;
-  width: 100%;
-  margin: 0;
+	display: block;
+	width: 100%;
+	margin: 0;
 }
 
 .bt-form-field__label {
-  margin-bottom: 6px;
-  font-family: var(--bt-font-heading);
-  font-size: 15px;
-  letter-spacing: 0.5px;
-  color: var(--bt-color-beige);
+	margin-bottom: 6px;
+	font-family: var(--bt-font-heading);
+	font-size: 15px;
+	letter-spacing: 0.5px;
+	color: var(--bt-color-beige);
 }
 
 .bt-form-field__helper {
-  margin: 6px 0 0;
-  font-size: 12px;
-  font-weight: normal;
-  color: rgba(255, 248, 225, 0.8);
+	margin: 6px 0 0;
+	font-size: 12px;
+	font-weight: normal;
+	color: rgba(255, 248, 225, 0.8);
 }

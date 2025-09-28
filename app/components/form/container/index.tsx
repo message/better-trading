@@ -9,14 +9,14 @@ type FormContainerProps<Entity = unknown> = {
   className?: string;
 } & React.FormHTMLAttributes<HTMLFormElement>;
 
-const FormContainer = <Entity,>({
-  onSubmit,
-  entity,
-  canSubmit = true,
-  className,
-  children,
-  ...rest
-}: FormContainerProps<Entity>) => {
+const FormContainer = <Entity, >({
+                                   onSubmit,
+                                   entity,
+                                   canSubmit = true,
+                                   className,
+                                   children,
+                                   ...rest
+                                 }: FormContainerProps<Entity>) => {
   const handleSubmit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();

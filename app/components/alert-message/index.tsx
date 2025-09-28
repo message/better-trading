@@ -17,12 +17,12 @@ const ICON_BY_TYPE: Record<AlertMessageType, string> = {
 };
 
 const AlertMessage: React.FC<AlertMessageProps> = ({
-  type = 'warning',
-  message,
-  children,
-  className,
-  ...rest
-}) => {
+                                                     type = 'warning',
+                                                     message,
+                                                     children,
+                                                     className,
+                                                     ...rest
+                                                   }) => {
   const icon = ICON_BY_TYPE[type];
 
   return (

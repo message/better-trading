@@ -13,23 +13,23 @@ type BaseProps = {
 
 type AnchorProps = BaseProps &
   Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof BaseProps> & {
-    href: string;
-    onFileChange?: never;
-  };
+  href: string;
+  onFileChange?: never;
+};
 
 type FileInputProps = BaseProps &
   Omit<React.LabelHTMLAttributes<HTMLLabelElement>, keyof BaseProps | 'onChange'> & {
-    onFileChange: ChangeEventHandler<HTMLInputElement>;
-    fileAccept?: string;
-    multiple?: boolean;
-    href?: never;
-  };
+  onFileChange: ChangeEventHandler<HTMLInputElement>;
+  fileAccept?: string;
+  multiple?: boolean;
+  href?: never;
+};
 
 type ButtonElementProps = BaseProps &
   Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof BaseProps> & {
-    href?: never;
-    onFileChange?: never;
-  };
+  href?: never;
+  onFileChange?: never;
+};
 
 type ButtonProps = (AnchorProps | FileInputProps | ButtonElementProps) & PropsWithChildren;
 
