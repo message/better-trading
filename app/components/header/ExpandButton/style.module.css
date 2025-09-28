@@ -1,11 +1,3 @@
-/* CSS Module for ExpandButton (was style.css)
-   Class name mapping:
-   .root  => previous .bt-header__expand
-   .visible => previous .bt-header__expand--visible
-   .icon => previous .bt-header__expand-icon
-   .logo => previous .bt-header__expand-logo
-*/
-
 .root {
 	position: fixed;
 	top: 56px;

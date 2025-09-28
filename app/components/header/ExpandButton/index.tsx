@@ -1,6 +1,6 @@
 import styles from './style.module.css';
 import React from 'react';
-import { cx } from '../../../lib/classnames';
+import { cx } from '@/app/lib/classnames';
 import { AngleLeftIcon } from '../../icons';
 
 export interface ExpandButtonProps {
@@ -11,16 +11,18 @@ export interface ExpandButtonProps {
   title: string;
 }
 
-const ExpandButton: React.FC<ExpandButtonProps> = ({ visible, onClick, label, logoUrl, title }) => (
-  <button
-    type="button"
-    className={cx(styles.root, visible && styles.visible)}
-    onClick={onClick}
-    aria-label={label}
-  >
-    <AngleLeftIcon className={styles.icon} />
-    <img className={styles.logo} src={logoUrl} alt={title} />
-  </button>
-);
+const ExpandButton: React.FC<ExpandButtonProps> = ({ visible, onClick, label, logoUrl, title }) => {
+  return (
+    <button
+      type="button"
+      className={cx(styles.root, visible && styles.visible)}
+      onClick={onClick}
+      aria-label={label}
+    >
+      <AngleLeftIcon className={styles.icon} />
+      <img className={styles.logo} src={logoUrl} alt={title} />
+    </button>
+  );
+};
 
 export default ExpandButton;

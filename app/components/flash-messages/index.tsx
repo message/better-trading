@@ -1,7 +1,7 @@
 import './style.css';
 import React from 'react';
 import { cx } from '../../lib/classnames';
-import AlertMessage from '../alert-message';
+import AlertMessage from '../AlertMessage';
 
 export type FlashMessageType = 'warning' | 'alert' | 'success';
 
