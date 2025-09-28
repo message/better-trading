@@ -24,21 +24,34 @@
 	--bt-shadow-overlay: 0 12px 30px rgba(0, 0, 0, 0.45);
 }
 
-body, #better-trading-container {
+#better-trading {
 	font-family: var(--bt-font-body);
 	color: var(--bt-color-white);
-}
-
-#better-trading-container {
 	box-sizing: border-box;
+	overflow-y: auto;
+	width: 400px;
+	background-color: rgba(10, 10, 10, 0.8);
+	backdrop-filter: blur(2px);
+	padding: 5px 10px;
+	transition: right 0.2s;
+	position: fixed;
+	z-index: 1000;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
 }
 
-#better-trading-container *,
-#better-trading-container *::before,
-#better-trading-container *::after {
+#better-trading *,
+#better-trading *::before,
+#better-trading *::after {
 	box-sizing: inherit;
 }
 
+/*body.bt-body #better-trading {*/
+body #better-trading {
+
+
+}
 
 .bt-icon {
 	display: inline-flex;

@@ -15,7 +15,7 @@ export default () => {
   };
 
   return (
-    <div>
+    <>
       <Header />
       <Button onClick={handleOpenModal}>Open Modal</Button>
 
@@ -27,6 +27,6 @@ export default () => {
         <p>This is a sample modal content using CSS modules!</p>
         <p>The modal has been converted to use CSS modules with nesting optimization.</p>
       </Modal>
-    </div>
+    </>
   );
 };

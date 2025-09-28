@@ -8,6 +8,7 @@ const config: UserConfig = {
     description: '__MSG_extension_description__',
     default_locale: 'en',
     permissions: ['activeTab', 'storage'],
+
   },
   outDir: './dist',
   webExt: {
