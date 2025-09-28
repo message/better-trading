@@ -1,0 +1,17 @@
+.bt-form-input {
+  width: 100%;
+  max-width: 400px;
+  height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--bt-radius-sm);
+  background-color: rgba(30, 33, 36, 0.95);
+  font-family: var(--bt-font-body);
+  font-size: 14px;
+  color: var(--bt-color-white);
+}
+
+.bt-form-input:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.25);
+  outline-offset: 2px;
+}

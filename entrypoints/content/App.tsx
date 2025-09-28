@@ -1,7 +1,8 @@
-import Index from '../../app/components/button';
+import Button from '../../app/components/button';
+import Header from '@/app/components/header';
 
 export default () => {
-  return <div>{i18n.t('extension.name')} - {i18n.t('extension.description')}
-  <Index onClick={() => alert(i18n.t('extension.name'))}>Click me</Index>
+  return <div>
+    <Header/>
   </div>;
 };

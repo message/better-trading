@@ -1,0 +1,28 @@
+.bt-clipboard-textarea {
+  position: relative;
+}
+
+.bt-clipboard-textarea__input {
+  width: 100%;
+  min-height: 75px;
+  max-height: 150px;
+  padding: 8px 12px;
+  border: 1px solid var(--bt-color-gold-alt);
+  border-radius: var(--bt-radius-sm);
+  background: rgba(0, 0, 0, 0.35);
+  font-family: var(--bt-font-body);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  resize: vertical;
+}
+
+.bt-clipboard-textarea__input:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 2px;
+}
+
+.bt-clipboard-textarea__button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}

@@ -1,0 +1,38 @@
+.bt-markdown-changelog {
+  line-height: 1.6;
+  font-family: var(--bt-font-body);
+  color: var(--bt-color-white);
+}
+
+.bt-markdown-changelog h1 {
+  margin: 0 0 12px;
+  font-family: var(--bt-font-heading);
+  font-size: 20px;
+}
+
+.bt-markdown-changelog h2 {
+  margin: 14px 0 6px;
+  font-family: var(--bt-font-heading);
+  font-size: 16px;
+}
+
+.bt-markdown-changelog ul {
+  margin: 0 0 12px 20px;
+  list-style: disc;
+}
+
+.bt-markdown-changelog p {
+  margin: 10px 0;
+}
+
+.bt-markdown-changelog a {
+  color: var(--bt-color-beige);
+  text-decoration: none;
+  border-bottom: 1px dotted currentColor;
+  transition: border-bottom-color var(--bt-transition-fast);
+}
+
+.bt-markdown-changelog a:hover,
+.bt-markdown-changelog a:focus-visible {
+  border-bottom-style: solid;
+}
