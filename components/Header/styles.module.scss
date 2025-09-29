@@ -1,0 +1,100 @@
+@use '../../styles/variables';
+@use 'sass:color';
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0 10px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+
+    .logo {
+      transform: rotate(5deg);
+    }
+  }
+}
+
+.logo {
+  transform: rotate(0);
+  height: 30px;
+  transition: transform 0.2s ease;
+}
+
+.title {
+  display: flex;
+  margin-left: 10px;
+  font-family: variables.$primary-font;
+  font-size: 20px;
+  color: variables.$white;
+}
+
+.headerButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  border: 0;
+  margin: 0;
+  background: transparent;
+  font-size: 22px;
+  color: variables.$white;
+  transition: color 0.2s ease;
+
+  &:hover,
+  &:focus {
+    color: rgba(variables.$white, 0.8);
+  }
+}
+
+.expandButton {
+  display: flex;
+  position: fixed;
+  top: 50px;
+  right: 0;
+  opacity: 0;
+  align-items: center;
+  padding: 5px 10px;
+  border: 1px solid variables.$blue-alt;
+  background-color: variables.$blue;
+  outline: none;
+  font-size: 20px;
+  color: variables.$white;
+  transition: opacity 0.2s ease;
+  border-right-width: 0;
+  pointer-events: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background-color: color.adjust(variables.$blue, $lightness: 5%);
+
+    .expandButtonIcon {
+      margin-right: 15px;
+    }
+  }
+
+  &.isVisible {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+.expandButtonIcon {
+  margin-right: 10px;
+  transition: margin-right 0.2s ease;
+}
