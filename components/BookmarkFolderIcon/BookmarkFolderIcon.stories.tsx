@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import BookmarkFolderIcon from './index.tsx';
 import {
   BookmarksFolderAscendancyDuelistIcon,
@@ -17,6 +16,8 @@ import {
   BookmarksFolderPoE1ItemIcon,
   BookmarksFolderPoE2ItemIcon,
 } from '@/types/bookmarks';
+import type { BookmarksFolderIcon as BookmarkFolderIconType } from '@/types/bookmarks';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 // Narrowed option groups per story (kept local to this file for discoverability)
 const POE1_ITEM_OPTIONS = Object.values(BookmarksFolderPoE1ItemIcon);
@@ -65,8 +66,6 @@ const meta = {
   },
   args: { icon: BookmarksFolderPoE1ItemIcon.ALCHEMY },
 } satisfies Meta<typeof BookmarkFolderIcon>;
-
-export default meta;
 
 type Story = StoryObj<typeof meta>;
 
@@ -140,7 +139,7 @@ export const Gallery: Story = {
               <div style={gridStyle}>
                 {cat.icons.map(i => (
                   <div key={i} style={cardStyle}>
-                    <BookmarkFolderIcon icon={i as any} />
+                    <BookmarkFolderIcon icon={i as BookmarkFolderIconType} />
                     <span style={{ marginTop: 4 }}>{i}</span>
                   </div>
                 ))}
@@ -152,3 +151,5 @@ export const Gallery: Story = {
     );
   },
 };
+
+export default meta;

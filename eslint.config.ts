@@ -26,7 +26,15 @@ export default defineConfig(
   },
   // Custom config
   {
-    ignores: ['**/.wxt/**', '**/.output/**', '**/dist/**', '**/node_modules/**'],
+    ignores: [
+      '**/.wxt/**',
+      '**/.output/**',
+      '**/dist/**',
+      '**/node_modules/**',
+      '**/old-extension/**',
+      '**/*.module.scss',
+      '**/.storybook/**',
+    ],
   },
   {
     files: ['**/*.{ts,tsx}'],

@@ -1,4 +1,5 @@
-import { defineConfig, UserConfig } from 'wxt';
+import { defineConfig } from 'wxt';
+import type { UserConfig } from 'wxt';
 
 // See https://wxt.dev/api/config.html
 const config: UserConfig = {

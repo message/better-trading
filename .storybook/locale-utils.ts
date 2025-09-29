@@ -42,7 +42,6 @@ export function resolveLocaleValue<T>(
 
   if (process.env.NODE_ENV !== 'production' && options.warn !== false) {
     if (source !== input) {
-      // eslint-disable-next-line no-console
       console.warn(`[locale-utils] Value for locale "${input}" not found; using "${source}".`);
     }
   }

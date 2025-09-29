@@ -8,25 +8,22 @@
 // Icon enums/types copied into app/types/bookmarks.ts so there is no runtime dependency on old-extension.
 // This keeps a single source for icon names while allowing deletion of the legacy Ember code later.
 
-import React from 'react';
-import classnames from 'classnames';
 import styles from './styles.module.scss';
+import { BookmarksFolderPoE1ItemIcon, BookmarksFolderPoE2ItemIcon } from '@/types/bookmarks';
 import { getExtensionUrl } from '@/utils/extension-url';
-import {
-  BookmarksFolderIcon as BookmarkFolderIconType,
-  BookmarksFolderPoE1ItemIcon,
-  BookmarksFolderPoE2ItemIcon,
-} from '@/types/bookmarks';
+import classnames from 'classnames';
+import type { BookmarksFolderIcon as BookmarkFolderIconType } from '@/types/bookmarks';
+import type { ImgHTMLAttributes, FC } from 'react';
 
 // Build a Set of all item icons for quick classification (constant at module scope)
-export const ITEM_ICON_SET = new Set<string>([
+const ITEM_ICON_SET = new Set<string>([
   ...Object.values(BookmarksFolderPoE1ItemIcon),
   ...Object.values(BookmarksFolderPoE2ItemIcon),
 ]);
 
-export type BookmarkFolderIconName = BookmarkFolderIconType;
+type BookmarkFolderIconName = BookmarkFolderIconType;
 
-export interface BookmarkFolderIconProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface BookmarkFolderIconProps extends ImgHTMLAttributes<HTMLImageElement> {
   /** Icon identifier (e.g. "alchemy", "poe2-divine", "slayer"). */
   icon: BookmarkFolderIconType;
 }
@@ -34,7 +31,7 @@ export interface BookmarkFolderIconProps extends React.ImgHTMLAttributes<HTMLIma
 /**
  * BookmarkFolderIcon renders a single folder icon (item or ascendancy) with proper sizing.
  */
-const BookmarkFolderIcon: React.FC<BookmarkFolderIconProps> = ({ icon, className, ...imgProps }) => {
+const BookmarkFolderIcon: FC<BookmarkFolderIconProps> = ({ icon, className, ...imgProps }) => {
   const iconPath = `/assets/images/bookmark-folder/${icon}.png`;
   const isItem = ITEM_ICON_SET.has(icon);
 
@@ -49,3 +46,5 @@ const BookmarkFolderIcon: React.FC<BookmarkFolderIconProps> = ({ icon, className
 };
 
 export default BookmarkFolderIcon;
+export { ITEM_ICON_SET };
+export type { BookmarkFolderIconName, BookmarkFolderIconProps };

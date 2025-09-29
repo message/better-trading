@@ -1,7 +1,6 @@
-import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import AlertMessage from './index.tsx';
-import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
+import { defineMessages, resolveLocaleValue } from '../../.storybook/locale-utils';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * AlertMessage displays a short status or warning block with an icon.
@@ -30,8 +29,6 @@ const meta = {
   args: { type: 'success', message: '' },
 } satisfies Meta<typeof AlertMessage>;
 
-export default meta;
-
 type Story = StoryObj<typeof meta>;
 
 // SUCCESS messages
@@ -46,7 +43,7 @@ const successMessages = defineMessages({
   'ko-KR': '모든 것이 순조롭게 진행되었어요!',
   'th-TH': 'ทุกอย่างราบรื่นดี!',
 });
-export const Success: Story = {
+const Success: Story = {
   args: { type: 'success', message: '' },
   render: (args, { globals }) => {
     const message = resolveLocaleValue(globals.locale as string, successMessages);
@@ -66,7 +63,7 @@ const warningMessages = defineMessages({
   'ko-KR': '주의하세요 — 입력을 다시 한번 확인하세요.',
   'th-TH': 'โปรดระวัง — ตรวจสอบข้อมูลที่กรอกอีกครั้ง',
 });
-export const Warning: Story = {
+const Warning: Story = {
   args: { type: 'warning', message: '' },
   render: (args, { globals }) => {
     const message = resolveLocaleValue(globals.locale as string, warningMessages);
@@ -87,7 +84,7 @@ const alertMessages = defineMessages({
   'ko-KR': '문제가 발생했습니다. 다시 시도해주세요.',
   'th-TH': 'เกิดข้อผิดพลาด โปรดลองอีกครั้ง',
 });
-export const Alert: Story = {
+const Alert: Story = {
   args: { type: 'alert', message: '' },
   render: (args, { globals }) => {
     const message = resolveLocaleValue(globals.locale as string, alertMessages);
@@ -116,7 +113,7 @@ const htmlMessages = defineMessages({
   'th-TH':
     "<strong>แจ้งเตือน:</strong> คุณสามารถใส่ข้อความที่มี<em>รูปแบบ</em> และ <a href='#' onclick='return false;'>ลิงก์</a> ได้",
 });
-export const WithHTML: Story = {
+const WithHTML: Story = {
   name: 'With HTML Content',
   args: { type: 'warning', message: '' },
   parameters: {
@@ -127,3 +124,6 @@ export const WithHTML: Story = {
     return <AlertMessage {...args} message={message} data-locale={globals.locale} />;
   },
 };
+
+export default meta;
+export { Success, Warning, Alert, WithHTML };

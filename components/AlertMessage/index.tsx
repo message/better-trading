@@ -1,13 +1,12 @@
-import React from 'react';
-import classnames from 'classnames';
 import styles from './styles.module.scss';
+import classnames from 'classnames';
+import type React from 'react';
+import type { HTMLAttributes } from 'react';
 
-interface AlertMessageProps {
+interface AlertMessageProps extends HTMLAttributes<HTMLDivElement> {
   type: 'warning' | 'alert' | 'success';
   message: string;
   className?: string;
-
-  [key: string]: any; // for additional props
 }
 
 const ALERT_CONFIG = {

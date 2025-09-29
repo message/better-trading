@@ -180,6 +180,8 @@ body,
 .sbdocs-wrapper,
 .sbdocs-content,
 .docs-story,
+.sb-errordisplay,
+.sb-errordisplay_main,
 [data-storybook='docs-root'] {
   background-color: #0a0a0a !important;
   color: #ffffff;

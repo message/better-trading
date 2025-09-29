@@ -9,11 +9,12 @@
  */
 
 import 'wxt';
-import svgr, { type VitePluginSvgrOptions } from 'vite-plugin-svgr';
+import svgr from 'vite-plugin-svgr';
 import { defineWxtModule } from 'wxt/modules';
 import type { InlineConfig } from 'vite';
+import type { VitePluginSvgrOptions } from 'vite-plugin-svgr';
 
-export interface SvgrModuleOptions extends VitePluginSvgrOptions {
+interface SvgrModuleOptions extends VitePluginSvgrOptions {
   /**
    * Enable or disable the SVGR integration.
    * @default true
@@ -42,7 +43,7 @@ declare module 'wxt' {
   }
 }
 
-export default defineWxtModule<SvgrModuleOptions>({
+const module = defineWxtModule<SvgrModuleOptions>({
   name: 'svgr',
   configKey: 'svgr',
   setup(wxt, options) {
@@ -99,7 +100,7 @@ interface ResolvedTypeOptions {
   exportAsDefault: boolean;
 }
 
-function generateTypeDeclarations(options: ResolvedTypeOptions): string {
+const generateTypeDeclarations = (options: ResolvedTypeOptions): string => {
   const lines: string[] = [];
 
   if (options.reactQuery) {
@@ -129,4 +130,7 @@ function generateTypeDeclarations(options: ResolvedTypeOptions): string {
   }
 
   return lines.join('\n');
-}
+};
+
+export type { SvgrModuleOptions };
+export default module;

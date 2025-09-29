@@ -1,6 +1,6 @@
 import '@/styles/app.scss';
-import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
+import { createRoot } from 'react-dom/client';
 
 // TODO: extract to separate package
 enum TradeDomain {
@@ -32,7 +32,7 @@ export default defineContentScript({
       append: 'last',
       onMount: container => {
         container.id = 'better-trading-container';
-        const root = ReactDOM.createRoot(container);
+        const root = createRoot(container);
         root.render(<App />);
 
         return { root };
