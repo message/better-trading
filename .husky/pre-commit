@@ -2,4 +2,4 @@
 
 # Husky pre-commit hook: run lint-staged (Prettier)
 
-pnpm exec lint-staged
+pnpm exec lint-staged --allow-empty
