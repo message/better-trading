@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+# Husky pre-commit hook: run lint-staged (Prettier)
+
+pnpm exec lint-staged

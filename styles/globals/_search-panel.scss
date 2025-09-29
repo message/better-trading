@@ -1,4 +1,4 @@
-@use "../variables";
+@use '../variables';
 
 .bt-body:not(.bt-is-collapsed) {
   @media (min-width: 1200px) and (max-width: #{1200px + variables.$extension-width - 1px}) {

@@ -30,14 +30,14 @@ export default defineContentScript({
       position: 'inline',
       anchor: 'body',
       append: 'last',
-      onMount: (container) => {
+      onMount: container => {
         container.id = 'better-trading-container';
         const root = ReactDOM.createRoot(container);
         root.render(<App />);
 
         return { root };
       },
-      onRemove: (elements) => {
+      onRemove: elements => {
         elements?.root.unmount();
       },
     });

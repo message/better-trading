@@ -6,4 +6,3 @@ export enum RouteHash {
 }
 
 export const DEFAULT_ROUTE_ORDER: RouteHash[] = [RouteHash.Root, RouteHash.About];
-

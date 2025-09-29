@@ -5,8 +5,5 @@
   "arrowParens": "avoid",
   "printWidth": 120,
   "bracketSameLine": true,
-  "htmlWhitespaceSensitivity": "strict",
-  "plugins": [
-    "prettier-plugin-tailwindcss"
-  ]
+  "htmlWhitespaceSensitivity": "strict"
 }

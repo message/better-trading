@@ -1,2 +1,5 @@
 dist
 *.md
+.output
+.idea
+pnpm-lock.yaml

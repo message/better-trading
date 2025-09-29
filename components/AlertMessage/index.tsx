@@ -25,19 +25,12 @@ const ALERT_CONFIG = {
   },
 } as const;
 
-const AlertMessage: React.FC<AlertMessageProps> = ({
-                                                     type,
-                                                     message,
-                                                     className,
-                                                     ...additionalProps
-                                                   }) => {
+const AlertMessage: React.FC<AlertMessageProps> = ({ type, message, className, ...additionalProps }) => {
   const config = ALERT_CONFIG[type];
 
   return (
     <div className={classnames(styles.alertMessage, config.className, className)} {...additionalProps}>
-      <span className={styles.icon}>
-        {config.icon}
-      </span>
+      <span className={styles.icon}>{config.icon}</span>
       <span dangerouslySetInnerHTML={{ __html: message }} />
     </div>
   );

@@ -37,7 +37,7 @@ type Story = StoryObj<typeof meta>;
 // SUCCESS messages
 const successMessages = defineMessages({
   'en-US': 'Everything went smoothly!',
-  'fr-FR': 'Tout s\'est bien passé !',
+  'fr-FR': "Tout s'est bien passé !",
   'es-ES': '¡Todo salió bien!',
   'de-DE': 'Alles hat reibungslos funktioniert!',
   'pt-BR': 'Tudo correu bem!',
@@ -97,15 +97,24 @@ export const Alert: Story = {
 
 // HTML messages
 const htmlMessages = defineMessages({
-  'en-US': '<strong>Heads up:</strong> You can include <em>formatted</em> text and <a href=\'#\' onclick=\'return false;\'>links</a>.',
-  'fr-FR': '<strong>Attention :</strong> Vous pouvez inclure du texte <em>formaté</em> et des <a href=\'#\' onclick=\'return false;\'>liens</a>.',
-  'es-ES': '<strong>Atención:</strong> Puedes incluir texto <em>formateado</em> y <a href=\'#\' onclick=\'return false;\'>enlaces</a>.',
-  'de-DE': '<strong>Achtung:</strong> Sie können <em>formatierten</em> Text und <a href=\'#\' onclick=\'return false;\'>Links</a> einfügen.',
-  'pt-BR': '<strong>Atenção:</strong> Você pode incluir texto <em>formatado</em> e <a href=\'#\' onclick=\'return false;\'>links</a>.',
-  'ru-RU': '<strong>Внимание:</strong> Можно включить <em>форматированный</em> текст и <a href=\'#\' onclick=\'return false;\'>ссылки</a>.',
-  'ja-JP': '<strong>注意:</strong> <em>書式付き</em>テキストや<a href=\'#\' onclick=\'return false;\'>リンク</a>を含められます。',
-  'ko-KR': '<strong>알림:</strong> <em>서식 있는</em> 텍스트와 <a href=\'#\' onclick=\'return false;\'>링크</a>를 포함할 수 있습니다.',
-  'th-TH': '<strong>แจ้งเตือน:</strong> คุณสามารถใส่ข้อความที่มี<em>รูปแบบ</em> และ <a href=\'#\' onclick=\'return false;\'>ลิงก์</a> ได้',
+  'en-US':
+    "<strong>Heads up:</strong> You can include <em>formatted</em> text and <a href='#' onclick='return false;'>links</a>.",
+  'fr-FR':
+    "<strong>Attention :</strong> Vous pouvez inclure du texte <em>formaté</em> et des <a href='#' onclick='return false;'>liens</a>.",
+  'es-ES':
+    "<strong>Atención:</strong> Puedes incluir texto <em>formateado</em> y <a href='#' onclick='return false;'>enlaces</a>.",
+  'de-DE':
+    "<strong>Achtung:</strong> Sie können <em>formatierten</em> Text und <a href='#' onclick='return false;'>Links</a> einfügen.",
+  'pt-BR':
+    "<strong>Atenção:</strong> Você pode incluir texto <em>formatado</em> e <a href='#' onclick='return false;'>links</a>.",
+  'ru-RU':
+    "<strong>Внимание:</strong> Можно включить <em>форматированный</em> текст и <a href='#' onclick='return false;'>ссылки</a>.",
+  'ja-JP':
+    "<strong>注意:</strong> <em>書式付き</em>テキストや<a href='#' onclick='return false;'>リンク</a>を含められます。",
+  'ko-KR':
+    "<strong>알림:</strong> <em>서식 있는</em> 텍스트와 <a href='#' onclick='return false;'>링크</a>를 포함할 수 있습니다.",
+  'th-TH':
+    "<strong>แจ้งเตือน:</strong> คุณสามารถใส่ข้อความที่มี<em>รูปแบบ</em> และ <a href='#' onclick='return false;'>ลิงก์</a> ได้",
 });
 export const WithHTML: Story = {
   name: 'With HTML Content',

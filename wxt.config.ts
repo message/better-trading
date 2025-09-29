@@ -11,9 +11,7 @@ const config: UserConfig = {
   },
   // outDir: './dist',
   webExt: {
-    chromiumArgs: [
-      'https://www.pathofexile.com/trade',
-    ],
+    chromiumArgs: ['https://www.pathofexile.com/trade'],
   },
 };
 

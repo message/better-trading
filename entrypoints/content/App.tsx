@@ -1,9 +1,5 @@
 import React from 'react';
 
 export default () => {
-  return (
-    <>
-      Hello Better Trading!
-    </>
-  );
+  return <>Hello Better Trading!</>;
 };

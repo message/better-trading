@@ -13,7 +13,6 @@ import svgr, { type VitePluginSvgrOptions } from 'vite-plugin-svgr';
 import { defineWxtModule } from 'wxt/modules';
 import type { InlineConfig } from 'vite';
 
-
 export interface SvgrModuleOptions extends VitePluginSvgrOptions {
   /**
    * Enable or disable the SVGR integration.
@@ -59,8 +58,7 @@ export default defineWxtModule<SvgrModuleOptions>({
 
     const resolvedTypes: ResolvedTypeOptions = {
       reactQuery: types?.reactQuery ?? true,
-      exportAsDefault:
-        types?.exportAsDefault ?? (pluginOptions.svgrOptions?.exportType === 'default'),
+      exportAsDefault: types?.exportAsDefault ?? pluginOptions.svgrOptions?.exportType === 'default',
     };
 
     const pluginFactory = () => svgr(pluginOptions);
@@ -76,7 +74,7 @@ export default defineWxtModule<SvgrModuleOptions>({
       }
     };
 
-    wxt.hooks.hook('vite:devServer:extendConfig', (config) => {
+    wxt.hooks.hook('vite:devServer:extendConfig', config => {
       addPlugin(config);
     });
 
@@ -106,8 +104,8 @@ function generateTypeDeclarations(options: ResolvedTypeOptions): string {
 
   if (options.reactQuery) {
     lines.push(
-      'declare module \'*.svg?react\' {',
-      '  import type { FC, SVGProps } from \'react\';',
+      "declare module '*.svg?react' {",
+      "  import type { FC, SVGProps } from 'react';",
       '  const Component: FC<SVGProps<SVGSVGElement>>;',
       '  export const ReactComponent: FC<SVGProps<SVGSVGElement>>;',
       '  export default Component;',
@@ -121,8 +119,8 @@ function generateTypeDeclarations(options: ResolvedTypeOptions): string {
 
   if (options.exportAsDefault) {
     lines.push(
-      'declare module \'*.svg\' {',
-      '  import type { FC, SVGProps } from \'react\';',
+      "declare module '*.svg' {",
+      "  import type { FC, SVGProps } from 'react';",
       '  const Component: FC<SVGProps<SVGSVGElement>>;',
       '  export const ReactComponent: FC<SVGProps<SVGSVGElement>>;',
       '  export default Component;',

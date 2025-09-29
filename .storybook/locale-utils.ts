@@ -22,7 +22,7 @@ export interface ResolveLocaleOptions {
 export function resolveLocaleValue<T>(
   locale: string | undefined,
   map: Record<string, T>,
-  options: ResolveLocaleOptions = {}
+  options: ResolveLocaleOptions = {},
 ): T {
   const fallback = options.fallback ?? 'en-US';
   const input = locale || fallback;
@@ -43,16 +43,12 @@ export function resolveLocaleValue<T>(
   if (process.env.NODE_ENV !== 'production' && options.warn !== false) {
     if (source !== input) {
       // eslint-disable-next-line no-console
-      console.warn(
-        `[locale-utils] Value for locale "${input}" not found; using "${source}".`
-      );
+      console.warn(`[locale-utils] Value for locale "${input}" not found; using "${source}".`);
     }
   }
 
   if (resolved === undefined) {
-    throw new Error(
-      `[locale-utils] No value could be resolved. Fallback locale "${fallback}" missing in map.`
-    );
+    throw new Error(`[locale-utils] No value could be resolved. Fallback locale "${fallback}" missing in map.`);
   }
 
   return resolved;
@@ -64,4 +60,3 @@ export function resolveLocaleValue<T>(
 export function defineMessages(map: Record<string, string>): Record<string, string> {
   return map; // passthrough – acts as a semantic marker
 }
-

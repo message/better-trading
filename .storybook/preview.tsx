@@ -39,7 +39,8 @@ const preview: Preview = {
         { name: 'white', value: '#FFFFFF' },
       ],
     },
-    docs: { // added
+    docs: {
+      // added
       theme: docsTheme,
     },
   },

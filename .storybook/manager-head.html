@@ -2,15 +2,19 @@
 <meta name="color-scheme" content="dark" />
 <style>
   /* Force dark shell so when preview iframe reloads there's no white flash */
-  html, body,
+  html,
+  body,
   #storybook-preview-wrapper,
   .css-mzrf51 {
-	  background: #0A0A0A !important;
-	  color: #FFFFFF !important;
+    background: #0a0a0a !important;
+    color: #ffffff !important;
   }
   /* Ensure the iframe element itself is dark before its content paints */
-  #storybook-preview-iframe { background:#0A0A0A !important; }
+  #storybook-preview-iframe {
+    background: #0a0a0a !important;
+  }
   /* Remove default transitions that can cause brief light flickers */
-  * { transition: none !important; }
+  * {
+    transition: none !important;
+  }
 </style>
-

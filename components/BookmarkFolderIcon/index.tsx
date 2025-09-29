@@ -42,11 +42,7 @@ const BookmarkFolderIcon: React.FC<BookmarkFolderIconProps> = ({ icon, className
     <img
       src={getExtensionUrl(iconPath)}
       alt={icon}
-      className={classnames(
-        styles.bookmarkFolderIcon,
-        isItem ? styles.isItem : styles.isAscendancy,
-        className,
-      )}
+      className={classnames(styles.bookmarkFolderIcon, isItem ? styles.isItem : styles.isAscendancy, className)}
       {...imgProps}
     />
   );

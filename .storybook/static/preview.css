@@ -1,170 +1,208 @@
 /* Fontin Small Caps */
 @font-face {
-	font-family: "FontinSmallCaps";
-	font-weight: normal;
-	font-style: normal;
-	src: local("☺"), url('/fonts/fontin-smallcaps-webfont.woff') format("woff")
+  font-family: 'FontinSmallCaps';
+  font-weight: normal;
+  font-style: normal;
+  src:
+    local('☺'),
+    url('/fonts/fontin-smallcaps-webfont.woff') format('woff');
 }
 
 /* Fontin Regular */
 @font-face {
-	font-family: "FontinRegular";
-	font-weight: normal;
-	font-style: normal;
-	src: local("☺"), url('/fonts/fontin-regular-webfont.woff') format("woff")
+  font-family: 'FontinRegular';
+  font-weight: normal;
+  font-style: normal;
+  src:
+    local('☺'),
+    url('/fonts/fontin-regular-webfont.woff') format('woff');
 }
 
 /* Fontin Italic */
 @font-face {
-	font-family: "FontinItalic";
-	font-weight: normal;
-	font-style: normal;
-	src: local("☺"), url('/fonts/fontin-italic-webfont.woff') format("woff")
+  font-family: 'FontinItalic';
+  font-weight: normal;
+  font-style: normal;
+  src:
+    local('☺'),
+    url('/fonts/fontin-italic-webfont.woff') format('woff');
 }
 
 /* Fontin Bold */
 @font-face {
-	font-family: "FontinBold";
-	font-weight: normal;
-	font-style: normal;
-	src: local("☺"), url('/fonts/fontin-bold-webfont.woff') format("woff")
+  font-family: 'FontinBold';
+  font-weight: normal;
+  font-style: normal;
+  src:
+    local('☺'),
+    url('/fonts/fontin-bold-webfont.woff') format('woff');
 }
 
 /* Cinzel Regular */
 @font-face {
-	font-family: "Cinzel";
-	font-weight: normal;
-	font-style: normal;
-	src: local("Cinzel-Regular"), url('/fonts/Cinzel-Regular.woff') format("woff")
+  font-family: 'Cinzel';
+  font-weight: normal;
+  font-style: normal;
+  src:
+    local('Cinzel-Regular'),
+    url('/fonts/Cinzel-Regular.woff') format('woff');
 }
 
 /* Cinzel Medium */
 @font-face {
-	font-family: "Cinzel-Medium";
-	font-weight: normal;
-	font-style: normal;
-	src: local("Cinzel-Medium"), url('/fonts/Cinzel-Medium.woff') format("woff")
+  font-family: 'Cinzel-Medium';
+  font-weight: normal;
+  font-style: normal;
+  src:
+    local('Cinzel-Medium'),
+    url('/fonts/Cinzel-Medium.woff') format('woff');
 }
 
 /* Optimus Princeps SemiBold */
 @font-face {
-	font-family: "OptimusPrincepsSemiBold";
-	font-weight: bold;
-	font-style: normal;
-	src: local("☺"), url('/fonts/OptimusPrincepsSemiBold.ttf') format("truetype")
+  font-family: 'OptimusPrincepsSemiBold';
+  font-weight: bold;
+  font-style: normal;
+  src:
+    local('☺'),
+    url('/fonts/OptimusPrincepsSemiBold.ttf') format('truetype');
 }
 
 /* Friz Quadrata C */
 @font-face {
-	font-family: "FrizQuadrataC";
-	font-weight: normal;
-	font-style: normal;
-	src: local("☺"), url('/fonts/FrizQuadrataC.woff') format("woff")
+  font-family: 'FrizQuadrataC';
+  font-weight: normal;
+  font-style: normal;
+  src:
+    local('☺'),
+    url('/fonts/FrizQuadrataC.woff') format('woff');
 }
 
 /* Daehan */
 @font-face {
-	font-family: "Daehan";
-	font-weight: normal;
-	font-style: normal;
-	src: local("☺"), url('/fonts/Daehan.woff') format("woff")
+  font-family: 'Daehan';
+  font-weight: normal;
+  font-style: normal;
+  src:
+    local('☺'),
+    url('/fonts/Daehan.woff') format('woff');
 }
 
 /* Noto Sans JP */
 @font-face {
-	font-family: "Noto Sans JP";
-	font-weight: normal;
-	font-style: normal;
-	src: local("☺"), url('/fonts/noto-sans-jp-v42-latin_japanese-regular.woff2') format("woff2"), url('/fonts/noto-sans-jp-v42-latin_japanese-regular.woff') format("woff")
+  font-family: 'Noto Sans JP';
+  font-weight: normal;
+  font-style: normal;
+  src:
+    local('☺'),
+    url('/fonts/noto-sans-jp-v42-latin_japanese-regular.woff2') format('woff2'),
+    url('/fonts/noto-sans-jp-v42-latin_japanese-regular.woff') format('woff');
 }
 
 /* Noto Serif JP */
 @font-face {
-	font-family: "Noto Serif JP";
-	font-weight: normal;
-	font-style: normal;
-	src: local("☺"), url('/fonts/noto-serif-jp-v21-latin_japanese-regular.woff2') format("woff2"), url('/fonts/noto-serif-jp-v21-latin_japanese-regular.woff') format("woff")
+  font-family: 'Noto Serif JP';
+  font-weight: normal;
+  font-style: normal;
+  src:
+    local('☺'),
+    url('/fonts/noto-serif-jp-v21-latin_japanese-regular.woff2') format('woff2'),
+    url('/fonts/noto-serif-jp-v21-latin_japanese-regular.woff') format('woff');
 }
 
 /* Quikhand */
 @font-face {
-	font-family: "Quikhand";
-	font-style: normal;
-	font-weight: normal;
-	src: local("Quikhand"), url('/fonts/Quikhand.woff') format("woff")
+  font-family: 'Quikhand';
+  font-style: normal;
+  font-weight: normal;
+  src:
+    local('Quikhand'),
+    url('/fonts/Quikhand.woff') format('woff');
 }
 
 /* Caveat Bold */
 @font-face {
-	font-family: "Caveat-Bold";
-	font-style: normal;
-	font-weight: normal;
-	src: local("Caveat-Bold"), url('/fonts/Caveat-Bold.woff2') format("woff2")
+  font-family: 'Caveat-Bold';
+  font-style: normal;
+  font-weight: normal;
+  src:
+    local('Caveat-Bold'),
+    url('/fonts/Caveat-Bold.woff2') format('woff2');
 }
 
 html {
-	font-family: "FontinSmallCaps", Verdana, Arial, Helvetica, sans-serif;
-	font-size-adjust: .54;
-	font-weight: normal;
+  font-family: 'FontinSmallCaps', Verdana, Arial, Helvetica, sans-serif;
+  font-size-adjust: 0.54;
+  font-weight: normal;
 }
 
-html[lang="zh-CN"] {
-	font-family: "Microsoft YaHei", Verdana, Arial, Helvetica, sans-serif;
+html[lang='zh-CN'] {
+  font-family: 'Microsoft YaHei', Verdana, Arial, Helvetica, sans-serif;
 }
 
-html[lang="zh-TW"] {
-	font-family: 微軟正黑, "Microsoft JhengHei", 新明細體, Verdana, Arial, Helvetica, sans-serif;
+html[lang='zh-TW'] {
+  font-family: 微軟正黑, 'Microsoft JhengHei', 新明細體, Verdana, Arial, Helvetica, sans-serif;
 }
 
-html[lang="ru-RU"] {
-	font-family: FrizQuadrataC, Verdana, Arial, Helvetica, sans-serif;
+html[lang='ru-RU'] {
+  font-family: FrizQuadrataC, Verdana, Arial, Helvetica, sans-serif;
 }
 
-html[lang="ko-KR"] {
-	font-family: "맑은 고딕", "Malgun Gothic", Verdana, Arial, Helvetica, sans-serif;
-	letter-spacing: -0.025em;
+html[lang='ko-KR'] {
+  font-family: '맑은 고딕', 'Malgun Gothic', Verdana, Arial, Helvetica, sans-serif;
+  letter-spacing: -0.025em;
 }
 
-html[lang="ja-JP"] {
-	font-family: "Noto Sans JP", Verdana, Arial, Helvetica, sans-serif;
-	letter-spacing: -0.025em;
+html[lang='ja-JP'] {
+  font-family: 'Noto Sans JP', Verdana, Arial, Helvetica, sans-serif;
+  letter-spacing: -0.025em;
 }
 
 /* Fonts */
 
 a {
-	color: #E9CF9F
+  color: #e9cf9f;
 }
 
 /* Base dark background applied immediately (before external CSS loads) */
-html, body,
-.sb-preparing-story, .sb-preparing-docs, .sb-previewBlock, .sb-previewBlock table {
-	background: #0A0A0A !important;
-	color: #FFFFFF !important;
+html,
+body,
+.sb-preparing-story,
+.sb-preparing-docs,
+.sb-previewBlock,
+.sb-previewBlock table {
+  background: #0a0a0a !important;
+  color: #ffffff !important;
 }
 
 /* Dark autodocs overrides: ensure all docs surfaces use extension dark background */
-.sbdocs, .sbdocs-wrapper, .sbdocs-content, .docs-story, [data-storybook='docs-root'] {
-	background-color: #0A0A0A !important;
-	color: #FFFFFF;
+.sbdocs,
+.sbdocs-wrapper,
+.sbdocs-content,
+.docs-story,
+[data-storybook='docs-root'] {
+  background-color: #0a0a0a !important;
+  color: #ffffff;
 }
 
 .sbdocs a {
-	color: #E9CF9F;
+  color: #e9cf9f;
 }
 
-.sbdocs code, .sbdocs pre {
-	background: #1A1A1A;
-	color: #E9CF9F;
+.sbdocs code,
+.sbdocs pre {
+  background: #1a1a1a;
+  color: #e9cf9f;
 }
 
 /* Tables in docs */
 .sbdocs table {
-	background: #121212;
+  background: #121212;
 }
 
-.sbdocs th, .sbdocs td {
-	border-color: #222222;
+.sbdocs th,
+.sbdocs td {
+  border-color: #222222;
 }
 
 /* --- Dark Theme Forced Overrides for Storybook Light Skeleton Elements --- */
@@ -172,18 +210,19 @@ html, body,
    extension's dark theme. All potentially light backgrounds and borders are overridden with
    !important to win against inline & higher-specificity Storybook styles. */
 :root {
-  --btwxt-bg-base: #0A0A0A;
+  --btwxt-bg-base: #0a0a0a;
   --btwxt-bg-surface: #121212;
   --btwxt-bg-elevated: #181818;
   --btwxt-border-color: #222222;
-  --btwxt-border-color-subtle: #1A1A1A;
-  --btwxt-accent: #E9CF9F;
+  --btwxt-border-color-subtle: #1a1a1a;
+  --btwxt-accent: #e9cf9f;
 }
 
 /* Loading overlays */
-.sb-preparing-story, .sb-preparing-docs {
+.sb-preparing-story,
+.sb-preparing-docs {
   background-color: var(--btwxt-bg-base) !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 
 /* Preview block (skeleton container) */
@@ -231,7 +270,9 @@ html, body,
 }
 
 /* Remove light box-shadow on argstable container for consistency */
-.sb-argstableBlock-body { box-shadow: none !important; }
+.sb-argstableBlock-body {
+  box-shadow: none !important;
+}
 
 /* General tables already dark, ensure consistency */
 .sb-previewBlock table,
@@ -250,13 +291,24 @@ html, body,
 }
 
 /* Override Storybook shimmer/glow animation to a subtle dark pulse */
-@-webkit-keyframes sb-glow { /* dark replacement */
-  0%, 100% { background-color: #1A1A1A; }
-  50% { background-color: #222222; }
+@-webkit-keyframes sb-glow {
+  /* dark replacement */
+  0%,
+  100% {
+    background-color: #1a1a1a;
+  }
+  50% {
+    background-color: #222222;
+  }
 }
 @keyframes sb-glow {
-  0%, 100% { background-color: #1A1A1A; }
-  50% { background-color: #222222; }
+  0%,
+  100% {
+    background-color: #1a1a1a;
+  }
+  50% {
+    background-color: #222222;
+  }
 }
 
 /* Ensure any element using the glow inherits our dark palette */
@@ -266,7 +318,7 @@ html, body,
 .sb-argstableBlock-body button,
 .sb-previewBlock_body [class*='skeleton'],
 .sb-previewBlock_body [data-skeleton] {
-  background-color: #1A1A1A !important;
+  background-color: #1a1a1a !important;
 }
 
 /* Final safeguard: blanket override for any white / near-white backgrounds inside Storybook preview root */
