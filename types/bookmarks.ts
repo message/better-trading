@@ -153,3 +153,9 @@ export enum BookmarksFolderPoE2ItemIcon {
   WAYSTONE = 'poe2-waystone',
   WISDOM = 'poe2-wisdom',
 }
+
+// Set of all item icons (PoE1 + PoE2) for quick classification
+export const bookmarkFolderItemIcons = new Set<string>([
+  ...Object.values(BookmarksFolderPoE1ItemIcon),
+  ...Object.values(BookmarksFolderPoE2ItemIcon),
+]);

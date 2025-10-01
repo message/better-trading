@@ -1,11 +1,9 @@
 import Header from './index';
 import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
-import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * Header component displays the Better Trading header with logo, title,
- * and collapse/expand functionality.
  */
 const meta = {
   component: Header,
@@ -87,13 +85,15 @@ export const OnRootRoute: Story = {
     const toggleClickMessage = resolveLocaleValue(globals.locale as string, toggleClickMessages);
 
     return (
-      <Header
-        {...args}
-        title={title}
-        isOnRootRoute={true}
-        onBrandClick={() => alert(brandClickMessage)}
-        onToggleClick={() => alert(toggleClickMessage)}
-      />
+      <>
+        <Header
+          {...args}
+          title={title}
+          isOnRootRoute={true}
+          onBrandClick={() => alert(brandClickMessage)}
+          onToggleClick={() => alert(toggleClickMessage)}
+        />
+      </>
     );
   },
 };
@@ -108,76 +108,16 @@ export const OnSubRoute: Story = {
     const toggleClickMessage = resolveLocaleValue(globals.locale as string, toggleClickMessages);
 
     return (
-      <Header
-        {...args}
-        title={title}
-        isOnRootRoute={false}
-        onBrandClick={() => alert(brandClickMessage)}
-        onToggleClick={() => alert(toggleClickMessage)}
-      />
-    );
-  },
-};
-
-/**
- * Interactive example showing route toggle behavior
- */
-export const Interactive: Story = {
-  render: (args, { globals }) => {
-    const InteractiveComponent = () => {
-      const title = resolveLocaleValue(globals.locale as string, titleMessages);
-      const brandClickMessage = resolveLocaleValue(globals.locale as string, brandClickMessages);
-
-      const [isOnRoot, setIsOnRoot] = useState(true);
-
-      const goToAboutMessages = defineMessages({
-        'en-US': 'Going to About page',
-        'fr-FR': 'Aller à la page À propos',
-        'es-ES': 'Ir a la página Acerca de',
-        'de-DE': 'Zur Über-Seite gehen',
-        'pt-BR': 'Ir para a página Sobre',
-        'ru-RU': 'Переход на страницу О программе',
-        'zh-CN': '前往关于页面',
-        'ja-JP': '概要ページに移動',
-        'ko-KR': '정보 페이지로 이동',
-        'th-TH': 'ไปยังหน้าเกี่ยวกับ',
-      });
-
-      const goToHomeMessages = defineMessages({
-        'en-US': 'Going to Home page',
-        'fr-FR': "Aller à la page d'accueil",
-        'es-ES': 'Ir a la página de inicio',
-        'de-DE': 'Zur Startseite gehen',
-        'pt-BR': 'Ir para a página inicial',
-        'ru-RU': 'Переход на главную страницу',
-        'zh-CN': '前往主页',
-        'ja-JP': 'ホームページに移動',
-        'ko-KR': '홈 페이지로 이동',
-        'th-TH': 'ไปยังหน้าแรก',
-      });
-
-      const routeChangeMessage = isOnRoot
-        ? resolveLocaleValue(globals.locale as string, goToAboutMessages)
-        : resolveLocaleValue(globals.locale as string, goToHomeMessages);
-
-      return (
+      <>
         <Header
           {...args}
           title={title}
-          isOnRootRoute={isOnRoot}
-          onBrandClick={() => {
-            alert(brandClickMessage);
-            setIsOnRoot(true);
-          }}
-          onToggleClick={() => {
-            alert(routeChangeMessage);
-            setIsOnRoot(!isOnRoot);
-          }}
+          isOnRootRoute={false}
+          onBrandClick={() => alert(brandClickMessage)}
+          onToggleClick={() => alert(toggleClickMessage)}
         />
-      );
-    };
-
-    return <InteractiveComponent />;
+      </>
+    );
   },
 };
 

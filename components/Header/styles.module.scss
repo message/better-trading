@@ -45,8 +45,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 25px;
-  height: 25px;
   padding: 0;
   border: 0;
   margin: 0;
@@ -61,40 +59,7 @@
   }
 }
 
-.expandButton {
-  display: flex;
-  position: fixed;
-  top: 50px;
-  right: 0;
-  opacity: 0;
-  align-items: center;
-  padding: 5px 10px;
-  border: 1px solid variables.$blue-alt;
-  background-color: variables.$blue;
-  outline: none;
-  font-size: 20px;
-  color: variables.$white;
-  transition: opacity 0.2s ease;
-  border-right-width: 0;
-  pointer-events: none;
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    background-color: color.adjust(variables.$blue, $lightness: 5%);
-
-    .expandButtonIcon {
-      margin-right: 15px;
-    }
-  }
-
-  &.isVisible {
-    opacity: 1;
-    pointer-events: all;
-  }
-}
-
-.expandButtonIcon {
-  margin-right: 10px;
-  transition: margin-right 0.2s ease;
+.headerButton svg {
+  width: 25px;
+  height: 25px;
 }

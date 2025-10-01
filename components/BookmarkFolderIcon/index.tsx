@@ -9,17 +9,11 @@
 // This keeps a single source for icon names while allowing deletion of the legacy Ember code later.
 
 import styles from './styles.module.scss';
-import { BookmarksFolderPoE1ItemIcon, BookmarksFolderPoE2ItemIcon } from '@/types/bookmarks';
+import { bookmarkFolderItemIcons } from '@/types/bookmarks';
 import { getExtensionUrl } from '@/utils/extension-url';
 import classnames from 'classnames';
 import type { BookmarksFolderIcon as BookmarkFolderIconType } from '@/types/bookmarks';
 import type { ImgHTMLAttributes, FC } from 'react';
-
-// Build a Set of all item icons for quick classification (constant at module scope)
-const ITEM_ICON_SET = new Set<string>([
-  ...Object.values(BookmarksFolderPoE1ItemIcon),
-  ...Object.values(BookmarksFolderPoE2ItemIcon),
-]);
 
 type BookmarkFolderIconName = BookmarkFolderIconType;
 
@@ -32,8 +26,16 @@ interface BookmarkFolderIconProps extends ImgHTMLAttributes<HTMLImageElement> {
  * BookmarkFolderIcon renders a single folder icon (item or ascendancy) with proper sizing.
  */
 const BookmarkFolderIcon: FC<BookmarkFolderIconProps> = ({ icon, className, ...imgProps }) => {
-  const iconPath = `/assets/images/bookmark-folder/${icon}.png`;
-  const isItem = ITEM_ICON_SET.has(icon);
+  const isPoE2 = icon.startsWith('poe2-');
+  const isItem = bookmarkFolderItemIcons.has(icon);
+
+  // Remove poe2- prefix from filename for PoE2 icons
+  const filename = isPoE2 ? icon.replace(/^poe2-/, '') : icon;
+
+  // Build the path based on game version and icon type
+  const gameVersion = isPoE2 ? 'poe2' : 'poe1';
+  const iconType = isItem ? 'item' : 'ascendancy';
+  const iconPath = `/assets/images/bookmark-folder/${gameVersion}/${iconType}/${filename}.png`;
 
   return (
     <img
@@ -46,5 +48,4 @@ const BookmarkFolderIcon: FC<BookmarkFolderIconProps> = ({ icon, className, ...i
 };
 
 export default BookmarkFolderIcon;
-export { ITEM_ICON_SET };
 export type { BookmarkFolderIconName, BookmarkFolderIconProps };
