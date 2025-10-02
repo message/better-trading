@@ -1,0 +1,22 @@
+@use '../../styles/variables';
+
+.textareaWrapper {
+  position: relative;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 75px;
+  max-height: 150px;
+  border: 1px solid variables.$gold-alt;
+  background: transparent;
+  font-weight: normal;
+  color: rgba(variables.$white, 0.7);
+  resize: vertical;
+}
+
+.clipboardButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
