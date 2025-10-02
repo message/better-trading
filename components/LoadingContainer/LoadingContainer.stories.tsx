@@ -310,7 +310,8 @@ export const SpinnerOnly: Story = {
     size: 'large',
     task: createInfiniteTask(),
   },
-  render: (args, { globals }) => {
+  render: (args, context) => {
+    const { globals } = context;
     const message = resolveLocaleValue(globals.locale as string, spinnerNeverStopsMessage);
     return (
       <div data-locale={globals.locale}>
@@ -329,7 +330,8 @@ export const SpinnerOnlySmall: Story = {
     size: 'small',
     task: createInfiniteTask(),
   },
-  render: (args, { globals }) => {
+  render: (args, context) => {
+    const { globals } = context;
     const message = resolveLocaleValue(globals.locale as string, smallSpinnerInspectionMessage);
     return (
       <div data-locale={globals.locale}>
@@ -348,7 +350,8 @@ export const LargeSpinner: Story = {
     size: 'large',
     task: createDelayedTask(2000),
   },
-  render: (args, { globals }) => {
+  render: (args, context) => {
+    const { globals } = context;
     const heading = resolveLocaleValue(globals.locale as string, contentLoadedMessage);
     const description = resolveLocaleValue(globals.locale as string, contentAppearsMessage);
     return (
@@ -368,7 +371,8 @@ export const SmallSpinner: Story = {
     size: 'small',
     task: createDelayedTask(2000),
   },
-  render: (args, { globals }) => {
+  render: (args, context) => {
+    const { globals } = context;
     const message = resolveLocaleValue(globals.locale as string, loadedContentSmallMessage);
     return (
       <LoadingContainer {...args}>
@@ -386,7 +390,8 @@ export const QuickLoad: Story = {
     size: 'large',
     task: createDelayedTask(500),
   },
-  render: (args, { globals }) => {
+  render: (args, context) => {
+    const { globals } = context;
     const message = resolveLocaleValue(globals.locale as string, loadedQuicklyMessage);
     return (
       <LoadingContainer {...args}>
@@ -404,7 +409,8 @@ export const LongLoad: Story = {
     size: 'large',
     task: createDelayedTask(5000),
   },
-  render: (args, { globals }) => {
+  render: (args, context) => {
+    const { globals } = context;
     const heading = resolveLocaleValue(globals.locale as string, finallyLoadedMessage);
     const description = resolveLocaleValue(globals.locale as string, tookAWhileMessage);
     return (
@@ -424,7 +430,8 @@ export const WithComplexContent: Story = {
     size: 'large',
     task: createDelayedTask(2000),
   },
-  render: (args, { globals }) => {
+  render: (args, context) => {
+    const { globals } = context;
     const dashboard = resolveLocaleValue(globals.locale as string, userDashboardMessage);
     const username = resolveLocaleValue(globals.locale as string, usernameLabel);
     const level = resolveLocaleValue(globals.locale as string, levelLabel);
@@ -459,7 +466,8 @@ export const ErrorHandling: Story = {
       throw new Error('Simulated task failure');
     },
   },
-  render: (args, { globals }) => {
+  render: (args, context) => {
+    const { globals } = context;
     const message = resolveLocaleValue(globals.locale as string, errorDisplaysMessage);
     return (
       <LoadingContainer {...args}>
@@ -474,7 +482,12 @@ export const ErrorHandling: Story = {
 export const MultipleInstances: Story = {
   name: 'Multiple Instances',
   parameters: { layout: 'padded' },
-  render: (args, { globals }) => {
+  args: {
+    task: createDelayedTask(1000),
+    size: 'large',
+  },
+  render: (args, context) => {
+    const { globals } = context;
     const large1s = resolveLocaleValue(globals.locale as string, largeSpinner1sLabel);
     const small2s = resolveLocaleValue(globals.locale as string, smallSpinner2sLabel);
     const large3s = resolveLocaleValue(globals.locale as string, largeSpinner3sLabel);

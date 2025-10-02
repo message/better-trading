@@ -79,21 +79,25 @@ const toggleClickMessages = defineMessages({
  * Default header on root route (shows info icon)
  */
 export const OnRootRoute: Story = {
-  render: (args, { globals }) => {
-    const title = resolveLocaleValue(globals.locale as string, titleMessages);
-    const brandClickMessage = resolveLocaleValue(globals.locale as string, brandClickMessages);
-    const toggleClickMessage = resolveLocaleValue(globals.locale as string, toggleClickMessages);
+  args: {
+    title: 'Better Trading',
+    isOnRootRoute: true,
+  },
+  render: (args, context) => {
+    const { globals } = context;
+    const locale = globals.locale as string;
+    const title = resolveLocaleValue(locale, titleMessages);
+    const brandClickMessage = resolveLocaleValue(locale, brandClickMessages);
+    const toggleClickMessage = resolveLocaleValue(locale, toggleClickMessages);
 
     return (
-      <>
-        <Header
-          {...args}
-          title={title}
-          isOnRootRoute={true}
-          onBrandClick={() => alert(brandClickMessage)}
-          onToggleClick={() => alert(toggleClickMessage)}
-        />
-      </>
+      <Header
+        {...args}
+        title={title}
+        isOnRootRoute={true}
+        onBrandClick={() => alert(brandClickMessage)}
+        onToggleClick={() => alert(toggleClickMessage)}
+      />
     );
   },
 };
@@ -102,21 +106,25 @@ export const OnRootRoute: Story = {
  * Header on sub-route (shows close icon)
  */
 export const OnSubRoute: Story = {
-  render: (args, { globals }) => {
-    const title = resolveLocaleValue(globals.locale as string, titleMessages);
-    const brandClickMessage = resolveLocaleValue(globals.locale as string, brandClickMessages);
-    const toggleClickMessage = resolveLocaleValue(globals.locale as string, toggleClickMessages);
+  args: {
+    title: 'Better Trading',
+    isOnRootRoute: false,
+  },
+  render: (args, context) => {
+    const { globals } = context;
+    const locale = globals.locale as string;
+    const title = resolveLocaleValue(locale, titleMessages);
+    const brandClickMessage = resolveLocaleValue(locale, brandClickMessages);
+    const toggleClickMessage = resolveLocaleValue(locale, toggleClickMessages);
 
     return (
-      <>
-        <Header
-          {...args}
-          title={title}
-          isOnRootRoute={false}
-          onBrandClick={() => alert(brandClickMessage)}
-          onToggleClick={() => alert(toggleClickMessage)}
-        />
-      </>
+      <Header
+        {...args}
+        title={title}
+        isOnRootRoute={false}
+        onBrandClick={() => alert(brandClickMessage)}
+        onToggleClick={() => alert(toggleClickMessage)}
+      />
     );
   },
 };
