@@ -1,0 +1,43 @@
+@use '../../styles/variables';
+
+$checkbox-size: 12px;
+$checkbox-border: 2px;
+$checkbox-gap: 2px;
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.indicator {
+  position: relative;
+  width: $checkbox-size;
+  height: $checkbox-size;
+  border: $checkbox-border solid #634928;
+  margin-right: 5px;
+
+  &::before {
+    display: block;
+    content: '';
+    position: absolute;
+    top: $checkbox-gap;
+    left: $checkbox-gap;
+    transform: scale(0);
+    width: calc(100% - #{$checkbox-gap * 2});
+    height: calc(100% - #{$checkbox-gap * 2});
+    background-color: variables.$white;
+    transition: transform 0.2s ease;
+  }
+
+  &.isActive::before {
+    transform: scale(1);
+  }
+}
+
+.label {
+  font-family: variables.$primary-font;
+  font-size: 13px;
+  line-height: 1;
+  color: variables.$white;
+}
