@@ -306,33 +306,86 @@ const ExampleSvgrIcon: React.FC<React.SVGProps<SVGSVGElement>> = props => (
 
 export const Blue: Story = {
   name: 'Blue Theme',
+  args: { theme: 'blue' },
   render: (args, { globals }) => {
     const label = resolveLocaleValue(globals.locale as string, blueButtonLabels);
-    return <Button theme="blue" label={label} onClick={() => alert(label)} data-locale={globals.locale} />;
+    const theme = args.theme ?? 'blue';
+    const onClick = args.onClick ?? (() => alert(label));
+    return (
+      <Button
+        theme={theme}
+        label={label}
+        icon={args.icon}
+        className={args.className}
+        type={args.type}
+        onClick={onClick}
+        data-locale={globals.locale}
+      />
+    );
   },
 };
 
 export const Gold: Story = {
   name: 'Gold Theme',
+  args: { theme: 'gold' },
   render: (args, { globals }) => {
     const label = resolveLocaleValue(globals.locale as string, goldButtonLabels);
-    return <Button theme="gold" label={label} onClick={() => alert(label)} data-locale={globals.locale} />;
+    const theme = args.theme ?? 'gold';
+    const onClick = args.onClick ?? (() => alert(label));
+    return (
+      <Button
+        theme={theme}
+        label={label}
+        icon={args.icon}
+        className={args.className}
+        type={args.type}
+        onClick={onClick}
+        data-locale={globals.locale}
+      />
+    );
   },
 };
 
 export const Red: Story = {
   name: 'Red Theme',
+  args: { theme: 'red' },
   render: (args, { globals }) => {
     const label = resolveLocaleValue(globals.locale as string, redButtonLabels);
-    return <Button theme="red" label={label} onClick={() => alert(label)} data-locale={globals.locale} />;
+    const theme = args.theme ?? 'red';
+    const onClick = args.onClick ?? (() => alert(label));
+    return (
+      <Button
+        theme={theme}
+        label={label}
+        icon={args.icon}
+        className={args.className}
+        type={args.type}
+        onClick={onClick}
+        data-locale={globals.locale}
+      />
+    );
   },
 };
 
 export const WithIcon: Story = {
   name: 'With Icon',
+  args: { theme: 'blue' },
   render: (args, { globals }) => {
     const label = resolveLocaleValue(globals.locale as string, saveButtonLabels);
-    return <Button theme="blue" label={label} icon="💾" onClick={() => alert(label)} data-locale={globals.locale} />;
+    const icon = args.icon ?? '💾';
+    const theme = args.theme ?? 'blue';
+    const onClick = args.onClick ?? (() => alert(label));
+    return (
+      <Button
+        theme={theme}
+        label={label}
+        icon={icon}
+        className={args.className}
+        type={args.type}
+        onClick={onClick}
+        data-locale={globals.locale}
+      />
+    );
   },
 };
 
@@ -347,28 +400,47 @@ export const IconOnly: Story = {
 
 export const AsLink: Story = {
   name: 'As Link (External)',
+  args: { theme: 'blue', href: 'https://www.pathofexile.com' },
   render: (args, { globals }) => {
     const label = resolveLocaleValue(globals.locale as string, visitGitHubLabels);
+    const theme = args.theme ?? 'blue';
+    const icon = args.icon ?? '🔗';
+    const href = args.href ?? 'https://www.pathofexile.com';
     return (
-      <Button theme="blue" label={label} icon="🔗" href="https://www.pathofexile.com" data-locale={globals.locale} />
+      <Button
+        theme={theme}
+        label={label}
+        icon={icon}
+        className={args.className}
+        href={href}
+        data-locale={globals.locale}
+      />
     );
   },
 };
 
 export const AsFileInput: Story = {
   name: 'As File Input',
+  args: { theme: 'gold', onFileChange: () => {} },
   render: (args, { globals }) => {
     const label = resolveLocaleValue(globals.locale as string, uploadFileLabels);
+    const handleFileChange =
+      args.onFileChange ??
+      ((event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        alert(`File selected: ${file?.name || 'none'}`);
+      });
+    const theme = args.theme ?? 'gold';
+    const icon = args.icon ?? '📁';
+    const fileAccept = args.fileAccept ?? '.json,.txt';
     return (
       <Button
-        theme="gold"
+        theme={theme}
         label={label}
-        icon="📁"
-        onFileChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          const file = event.target.files?.[0];
-          alert(`File selected: ${file?.name || 'none'}`);
-        }}
-        fileAccept=".json,.txt"
+        icon={icon}
+        className={args.className}
+        onFileChange={handleFileChange}
+        fileAccept={fileAccept}
         data-locale={globals.locale}
       />
     );
@@ -377,16 +449,37 @@ export const AsFileInput: Story = {
 
 export const MultipleButtons: Story = {
   name: 'Multiple Buttons',
+  args: { theme: 'blue' },
   render: (args, { globals }) => {
     const saveLabel = resolveLocaleValue(globals.locale as string, saveButtonLabels);
     const editLabel = resolveLocaleValue(globals.locale as string, editButtonLabels);
     const deleteLabel = resolveLocaleValue(globals.locale as string, deleteButtonLabels);
+    const sharedClassName = args.className;
+    const sharedOnClick = 'href' in args || 'onFileChange' in args ? undefined : args.onClick;
 
     return (
       <div data-locale={globals.locale}>
-        <Button theme="blue" label={saveLabel} icon="💾" onClick={() => alert(saveLabel)} />
-        <Button theme="gold" label={editLabel} icon="✏️" onClick={() => alert(editLabel)} />
-        <Button theme="red" label={deleteLabel} icon="🗑️" onClick={() => alert(deleteLabel)} />
+        <Button
+          theme="blue"
+          className={sharedClassName}
+          label={saveLabel}
+          icon="💾"
+          onClick={sharedOnClick ?? (() => alert(saveLabel))}
+        />
+        <Button
+          theme="gold"
+          className={sharedClassName}
+          label={editLabel}
+          icon="✏️"
+          onClick={sharedOnClick ?? (() => alert(editLabel))}
+        />
+        <Button
+          theme="red"
+          className={sharedClassName}
+          label={deleteLabel}
+          icon="🗑️"
+          onClick={sharedOnClick ?? (() => alert(deleteLabel))}
+        />
       </div>
     );
   },
@@ -395,6 +488,7 @@ export const MultipleButtons: Story = {
 export const ThemeShowcase: Story = {
   name: 'Theme Showcase',
   parameters: { layout: 'padded' },
+  args: { theme: 'blue' },
   render: (args, { globals }) => {
     const blueTheme = resolveLocaleValue(globals.locale as string, blueThemeHeading);
     const goldTheme = resolveLocaleValue(globals.locale as string, goldThemeHeading);
@@ -403,30 +497,31 @@ export const ThemeShowcase: Story = {
     const withIcon = resolveLocaleValue(globals.locale as string, withIconLabels);
     const noIcon = resolveLocaleValue(globals.locale as string, noIconLabels);
 
+    const sharedClassName = args.className;
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }} data-locale={globals.locale}>
         <div>
           <h4 style={{ margin: '0 0 8px', fontSize: 14, color: '#999' }}>{blueTheme}</h4>
-          <Button theme="blue" label={clickMe} icon="✓" onClick={() => {}} />
-          <Button theme="blue" label={withIcon} icon="⚡" onClick={() => {}} />
-          <Button theme="blue" label={noIcon} onClick={() => {}} />
-          <Button theme="blue" icon="★" onClick={() => {}} />
+          <Button theme="blue" className={sharedClassName} label={clickMe} icon="✓" onClick={() => {}} />
+          <Button theme="blue" className={sharedClassName} label={withIcon} icon="⚡" onClick={() => {}} />
+          <Button theme="blue" className={sharedClassName} label={noIcon} onClick={() => {}} />
+          <Button theme="blue" className={sharedClassName} icon="★" onClick={() => {}} />
         </div>
 
         <div>
           <h4 style={{ margin: '0 0 8px', fontSize: 14, color: '#999' }}>{goldTheme}</h4>
-          <Button theme="gold" label={clickMe} icon="✓" onClick={() => {}} />
-          <Button theme="gold" label={withIcon} icon="⚡" onClick={() => {}} />
-          <Button theme="gold" label={noIcon} onClick={() => {}} />
-          <Button theme="gold" icon="★" onClick={() => {}} />
+          <Button theme="gold" className={sharedClassName} label={clickMe} icon="✓" onClick={() => {}} />
+          <Button theme="gold" className={sharedClassName} label={withIcon} icon="⚡" onClick={() => {}} />
+          <Button theme="gold" className={sharedClassName} label={noIcon} onClick={() => {}} />
+          <Button theme="gold" className={sharedClassName} icon="★" onClick={() => {}} />
         </div>
 
         <div>
           <h4 style={{ margin: '0 0 8px', fontSize: 14, color: '#999' }}>{redTheme}</h4>
-          <Button theme="red" label={clickMe} icon="✓" onClick={() => {}} />
-          <Button theme="red" label={withIcon} icon="⚡" onClick={() => {}} />
-          <Button theme="red" label={noIcon} onClick={() => {}} />
-          <Button theme="red" icon="★" onClick={() => {}} />
+          <Button theme="red" className={sharedClassName} label={clickMe} icon="✓" onClick={() => {}} />
+          <Button theme="red" className={sharedClassName} label={withIcon} icon="⚡" onClick={() => {}} />
+          <Button theme="red" className={sharedClassName} label={noIcon} onClick={() => {}} />
+          <Button theme="red" className={sharedClassName} icon="★" onClick={() => {}} />
         </div>
       </div>
     );
@@ -436,6 +531,7 @@ export const ThemeShowcase: Story = {
 export const AllVariants: Story = {
   name: 'All Variants',
   parameters: { layout: 'padded' },
+  args: { theme: 'blue' },
   render: (args, { globals }) => {
     const buttonHeading = resolveLocaleValue(globals.locale as string, buttonOnClickHeading);
     const linkHeading = resolveLocaleValue(globals.locale as string, linkHrefHeading);
@@ -444,29 +540,47 @@ export const AllVariants: Story = {
     const visitGitHub = resolveLocaleValue(globals.locale as string, visitGitHubLabels);
     const upload = resolveLocaleValue(globals.locale as string, uploadLabels);
 
+    const sharedClassName = args.className;
+    const buttonVariantOnClick = 'href' in args || 'onFileChange' in args ? undefined : args.onClick;
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }} data-locale={globals.locale}>
         <div>
           <h4 style={{ margin: '0 0 8px', fontSize: 14, color: '#999' }}>{buttonHeading}</h4>
-          <Button theme="blue" label={clickMe} icon="👆" onClick={() => alert(clickMe)} />
+          <Button
+            theme="blue"
+            className={sharedClassName}
+            label={clickMe}
+            icon="👆"
+            onClick={buttonVariantOnClick ?? (() => alert(clickMe))}
+          />
         </div>
 
         <div>
           <h4 style={{ margin: '0 0 8px', fontSize: 14, color: '#999' }}>{linkHeading}</h4>
-          <Button theme="gold" label={visitGitHub} icon="🔗" href="https://github.com" />
+          <Button
+            theme="gold"
+            className={sharedClassName}
+            label={visitGitHub}
+            icon={args.icon ?? '🔗'}
+            href={args.href ?? 'https://github.com'}
+          />
         </div>
 
         <div>
           <h4 style={{ margin: '0 0 8px', fontSize: 14, color: '#999' }}>{fileHeading}</h4>
           <Button
             theme="red"
+            className={sharedClassName}
             label={upload}
-            icon="📁"
-            onFileChange={e => {
-              const file = e.target.files?.[0];
-              alert(`File: ${file?.name || 'none'}`);
-            }}
-            fileAccept=".json"
+            icon={args.icon ?? '📁'}
+            onFileChange={
+              args.onFileChange ??
+              ((event: React.ChangeEvent<HTMLInputElement>) => {
+                const file = event.target.files?.[0];
+                alert(`File: ${file?.name || 'none'}`);
+              })
+            }
+            fileAccept={args.fileAccept ?? '.json'}
           />
         </div>
       </div>
@@ -476,14 +590,20 @@ export const AllVariants: Story = {
 
 export const WithSvgrIcon: Story = {
   name: 'With SVGR Icon Component',
+  args: { theme: 'blue' },
   render: (args, { globals }) => {
     const label = resolveLocaleValue(globals.locale as string, svgrIconLabels);
+    const icon = args.icon ?? ExampleSvgrIcon;
+    const theme = args.theme ?? 'blue';
+    const onClick = args.onClick ?? (() => alert(label));
     return (
       <Button
-        theme="blue"
+        theme={theme}
         label={label}
-        icon={ExampleSvgrIcon}
-        onClick={() => alert(label)}
+        icon={icon}
+        className={args.className}
+        type={args.type}
+        onClick={onClick}
         data-locale={globals.locale}
       />
     );

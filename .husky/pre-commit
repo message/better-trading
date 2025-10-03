@@ -1,6 +1,4 @@
 #!/usr/bin/env sh
 
-# Husky pre-commit hook: run lint-staged (Prettier)
-
-pnpm dlx lint-staged --allow-empty
-
+pnpm lint-staged --allow-empty
+pnpm compile

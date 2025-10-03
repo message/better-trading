@@ -1,7 +1,6 @@
 import { fixupConfigRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
-import { defineConfig } from 'eslint/config';
 import { flatConfigs as importXFlatConfig } from 'eslint-plugin-import-x';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
@@ -9,16 +8,21 @@ import reactPlugin from 'eslint-plugin-react';
 import { browser, es2020, node } from 'globals';
 import { configs as tsConfigs, parser as tsParser } from 'typescript-eslint';
 import type { FixupConfigArray } from '@eslint/compat';
+import type { Linter } from 'eslint';
 
-export default defineConfig(
+const reactHooksConfig = fixupConfigRules(
+  new FlatCompat().extends('plugin:react-hooks/recommended') as FixupConfigArray,
+);
+
+const config: Linter.Config[] = [
   // Shared configs
   js.configs.recommended,
   ...tsConfigs.recommended,
   jsxA11y.flatConfigs.recommended,
+  eslintPluginPrettierRecommended,
   importXFlatConfig.recommended,
   importXFlatConfig.typescript,
-  eslintPluginPrettierRecommended,
-  ...fixupConfigRules(new FlatCompat().extends('plugin:react-hooks/recommended') as FixupConfigArray),
+  ...reactHooksConfig,
   {
     files: ['**/*.{ts,tsx}'],
     ...reactPlugin.configs.flat.recommended,
@@ -97,4 +101,6 @@ export default defineConfig(
       reportUnusedDisableDirectives: 'error',
     },
   },
-);
+];
+
+export default config;
