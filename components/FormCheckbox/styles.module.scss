@@ -1,0 +1,48 @@
+@use '../../styles/variables';
+
+// Form elements
+$checkbox-size: 12px;
+$checkbox-border-width: 2px;
+$checkbox-inner-padding: 2px;
+$checkbox-inner-size: $checkbox-size - $checkbox-border-width - $checkbox-inner-padding;
+$checkbox-font-size: 13px;
+$checkbox-spacing: 5px;
+$checkbox-transition-duration: 0.2s;
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.indicator {
+  position: relative;
+  width: $checkbox-size;
+  height: $checkbox-size;
+  border: $checkbox-border-width solid variables.$brown;
+  margin-right: $checkbox-spacing;
+
+  &::before {
+    display: block;
+    content: '';
+    position: absolute;
+    top: $checkbox-inner-padding;
+    left: $checkbox-inner-padding;
+    transform: scale(0);
+    width: $checkbox-inner-size;
+    height: $checkbox-inner-size;
+    background-color: variables.$white;
+    transition: transform $checkbox-transition-duration ease;
+  }
+
+  &.isActive::before {
+    transform: scale(1);
+  }
+}
+
+.label {
+  font-family: variables.$primary-font;
+  font-size: $checkbox-font-size;
+  line-height: 1;
+  color: variables.$white;
+}
