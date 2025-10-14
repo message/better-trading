@@ -1,0 +1,49 @@
+@use '../../styles/variables';
+@use '../../styles/mixins/fade-in';
+@use '../../styles/mixins/gradient-hover';
+
+.contextualMenu {
+  display: flex;
+  z-index: 1;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.contextualMenuItems {
+  @include fade-in.fade-in;
+
+  position: fixed;
+  z-index: 10000;
+  transform: translate(-190px, -10px);
+  width: 200px;
+  border: 1px solid variables.$gray-alt;
+  background-color: variables.$gray;
+}
+
+.item {
+  @include gradient-hover.gradient-hover(variables.$gray-alt);
+
+  display: block;
+  width: 100%;
+  padding: 4px 8px;
+  border: 0;
+  background: none;
+  text-align: left;
+  white-space: nowrap;
+  font-family: variables.$default-font;
+  font-size: 13px;
+  font-weight: 400;
+  color: variables.$white;
+  transition: 0.2s ease;
+  transition-property: color, padding;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
