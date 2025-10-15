@@ -1,0 +1,24 @@
+@use '../../styles/mixins/slide-fade-in' as mixins;
+
+.flashMessages {
+  display: grid;
+  position: absolute;
+  z-index: 100000;
+  right: 30px;
+  bottom: 20px;
+  grid-gap: 10px;
+}
+
+.messageWrapper {
+  @include mixins.slide-fade-in;
+
+  &.isExiting {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+}
+
+.message {
+  max-width: 400px;
+  cursor: pointer;
+}
