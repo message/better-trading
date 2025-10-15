@@ -5,7 +5,13 @@ import { docsTheme } from './theme'; // added
 
 // The preview object configures global Storybook parameters & globals.
 const preview: Preview = {
-  initialGlobals: { locale: 'en-US' },
+  initialGlobals: {
+    locale: 'en-US',
+
+    backgrounds: {
+      value: 'bt-dark',
+    },
+  },
   globalTypes: {
     locale: {
       name: 'Locale',
@@ -32,12 +38,11 @@ const preview: Preview = {
       matchers: { color: /(background|color)$/i, date: /Date$/i },
     },
     backgrounds: {
-      default: 'bt-dark',
-      values: [
-        { name: 'bt-dark', value: '#0A0A0A' },
-        { name: 'transparent', value: 'transparent' },
-        { name: 'white', value: '#FFFFFF' },
-      ],
+      options: {
+        'bt-dark': { name: 'bt-dark', value: '#0A0A0A' },
+        transparent: { name: 'transparent', value: 'transparent' },
+        white: { name: 'white', value: '#FFFFFF' },
+      },
     },
     docs: {
       // added

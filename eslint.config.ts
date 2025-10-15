@@ -1,3 +1,5 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+
 import { fixupConfigRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
@@ -5,6 +7,7 @@ import { flatConfigs as importXFlatConfig } from 'eslint-plugin-import-x';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import reactPlugin from 'eslint-plugin-react';
+import storybook from 'eslint-plugin-storybook';
 import { browser, es2020, node } from 'globals';
 import { configs as tsConfigs, parser as tsParser } from 'typescript-eslint';
 import type { FixupConfigArray } from '@eslint/compat';
@@ -27,8 +30,7 @@ const config: Linter.Config[] = [
     files: ['**/*.{ts,tsx}'],
     ...reactPlugin.configs.flat.recommended,
     ...reactPlugin.configs.flat['jsx-runtime'],
-  },
-  // Custom config
+  }, // Custom config
   {
     ignores: [
       '**/.wxt/**',
@@ -101,6 +103,7 @@ const config: Linter.Config[] = [
       reportUnusedDisableDirectives: 'error',
     },
   },
+  ...storybook.configs['flat/recommended'],
 ];
 
 export default config;

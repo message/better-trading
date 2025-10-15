@@ -33,11 +33,11 @@
     "@eslint/compat": "^1.4.0",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.36.0",
-    "@storybook/addon-docs": "^9.1.8",
-    "@storybook/addon-links": "^9.1.8",
-    "@storybook/addon-onboarding": "^9.1.8",
-    "@storybook/builder-vite": "^9.1.8",
-    "@storybook/react-vite": "^9.1.8",
+    "@storybook/addon-docs": "^9.1.10",
+    "@storybook/addon-links": "^9.1.10",
+    "@storybook/addon-onboarding": "^9.1.10",
+    "@storybook/builder-vite": "^9.1.10",
+    "@storybook/react-vite": "^9.1.10",
     "@types/eslint-plugin-jsx-a11y": "^6.10.0",
     "@types/react": "^19.1.15",
     "@types/react-dom": "^19.1.9",
@@ -58,13 +58,14 @@
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "sass-embedded": "^1.93.2",
-    "storybook": "^9.1.8",
+    "storybook": "^9.1.10",
     "storybook-addon-test-codegen": "^2.0.1",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.44.1",
     "vite": "^7.1.7",
     "vite-plugin-svgr": "^4.5.0",
-    "wxt": "^0.20.11"
+    "wxt": "^0.20.11",
+    "eslint-plugin-storybook": "9.1.10"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,css,scss,md,json,yml,yaml}": [
