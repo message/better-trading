@@ -1,0 +1,40 @@
+@use '../../styles/variables';
+
+.markdownChangelog {
+  line-height: 1.6;
+
+  h1 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    color: variables.$white;
+  }
+
+  h2 {
+    margin: 10px 0 5px;
+    font-size: 15px;
+    color: variables.$white;
+  }
+
+  ul {
+    margin-left: 16px;
+    list-style: disc;
+    color: variables.$white;
+  }
+
+  p {
+    margin: 10px 0;
+    color: variables.$white;
+  }
+
+  a {
+    border-bottom: 1px dotted currentColor;
+    text-decoration: none;
+    color: variables.$white;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      border-bottom-style: solid;
+    }
+  }
+}
