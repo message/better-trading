@@ -1,0 +1,53 @@
+@use '../../styles/variables';
+
+.iconOptions {
+  display: grid;
+  grid-gap: 8px;
+  padding: 0;
+  list-style: none;
+  margin: 0;
+
+  + .iconOptions {
+    margin-top: 10px;
+  }
+
+  &.withAscendancies {
+    grid-template-columns: repeat(auto-fill, 75px);
+  }
+
+  &.withItems {
+    grid-template-columns: repeat(auto-fill, 50px);
+  }
+}
+
+.iconOption {
+  border: 2px solid transparent;
+  background-color: transparent;
+  transition: 0.2s ease;
+  transition-property: border-color, background-color;
+  list-style: none;
+
+  &.isSelected {
+    border-color: variables.$gold-alt;
+    background-color: rgba(variables.$gold, 0.5);
+  }
+
+  &:hover {
+    border-color: variables.$gold-alt;
+  }
+}
+
+.iconButton {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+}
+
+.iconOptionImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}

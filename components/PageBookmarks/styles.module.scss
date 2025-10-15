@@ -1,0 +1,35 @@
+@use '../../styles/variables';
+
+.createFolderButton {
+  width: 100%;
+}
+
+.headerActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.foldersWrapper {
+  margin: 5px 0;
+}
+
+.folderWrapper {
+  position: relative;
+  padding: 5px 0;
+
+  // TODO: Add drag-and-drop styling when implementing reordering
+  &:global(.is-dragging) {
+    z-index: 1;
+    background-color: variables.$blue;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 5px;
+}
+
+.foldersWarning {
+  margin-top: 10px;
+}

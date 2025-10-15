@@ -1,0 +1,66 @@
+@use '../../styles/variables';
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 9999;
+}
+
+.container {
+  width: 650px;
+  padding: 20px;
+  background-color: rgba(#141414, 0.8);
+  color: variables.$white;
+  backdrop-filter: blur(2px);
+  outline: none;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.headerTitle {
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  font-family: variables.$primary-font;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  color: variables.$white;
+}
+
+.headerTitleLogo {
+  height: 28px;
+  margin-right: 10px;
+}
+
+.headerClose {
+  transform: scale(1);
+  width: 20px;
+  height: 25px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 17px;
+  color: variables.$white;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.body {
+  // Body content styles can be customized here
+}
