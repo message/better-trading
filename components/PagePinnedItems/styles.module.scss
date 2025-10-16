@@ -1,0 +1,90 @@
+@use '../../styles/variables';
+
+.pinnedItems {
+  display: grid;
+  grid-gap: 10px;
+}
+
+.itemWrapper {
+  background-color: #000;
+
+  :global(.itemPopupContainer) {
+    margin: 0;
+    background-color: #000;
+  }
+
+  :global(.itemPopupAdditional) {
+    padding: 3px 0;
+    background-color: #000;
+
+    :global(.s) {
+      width: 33.33%;
+      text-align: center;
+    }
+
+    :global(.lc) {
+      color: #7f7f7f;
+
+      :global(.colourDefault),
+      :global(.colourAugmented) {
+        &::before {
+          content: ':';
+          margin-right: 3px;
+        }
+      }
+
+      :global(.colourDefault) {
+        color: #fff;
+      }
+
+      :global(.colourAugmented) {
+        color: #88f;
+      }
+    }
+  }
+
+  .itemActions {
+    display: flex;
+    padding: 10px;
+    background-color: #000;
+  }
+
+  .itemScroll {
+    flex: 1 1 auto;
+  }
+
+  .renderedItemWrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: #000;
+  }
+
+  :global(.newItemContainer .sockets) {
+    display: block;
+  }
+
+  :global(.price) {
+    display: flex;
+    justify-content: center;
+    padding: 5px 10px 10px;
+    background-color: #000;
+    color: #a38d6d;
+
+    img {
+      height: 25px;
+    }
+
+    br {
+      display: none;
+    }
+
+    :global(.currency-text) span {
+      display: none;
+    }
+
+    :global(.price-label) {
+      display: none;
+    }
+  }
+}

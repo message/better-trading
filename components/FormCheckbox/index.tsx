@@ -6,13 +6,14 @@ interface FormCheckboxProps {
   value: boolean;
   label: string;
   onChange: (newValue: boolean) => void;
+  className?: string;
 }
 
 /**
  * FormCheckbox component - A checkbox with label and custom indicator
  * Migrated from old-extension/app/pods/components/form/checkbox
  */
-const FormCheckbox: React.FC<FormCheckboxProps> = ({ value, label, onChange }) => {
+const FormCheckbox: React.FC<FormCheckboxProps> = ({ value, label, onChange, className }) => {
   const toggleValue = () => {
     onChange(!value);
   };
@@ -26,7 +27,7 @@ const FormCheckbox: React.FC<FormCheckboxProps> = ({ value, label, onChange }) =
 
   return (
     <div
-      className={styles.wrapper}
+      className={classNames(styles.wrapper, className)}
       onClick={toggleValue}
       onKeyDown={handleKeyDown}
       tabIndex={0}
