@@ -29,8 +29,8 @@ export interface ItemResultsParsedItem {
 export interface ItemResultsEnhancerService {
   slug?: string;
   initialize?(): Promise<void> | void;
-  prepare?(): Promise<void> | void;
-  enhance(itemElement: HTMLDivElement, parsedItem: ItemResultsParsedItem): Promise<void> | void;
+  prepare?(...args: unknown[]): Promise<void> | void;
+  enhance(itemElement: HTMLDivElement, parsedItem?: ItemResultsParsedItem): Promise<void> | void;
   clear?(): Promise<void> | void;
 }
 
