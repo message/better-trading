@@ -116,7 +116,7 @@ const Folder: React.FC<FolderProps> = ({
 
           {/* TODO: Add drag handle for reordering folders */}
           <button type="button" className={styles.headerAction}>
-            <SortIcon />
+            <SortIcon className={styles.handleIcon} />
           </button>
         </div>
       </div>
@@ -152,7 +152,7 @@ const Folder: React.FC<FolderProps> = ({
 
                   {/* TODO: Add drag handle for reordering trades */}
                   <button type="button" className={styles.tradeAction}>
-                    <SortIcon />
+                    <SortIcon className={styles.handleIcon} />
                   </button>
                 </div>
               </li>
