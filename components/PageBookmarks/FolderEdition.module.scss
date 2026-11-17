@@ -46,8 +46,10 @@
   width: 100%;
 }
 
-.iconOptionImage {
+.iconOption .iconOptionImage {
   width: 100%;
   height: auto;
+  // BookmarkFolderIcon adds its own margin for item icons, which would push the image out of the cell
+  margin: 0;
   display: block;
 }
