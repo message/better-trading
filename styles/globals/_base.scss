@@ -1,12 +1,17 @@
+@use 'sass:math';
 @use '../variables';
 
 body.bt-body {
   overflow-y: scroll;
 
-  #app {
-    width: calc(100% - #{variables.$extension-width});
-    margin: 0;
-    transition: width 0.2s ease;
+  // Shrink #trade and shift it left so it sits beside the fixed panel instead of under it.
+  // ponytail: 1520px is the trade site's own max content width, update if the site changes it.
+  #trade {
+    max-width: calc(1520px - #{math.div(variables.$extension-width, 1.5)});
+    transform: translateX(#{math.div(-1 * variables.$extension-width, 2)});
+    transition:
+      max-width 0.2s ease,
+      transform 0.2s ease;
   }
 
   #better-trading-container {
@@ -23,8 +28,9 @@ body.bt-body {
   }
 
   &.bt-is-collapsed {
-    #app {
-      width: 100%;
+    #trade {
+      max-width: 1520px;
+      transform: translateX(0);
     }
 
     #better-trading-container {
