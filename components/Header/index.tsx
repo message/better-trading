@@ -17,6 +17,14 @@ import type { FC } from 'react';
 interface HeaderProps {
   /** The title to display in the header */
   title: string;
+  /** Alt text of the logo */
+  logoAlt: string;
+  /** Aria label of the collapse button */
+  collapseLabel: string;
+  /** Aria label of the toggle button while on the root route */
+  showAboutLabel: string;
+  /** Aria label of the toggle button while on a sub route */
+  showMainLabel: string;
   /** Whether the current route is the root route */
   isOnRootRoute?: boolean;
   /** Callback when brand logo is clicked */
@@ -28,7 +36,16 @@ interface HeaderProps {
 /**
  * Header component with collapse/expand functionality and navigation
  */
-const Header: FC<HeaderProps> = ({ title, isOnRootRoute = true, onBrandClick, onToggleClick }) => {
+const Header: FC<HeaderProps> = ({
+  title,
+  logoAlt,
+  collapseLabel,
+  showAboutLabel,
+  showMainLabel,
+  isOnRootRoute = true,
+  onBrandClick,
+  onToggleClick,
+}) => {
   useEffect(() => {
     initializeSidePanelCollapse();
   }, []);
@@ -41,16 +58,20 @@ const Header: FC<HeaderProps> = ({ title, isOnRootRoute = true, onBrandClick, on
 
   return (
     <div className={styles.container}>
-      <button onClick={handleCollapse} type="button" className={styles.headerButton}>
+      <button onClick={handleCollapse} type="button" className={styles.headerButton} aria-label={collapseLabel}>
         <AngleRightIcon />
       </button>
 
       <button onClick={onBrandClick} className={styles.brand} type="button">
-        <img className={styles.logo} src={logoUrl} alt="Better Trading Logo" />
+        <img className={styles.logo} src={logoUrl} alt={logoAlt} />
         <div className={styles.title}>{title}</div>
       </button>
 
-      <button onClick={onToggleClick} className={styles.headerButton}>
+      <button
+        onClick={onToggleClick}
+        type="button"
+        className={styles.headerButton}
+        aria-label={isOnRootRoute ? showAboutLabel : showMainLabel}>
         {isOnRootRoute ? <CircleInfoIcon /> : <XmarkIcon />}
       </button>
     </div>

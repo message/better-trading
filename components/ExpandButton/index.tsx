@@ -11,10 +11,14 @@ import { useCallback, useEffect, useState } from 'react';
 import type { FC } from 'react';
 
 interface ExpandButtonProps {
+  /** Alt text of the logo */
+  logoAlt: string;
+  /** Aria label of the button */
+  expandLabel: string;
   className?: string;
 }
 
-const ExpandButton: FC<ExpandButtonProps> = ({ className }) => {
+const ExpandButton: FC<ExpandButtonProps> = ({ logoAlt, expandLabel, className }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -33,9 +37,9 @@ const ExpandButton: FC<ExpandButtonProps> = ({ className }) => {
   });
 
   return (
-    <button onClick={handleExpand} type="button" className={buttonClassName}>
+    <button onClick={handleExpand} type="button" className={buttonClassName} aria-label={expandLabel}>
       <AngleLeftIcon className={styles.expandButtonIcon} />
-      <img className={styles.logo} src={logoUrl} alt="Better Trading Logo" />
+      <img className={styles.logo} src={logoUrl} alt={logoAlt} />
     </button>
   );
 };

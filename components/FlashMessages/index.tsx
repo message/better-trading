@@ -1,7 +1,7 @@
 import styles from './styles.module.scss';
 import AlertMessage from '../AlertMessage';
 import classnames from 'classnames';
-import type { FlashMessage } from './types';
+import type { FlashMessage } from '@/types/flash-message';
 import type React from 'react';
 
 interface FlashMessagesProps {

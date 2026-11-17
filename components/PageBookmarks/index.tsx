@@ -15,6 +15,7 @@ import styles from './styles.module.scss';
 import AlertMessage from '../AlertMessage';
 import Button from '../Button';
 import LoadingContainer from '../LoadingContainer';
+import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import { useBookmarksState } from '@/hooks/useBookmarksState';
 import { useTradeLocation } from '@/hooks/useTradeLocation';
@@ -63,7 +64,11 @@ interface PageBookmarksProps {
   createFolderSuccessMessage: (title: string) => string;
   updateFolderSuccessMessage: (title: string) => string;
   importFolderSuccessMessage: (title: string) => string;
+  copyTradeSuccessMessage: (title: string) => string;
   restoreBackupErrorMessage: string;
+  genericAlertMessage: string;
+  modalCloseLabel: string;
+  logoAlt: string;
 }
 
 const PageBookmarks: React.FC<PageBookmarksProps> = ({
@@ -101,9 +106,14 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   createFolderSuccessMessage,
   updateFolderSuccessMessage,
   importFolderSuccessMessage,
+  copyTradeSuccessMessage,
   restoreBackupErrorMessage,
+  genericAlertMessage,
+  modalCloseLabel,
+  logoAlt,
 }) => {
   const bookmarks = useBookmarks();
+  const { addFlash } = useFlashMessagesContext();
   const { expandedFolderIds, toggleFolderExpansion, collapseAllFolders } = useBookmarksState();
   const { version, league } = useTradeLocation();
 
@@ -128,12 +138,12 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
     async (folder: BookmarksFolderStruct) => {
       try {
         await bookmarks.deleteFolder(folder);
-        console.log(deleteFolderSuccessMessage(folder.title));
+        addFlash(deleteFolderSuccessMessage(folder.title), 'success');
       } catch {
-        console.error('An error occurred');
+        addFlash(genericAlertMessage, 'alert');
       }
     },
-    [bookmarks, deleteFolderSuccessMessage],
+    [bookmarks, deleteFolderSuccessMessage, genericAlertMessage, addFlash],
   );
 
   const handleToggleFolderArchive = useCallback(
@@ -157,14 +167,21 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
         const successMessage = isNewlyCreated
           ? createFolderSuccessMessage(folder.title)
           : updateFolderSuccessMessage(folder.title);
-        console.log(successMessage);
+        addFlash(successMessage, 'success');
       } catch {
-        console.error('An error occurred');
+        addFlash(genericAlertMessage, 'alert');
       } finally {
         setStagedFolder(null);
       }
     },
-    [bookmarks, toggleFolderExpansion, createFolderSuccessMessage, updateFolderSuccessMessage],
+    [
+      bookmarks,
+      toggleFolderExpansion,
+      createFolderSuccessMessage,
+      updateFolderSuccessMessage,
+      genericAlertMessage,
+      addFlash,
+    ],
   );
 
   const handlePersistImportedFolder = useCallback(
@@ -173,14 +190,14 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
         const folderId = await bookmarks.persistFolder(data.folder);
         await bookmarks.persistTrades(data.trades, folderId);
         toggleFolderExpansion(folderId);
-        console.log(importFolderSuccessMessage(data.folder.title));
+        addFlash(importFolderSuccessMessage(data.folder.title), 'success');
       } catch {
-        console.error('An error occurred');
+        addFlash(genericAlertMessage, 'alert');
       } finally {
         setIsImportingFolder(false);
       }
     },
-    [bookmarks, toggleFolderExpansion, importFolderSuccessMessage],
+    [bookmarks, toggleFolderExpansion, importFolderSuccessMessage, genericAlertMessage, addFlash],
   );
 
   const handleGenerateBackup = useCallback(async () => {
@@ -196,10 +213,10 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
     async (dataString: string) => {
       const success = await bookmarks.restoreBackup(dataString);
       if (!success) {
-        console.error(restoreBackupErrorMessage);
+        addFlash(restoreBackupErrorMessage, 'alert');
       }
     },
-    [bookmarks, restoreBackupErrorMessage],
+    [bookmarks, restoreBackupErrorMessage, addFlash],
   );
 
   const handleToggleArchiveDisplay = () => {
@@ -245,9 +262,9 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
       if (!league) return;
       const tradeUrl = getTradeUrl(trade.location.version, trade.location.type, trade.location.slug, league);
       await copyToClipboard(tradeUrl);
-      console.log(`Copied ${trade.title} to clipboard`);
+      addFlash(copyTradeSuccessMessage(trade.title), 'success');
     },
-    [league],
+    [league, copyTradeSuccessMessage, addFlash],
   );
 
   const handleGetTradeUrl = (trade: BookmarksTradeStruct, currentLeague: string | null) => {
@@ -367,6 +384,8 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
           folder={stagedFolder}
           version={version}
           modalTitle={folderModalTitle}
+          modalCloseLabel={modalCloseLabel}
+          logoAlt={logoAlt}
           titleLabel={folderTitleLabel}
           iconLabel={folderIconLabel}
           saveLabel={saveLabel}
@@ -378,6 +397,8 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
       {isImportingFolder && (
         <FolderImport
           modalTitle={importModalTitle}
+          modalCloseLabel={modalCloseLabel}
+          logoAlt={logoAlt}
           importCodeLabel={importCodeLabel}
           previewLabel={importPreviewLabel}
           invalidCodeMessage={invalidCodeMessage}

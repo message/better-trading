@@ -1,4 +1,5 @@
 import RootPageMenu from './index.tsx';
+import { rootPageMenuLabelMessages } from '../../.storybook/common-messages';
 import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
 import { RootPage } from '@/types/root-page';
 import { useState } from 'react';
@@ -22,9 +23,13 @@ const meta = {
       control: false,
       description: 'Callback when page selection changes',
     },
-    t: {
+    labels: {
       control: false,
-      description: 'Translation function (provided by render)',
+      description: 'Page labels (provided by render)',
+    },
+    ariaLabel: {
+      control: false,
+      description: 'Navigation aria-label (provided by render)',
     },
   },
 } satisfies Meta<typeof RootPageMenu>;
@@ -84,36 +89,31 @@ const currentPageMessages = defineMessages({
   'th-TH': 'หน้าปัจจุบัน:',
 });
 
-// Mock translation function
-const createMockTranslationFunction = (locale: string) => {
-  const translations: Record<string, Record<string, string>> = {
-    'components.root-page-menu.bookmarks': bookmarksMessages,
-    'components.root-page-menu.pinned-items': pinnedItemsMessages,
-    'components.root-page-menu.history': historyMessages,
-  };
-
-  return (key: string) => {
-    const messageMap = translations[key];
-    if (!messageMap) return key;
-    return resolveLocaleValue(locale, messageMap);
-  };
-};
+const getLabels = (locale: string) => ({
+  labels: {
+    bookmarks: resolveLocaleValue(locale, bookmarksMessages),
+    pinnedItems: resolveLocaleValue(locale, pinnedItemsMessages),
+    history: resolveLocaleValue(locale, historyMessages),
+  },
+  ariaLabel: resolveLocaleValue(locale, rootPageMenuLabelMessages),
+});
 
 export const BookmarksActive: Story = {
   name: 'Bookmarks Active',
   args: {
     currentPage: RootPage.BOOKMARKS,
     onChange: () => {},
-    t: () => '',
+    labels: { bookmarks: '', pinnedItems: '', history: '' },
+    ariaLabel: '',
   },
   render: (args, { globals }) => {
-    const t = createMockTranslationFunction(globals.locale as string);
+    const labels = getLabels(globals.locale as string);
 
     return (
       <RootPageMenu
         currentPage={RootPage.BOOKMARKS}
         onChange={page => console.log('Changed to:', page)}
-        t={t}
+        {...labels}
         data-locale={globals.locale}
       />
     );
@@ -125,16 +125,17 @@ export const PinnedItemsActive: Story = {
   args: {
     currentPage: RootPage.PINNED_ITEMS,
     onChange: () => {},
-    t: () => '',
+    labels: { bookmarks: '', pinnedItems: '', history: '' },
+    ariaLabel: '',
   },
   render: (args, { globals }) => {
-    const t = createMockTranslationFunction(globals.locale as string);
+    const labels = getLabels(globals.locale as string);
 
     return (
       <RootPageMenu
         currentPage={RootPage.PINNED_ITEMS}
         onChange={page => console.log('Changed to:', page)}
-        t={t}
+        {...labels}
         data-locale={globals.locale}
       />
     );
@@ -146,16 +147,17 @@ export const HistoryActive: Story = {
   args: {
     currentPage: RootPage.HISTORY,
     onChange: () => {},
-    t: () => '',
+    labels: { bookmarks: '', pinnedItems: '', history: '' },
+    ariaLabel: '',
   },
   render: (args, { globals }) => {
-    const t = createMockTranslationFunction(globals.locale as string);
+    const labels = getLabels(globals.locale as string);
 
     return (
       <RootPageMenu
         currentPage={RootPage.HISTORY}
         onChange={page => console.log('Changed to:', page)}
-        t={t}
+        {...labels}
         data-locale={globals.locale}
       />
     );
@@ -167,16 +169,17 @@ export const Interactive: Story = {
   args: {
     currentPage: RootPage.BOOKMARKS,
     onChange: () => {},
-    t: () => '',
+    labels: { bookmarks: '', pinnedItems: '', history: '' },
+    ariaLabel: '',
   },
   render: (args, { globals }) => {
     const [currentPage, setCurrentPage] = useState<RootPage>(RootPage.BOOKMARKS);
-    const t = createMockTranslationFunction(globals.locale as string);
+    const labels = getLabels(globals.locale as string);
     const currentPageLabel = resolveLocaleValue(globals.locale as string, currentPageMessages);
 
     return (
       <div data-locale={globals.locale}>
-        <RootPageMenu currentPage={currentPage} onChange={setCurrentPage} t={t} />
+        <RootPageMenu currentPage={currentPage} onChange={setCurrentPage} {...labels} />
         <div style={{ marginTop: 20, padding: 10, backgroundColor: '#1a1a1a', color: '#fff' }}>
           <strong>{currentPageLabel}</strong> {currentPage}
         </div>

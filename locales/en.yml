@@ -1,12 +1,123 @@
-extension:
-  name: Better Trading
-  description: A browser extension that enhances the Path of Exile and Path of Exile 2 trade site experience.
+extensionName: Better Trading
+extensionDescription: A browser extension that enhances the Path of Exile and Path of Exile 2 trade site experience.
 
-general:
-  title: Better Trading
+generalTitle: Better Trading
+genericAlertFlash: Oops! Something went wrong!
+logoAlt: Better Trading Logo
 
-header:
-  collapse: Collapse Better Trading panel
-  expand: Expand Better Trading panel
-  show_about: Show details about Better Trading
-  show_main: Show trading tools
+headerCollapse: Collapse Better Trading panel
+headerExpand: Expand Better Trading panel
+headerShowAbout: Show details about Better Trading
+headerShowMain: Show trading tools
+
+modalClose: Close
+
+changelogBannerNotice: New version $1 is now installed.
+changelogBannerModalTitle: $1 changelog
+changelogBannerModalButton: Changelog
+changelogBannerDismissButton: Dismiss
+
+clipboardTextareaButton: Copy to clipboard
+clipboardTextareaButtonCopied: Copied
+
+rootPageMenuLabel: Better Trading pages
+rootPageMenuBookmarks: Bookmarks
+rootPageMenuHistory: History
+rootPageMenuPinnedItems: Pinned items
+
+itemResultsPinnablePin: Pin
+itemResultsPinnableUnpin: Unpin
+itemResultsMaximumSocketsWarning: Max. $1 sockets
+itemResultsRegroupSimilarsButton:
+  0: ''
+  1: 1 similar result
+  n: $1 similar results
+
+pageAboutDisclaimer: This extension is fan-made and not affiliated with Grinding Gear Games in any way.
+pageAboutEnhancersTitle: Enabled item result enhancers
+pageAboutEnhancersEquivalentPricings: Equivalent pricings (powered by poe.ninja)
+pageAboutEnhancersHighlightStatFilters: Highlight searched mods
+pageAboutEnhancersMaximumSockets: Warning for armors that cannot be 6-socketed
+pageAboutEnhancersRegroupSimilars: Regroup similar results
+pageAboutGithubTitle: On GitHub
+pageAboutGithubDescription: To contribute, report issues or simply browse the code.
+pageAboutGithubButton: View on GitHub
+pageAboutCreditsTitle: Credits
+pageAboutCreditsDescription: 'Better Trading was originally created by <strong>InfaMc</strong> (<a href="https://github.com/pboutin">@pboutin</a>) and is currently maintained by <strong>brosmike</strong> (<a href="https://github.com/dbjorge">@dbjorge</a>).'
+
+pagePinnedItemsWarning: Items will remain pinned as long as they are within the current results. Changing the search or refreshing the results will reset the pins.
+pagePinnedItemsClear: Clear pinned items
+pagePinnedItemsEmpty: Items can be pinned here by clicking the "pin" button near the "whisper" button.
+pagePinnedItemsUnpinItem: Unpin
+pagePinnedItemsScrollToItem: Scroll to the item result
+
+pageHistoryClear: Clear history
+pageHistoryEmpty: The search history is currently empty.
+pageHistoryClearSuccessFlash: The search history has been cleared.
+
+pageBookmarksCreateFolder: New folder
+pageBookmarksImportFolder: Import folder
+pageBookmarksCollapseAll: Collapse folders
+pageBookmarksShowArchivedFolders: Show archive
+pageBookmarksShowUnarchivedFolders: Return to active folders
+pageBookmarksFoldersWarning: Having a lot of folders can slow down the website.<br>Backup unnecessary folders using the export feature, then delete them.
+pageBookmarksDeleteFolderSuccessFlash: 'The folder "$1" has been deleted.'
+pageBookmarksUpdateFolderSuccessFlash: 'The folder "$1" has been updated.'
+pageBookmarksCreateFolderSuccessFlash: 'The folder "$1" has been created.'
+pageBookmarksImportFolderSuccessFlash: 'The folder "$1" has been imported.'
+pageBookmarksBackupTitle: Backup tools
+pageBookmarksBackupGenerateButton: Save file
+pageBookmarksBackupRestoreButton: Restore from file
+pageBookmarksBackupRestoreErrorFlash: Backup restoration has failed.
+pageBookmarksFolderEditFolder: Edit
+pageBookmarksFolderDeleteFolder: Delete
+pageBookmarksFolderArchiveFolder: Archive
+pageBookmarksFolderRestoreFolder: Restore
+pageBookmarksFolderExportFolder: Export/Share
+pageBookmarksFolderOpenLiveTrade: Live search
+pageBookmarksFolderCreateTrade: Register current trade
+pageBookmarksFolderCopyTradeToClipboard: Copy URL to clipboard
+pageBookmarksFolderCopyTradeToClipboardSuccessFlash: 'Trade URL for "$1" has been copied to the clipboard.'
+pageBookmarksFolderEditTrade: Edit
+pageBookmarksFolderDeleteTrade: Delete
+pageBookmarksFolderUpdateTradeLocation: Save active trade
+pageBookmarksFolderCompleteTrade: Mark as complete
+pageBookmarksFolderUncompleteTrade: Unmark as complete
+pageBookmarksFolderDeleteTradeSuccessFlash: 'The trade "$1" has been deleted.'
+pageBookmarksFolderUpdateTradeSuccessFlash: 'The trade "$1" has been updated.'
+pageBookmarksFolderCreateTradeSuccessFlash: 'The trade "$1" has been created.'
+pageBookmarksFolderPersistTradeLocationSuccessFlash: 'The trade location for "$1" has been updated.'
+pageBookmarksFolderTradeDeletionModalTitle: Confirm deletion
+pageBookmarksFolderTradeDeletionConfirmation: 'Delete the bookmark <strong>$1</strong> ?'
+pageBookmarksFolderTradeDeletionDelete: Delete
+pageBookmarksFolderTradeDeletionCancel: Cancel
+pageBookmarksFolderFolderDeletionModalTitle: Confirm deletion
+pageBookmarksFolderFolderDeletionConfirmation:
+  0: 'Delete the bookmarks folder <strong>$1</strong> ?'
+  1: 'Delete the bookmarks folder <strong>$1</strong> and its <strong>single bookmark</strong> ?'
+  n: 'Delete the bookmarks folder <strong>$1</strong> and its <strong>$2 bookmarks</strong> ?'
+pageBookmarksFolderFolderDeletionDelete: Delete
+pageBookmarksFolderFolderDeletionCancel: Cancel
+pageBookmarksFolderFolderExportModalTitle: Bookmark folder export
+pageBookmarksFolderFolderExportPreviewUrl: Preview page
+pageBookmarksFolderFolderExportPreviewUrlButton: Open in a new tab
+pageBookmarksFolderFolderExportExportCode: Export code
+pageBookmarksFolderFolderExportExportCodeHelper: This code can be used to restore a folder. It can be used for backup and sharing purposes.
+pageBookmarksFolderFolderExportEmbedCode: Embed code snippet
+pageBookmarksFolderFolderExportEmbedCodeHelper: Code snippet that can be used to include the folder's preview into a website.
+pageBookmarksFolderFolderExportClose: Close
+pageBookmarksFolderTradeEditionModalTitle: Bookmark trade
+pageBookmarksFolderTradeEditionTitleLabel: Title
+pageBookmarksFolderTradeEditionSave: Save
+pageBookmarksFolderEditionModalTitle: Bookmark folder
+pageBookmarksFolderEditionTitleLabel: Title
+pageBookmarksFolderEditionIconLabel: Icon
+pageBookmarksFolderEditionSave: Save
+pageBookmarksFolderImportModalTitle: Import bookmark folder
+pageBookmarksFolderImportImportCodeLabel: Import code
+pageBookmarksFolderImportPreview:
+  0: $1
+  1: $1 (1 bookmark)
+  n: $1 ($2 bookmarks)
+pageBookmarksFolderImportInvalidCode: The entered code seems invalid, try another one.
+pageBookmarksFolderImportSave: Save

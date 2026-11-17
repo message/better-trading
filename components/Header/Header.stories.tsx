@@ -1,4 +1,10 @@
 import Header from './index';
+import {
+  logoAltMessages,
+  headerCollapseMessages,
+  headerShowAboutMessages,
+  headerShowMainMessages,
+} from '../../.storybook/common-messages';
 import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
@@ -17,6 +23,10 @@ const meta = {
       control: false,
       description: '(Derived from locale in render)',
     },
+    logoAlt: { control: false, description: '(Derived from locale in render)' },
+    collapseLabel: { control: false, description: '(Derived from locale in render)' },
+    showAboutLabel: { control: false, description: '(Derived from locale in render)' },
+    showMainLabel: { control: false, description: '(Derived from locale in render)' },
     isOnRootRoute: {
       control: 'boolean',
       description: 'Whether currently on root route (affects toggle icon)',
@@ -81,6 +91,10 @@ const toggleClickMessages = defineMessages({
 export const OnRootRoute: Story = {
   args: {
     title: 'Better Trading',
+    logoAlt: '',
+    collapseLabel: '',
+    showAboutLabel: '',
+    showMainLabel: '',
     isOnRootRoute: true,
   },
   render: (args, context) => {
@@ -94,6 +108,10 @@ export const OnRootRoute: Story = {
       <Header
         {...args}
         title={title}
+        logoAlt={resolveLocaleValue(locale, logoAltMessages)}
+        collapseLabel={resolveLocaleValue(locale, headerCollapseMessages)}
+        showAboutLabel={resolveLocaleValue(locale, headerShowAboutMessages)}
+        showMainLabel={resolveLocaleValue(locale, headerShowMainMessages)}
         isOnRootRoute={true}
         onBrandClick={() => alert(brandClickMessage)}
         onToggleClick={() => alert(toggleClickMessage)}
@@ -108,6 +126,10 @@ export const OnRootRoute: Story = {
 export const OnSubRoute: Story = {
   args: {
     title: 'Better Trading',
+    logoAlt: '',
+    collapseLabel: '',
+    showAboutLabel: '',
+    showMainLabel: '',
     isOnRootRoute: false,
   },
   render: (args, context) => {
@@ -121,6 +143,10 @@ export const OnSubRoute: Story = {
       <Header
         {...args}
         title={title}
+        logoAlt={resolveLocaleValue(locale, logoAltMessages)}
+        collapseLabel={resolveLocaleValue(locale, headerCollapseMessages)}
+        showAboutLabel={resolveLocaleValue(locale, headerShowAboutMessages)}
+        showMainLabel={resolveLocaleValue(locale, headerShowMainMessages)}
         isOnRootRoute={false}
         onBrandClick={() => alert(brandClickMessage)}
         onToggleClick={() => alert(toggleClickMessage)}

@@ -26,10 +26,12 @@ interface ChangelogBannerProps {
   version: string;
   changelog?: ChangelogData;
   // Localized strings
-  noticeText?: string;
-  modalButtonLabel?: string;
-  modalTitle?: string;
-  dismissButtonLabel?: string;
+  noticeText: string;
+  modalButtonLabel: string;
+  modalTitle: string;
+  dismissButtonLabel: string;
+  modalCloseLabel: string;
+  logoAlt: string;
 }
 
 /**
@@ -37,12 +39,13 @@ interface ChangelogBannerProps {
  * It can be dismissed and shows a modal with the full changelog when clicked.
  */
 const ChangelogBanner: React.FC<ChangelogBannerProps> = ({
-  version,
   changelog,
-  noticeText = `Better Trading has been updated to version ${version}!`,
-  modalButtonLabel = 'View Changelog',
-  modalTitle = `What's new in version ${version}`,
-  dismissButtonLabel = 'Got it!',
+  noticeText,
+  modalButtonLabel,
+  modalTitle,
+  dismissButtonLabel,
+  modalCloseLabel,
+  logoAlt,
 }) => {
   const [isDismissed, setIsDismissed] = useState(false);
   const [modalChangelogIsVisible, setModalChangelogIsVisible] = useState(false);
@@ -83,7 +86,12 @@ const ChangelogBanner: React.FC<ChangelogBannerProps> = ({
       </div>
 
       {changelog && (
-        <Modal title={modalTitle} onClose={dismiss} isOpen={modalChangelogIsVisible}>
+        <Modal
+          title={modalTitle}
+          closeLabel={modalCloseLabel}
+          logoAlt={logoAlt}
+          onClose={dismiss}
+          isOpen={modalChangelogIsVisible}>
           <MarkdownChangelog markdown={changelog.markdown} />
 
           <Button

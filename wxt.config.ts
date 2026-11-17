@@ -5,8 +5,8 @@ import type { UserConfig } from 'wxt';
 const config: UserConfig = {
   modules: ['@wxt-dev/module-react', '@wxt-dev/i18n/module'],
   manifest: {
-    name: '__MSG_extension_name__',
-    description: '__MSG_extension_description__',
+    name: '__MSG_extensionName__',
+    description: '__MSG_extensionDescription__',
     default_locale: 'en',
     permissions: ['activeTab', 'storage'],
     // Images are used by the content script on the trade site (see utils/extension-url.ts)

@@ -11,10 +11,11 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
-    t: {
-      control: false,
-      description: 'Translation function (provided by render)',
-    },
+    warningMessage: { control: false, description: '(Provided by render)' },
+    clearLabel: { control: false, description: '(Provided by render)' },
+    emptyMessage: { control: false, description: '(Provided by render)' },
+    unpinItemLabel: { control: false, description: '(Provided by render)' },
+    scrollToItemLabel: { control: false, description: '(Provided by render)' },
   },
 } satisfies Meta<typeof PagePinnedItems>;
 
@@ -86,46 +87,45 @@ const warningMessages = defineMessages({
   'th-TH': 'ไอเทมที่ปักหมุดจะถูกเก็บไว้ในเครื่องและจะหายไปหากคุณล้างข้อมูลเบราว์เซอร์',
 });
 
-// Mock translation function
-const createMockTranslationFunction = (locale: string) => {
-  const translations: Record<string, Record<string, string>> = {
-    'page.pinned-items.scroll-to-item': scrollToItemMessages,
-    'page.pinned-items.unpin-item': unpinItemMessages,
-    'page.pinned-items.clear': clearMessages,
-    'page.pinned-items.empty': emptyMessages,
-    'page.pinned-items.warning': warningMessages,
-  };
-
-  return (key: string) => {
-    const messageMap = translations[key];
-    if (!messageMap) return key;
-    return resolveLocaleValue(locale, messageMap);
-  };
-};
+const getMessages = (locale: string) => ({
+  warningMessage: resolveLocaleValue(locale, warningMessages),
+  clearLabel: resolveLocaleValue(locale, clearMessages),
+  emptyMessage: resolveLocaleValue(locale, emptyMessages),
+  unpinItemLabel: resolveLocaleValue(locale, unpinItemMessages),
+  scrollToItemLabel: resolveLocaleValue(locale, scrollToItemMessages),
+});
 
 export const Empty: Story = {
   name: 'Empty State',
   args: {
-    t: () => '',
+    warningMessage: '',
+    clearLabel: '',
+    emptyMessage: '',
+    unpinItemLabel: '',
+    scrollToItemLabel: '',
   },
   render: (args, { globals }) => {
-    const t = createMockTranslationFunction(globals.locale as string);
+    const messages = getMessages(globals.locale as string);
 
-    return <PagePinnedItems t={t} data-locale={globals.locale} />;
+    return <PagePinnedItems {...messages} data-locale={globals.locale} />;
   },
 };
 
 export const WithWarningOnly: Story = {
   name: 'Warning Message',
   args: {
-    t: () => '',
+    warningMessage: '',
+    clearLabel: '',
+    emptyMessage: '',
+    unpinItemLabel: '',
+    scrollToItemLabel: '',
   },
   render: (args, { globals }) => {
-    const t = createMockTranslationFunction(globals.locale as string);
+    const messages = getMessages(globals.locale as string);
 
     return (
       <div data-locale={globals.locale}>
-        <PagePinnedItems t={t} />
+        <PagePinnedItems {...messages} />
       </div>
     );
   },

@@ -19,9 +19,9 @@ const meta = {
       control: 'text',
       description: 'GitHub repository URL',
     },
-    t: {
+    getEnhancerTitle: {
       control: false,
-      description: 'Translation function (provided by render)',
+      description: 'Enhancer title lookup by slug (provided by render)',
     },
   },
 } satisfies Meta<typeof PageAbout>;
@@ -42,70 +42,56 @@ const enhancersTitleMessages = defineMessages({
   'th-TH': 'ตัวปรับปรุงผลลัพธ์',
 });
 
-const enhancerBulkPriceMessages = defineMessages({
-  'en-US': 'Show bulk prices',
-  'fr-FR': 'Afficher les prix en vrac',
-  'es-ES': 'Mostrar precios al por mayor',
-  'de-DE': 'Mengenpreise anzeigen',
-  'pt-BR': 'Mostrar preços em massa',
-  'ru-RU': 'Показывать оптовые цены',
-  'zh-CN': '显示批量价格',
-  'ja-JP': 'バルク価格を表示',
-  'ko-KR': '대량 가격 표시',
-  'th-TH': 'แสดงราคาขายส่ง',
-});
-
-const enhancerItemAgeMessages = defineMessages({
-  'en-US': 'Show item age',
-  'fr-FR': "Afficher l'âge de l'article",
-  'es-ES': 'Mostrar antigüedad del artículo',
-  'de-DE': 'Artikelalter anzeigen',
-  'pt-BR': 'Mostrar idade do item',
-  'ru-RU': 'Показывать возраст предмета',
-  'zh-CN': '显示物品年龄',
-  'ja-JP': 'アイテムの経過時間を表示',
-  'ko-KR': '아이템 나이 표시',
-  'th-TH': 'แสดงอายุไอเทม',
-});
-
-const enhancerCollapsedCardsMessages = defineMessages({
-  'en-US': 'Collapse divination cards',
-  'fr-FR': 'Réduire les cartes de divination',
-  'es-ES': 'Contraer cartas de adivinación',
-  'de-DE': 'Weissagungskarten einklappen',
-  'pt-BR': 'Recolher cartas de adivinhação',
-  'ru-RU': 'Свернуть карты гадания',
-  'zh-CN': '折叠占卜卡',
-  'ja-JP': '占いカードを折りたたむ',
-  'ko-KR': '점술 카드 접기',
-  'th-TH': 'ยุบการ์ดทำนาย',
-});
-
-const enhancerHighlightCorruptedMessages = defineMessages({
-  'en-US': 'Highlight corrupted items',
-  'fr-FR': 'Surligner les objets corrompus',
-  'es-ES': 'Resaltar objetos corruptos',
-  'de-DE': 'Verdorbene Gegenstände hervorheben',
-  'pt-BR': 'Destacar itens corrompidos',
-  'ru-RU': 'Выделять испорченные предметы',
-  'zh-CN': '突出显示腐化物品',
-  'ja-JP': '汚染されたアイテムを強調',
-  'ko-KR': '타락한 아이템 강조',
-  'th-TH': 'เน้นไอเทมเสื่อมสภาพ',
-});
-
-const enhancerHighlightIlvlMessages = defineMessages({
-  'en-US': 'Highlight item level',
-  'fr-FR': "Surligner le niveau d'objet",
-  'es-ES': 'Resaltar nivel de objeto',
-  'de-DE': 'Gegenstandsstufe hervorheben',
-  'pt-BR': 'Destacar nível do item',
-  'ru-RU': 'Выделять уровень предмета',
-  'zh-CN': '突出显示物品等级',
-  'ja-JP': 'アイテムレベルを強調',
-  'ko-KR': '아이템 레벨 강조',
-  'th-TH': 'เน้นระดับไอเทม',
-});
+const enhancerTitleMessages: Record<string, Record<string, string>> = {
+  'equivalent-pricings': defineMessages({
+    'en-US': 'Equivalent pricings (powered by poe.ninja)',
+    'fr-FR': 'Prix équivalents (via poe.ninja)',
+    'es-ES': 'Precios equivalentes (con poe.ninja)',
+    'de-DE': 'Äquivalente Preise (von poe.ninja)',
+    'pt-BR': 'Preços equivalentes (via poe.ninja)',
+    'ru-RU': 'Эквивалентные цены (на основе poe.ninja)',
+    'zh-CN': '等价价格（由 poe.ninja 提供）',
+    'ja-JP': '同等価格（poe.ninja 提供）',
+    'ko-KR': '동등 가격 (poe.ninja 제공)',
+    'th-TH': 'ราคาเทียบเท่า (จาก poe.ninja)',
+  }),
+  'highlight-stat-filters': defineMessages({
+    'en-US': 'Highlight searched mods',
+    'fr-FR': 'Surligner les modificateurs recherchés',
+    'es-ES': 'Resaltar los modificadores buscados',
+    'de-DE': 'Gesuchte Modifikatoren hervorheben',
+    'pt-BR': 'Destacar modificadores pesquisados',
+    'ru-RU': 'Подсвечивать искомые свойства',
+    'zh-CN': '高亮搜索的词缀',
+    'ja-JP': '検索した Mod をハイライト',
+    'ko-KR': '검색한 모드 강조',
+    'th-TH': 'ไฮไลต์ม็อดที่ค้นหา',
+  }),
+  'maximum-sockets': defineMessages({
+    'en-US': 'Warning for armors that cannot be 6-socketed',
+    'fr-FR': 'Avertissement pour les armures qui ne peuvent pas avoir 6 châsses',
+    'es-ES': 'Aviso para armaduras que no pueden tener 6 engarces',
+    'de-DE': 'Warnung für Rüstungen, die keine 6 Fassungen haben können',
+    'pt-BR': 'Aviso para armaduras que não podem ter 6 engastes',
+    'ru-RU': 'Предупреждение для брони, в которой нельзя сделать 6 гнезд',
+    'zh-CN': '无法拥有 6 孔的护甲警告',
+    'ja-JP': '6 ソケットにできない防具の警告',
+    'ko-KR': '6소켓이 불가능한 방어구 경고',
+    'th-TH': 'คำเตือนสำหรับเกราะที่ไม่สามารถมี 6 ช่องได้',
+  }),
+  'regroup-similars': defineMessages({
+    'en-US': 'Regroup similar results',
+    'fr-FR': 'Regrouper les résultats similaires',
+    'es-ES': 'Reagrupar resultados similares',
+    'de-DE': 'Ähnliche Ergebnisse gruppieren',
+    'pt-BR': 'Reagrupar resultados semelhantes',
+    'ru-RU': 'Группировать похожие результаты',
+    'zh-CN': '合并相似结果',
+    'ja-JP': '類似した結果をまとめる',
+    'ko-KR': '비슷한 결과 묶기',
+    'th-TH': 'จัดกลุ่มผลลัพธ์ที่คล้ายกัน',
+  }),
+};
 
 const githubTitleMessages = defineMessages({
   'en-US': 'Open Source',
@@ -303,45 +289,40 @@ const changelogMarkdownMessages = defineMessages({
 - แก้ไขบั๊กราคา`,
 });
 
-// Mock translation function
-const createMockTranslationFunction = (locale: string) => {
-  const translations: Record<string, Record<string, string>> = {
-    'page.about.enhancers.title': enhancersTitleMessages,
-    'page.about.enhancers.bulk-price': enhancerBulkPriceMessages,
-    'page.about.enhancers.item-age': enhancerItemAgeMessages,
-    'page.about.enhancers.collapsed-cards': enhancerCollapsedCardsMessages,
-    'page.about.enhancers.highlight-corrupted': enhancerHighlightCorruptedMessages,
-    'page.about.enhancers.highlight-ilvl': enhancerHighlightIlvlMessages,
-    'page.about.github.title': githubTitleMessages,
-    'page.about.github.description': githubDescriptionMessages,
-    'page.about.github.button': githubButtonMessages,
-    'page.about.credits.title': creditsTitleMessages,
-    'page.about.credits.description': creditsDescriptionMessages,
-    'page.about.disclaimer': disclaimerMessages,
-  };
-
-  return (key: string) => {
-    const messageMap = translations[key];
-    if (!messageMap) return key;
-    return resolveLocaleValue(locale, messageMap);
-  };
-};
+const getMessages = (locale: string) => ({
+  enhancersTitle: resolveLocaleValue(locale, enhancersTitleMessages),
+  getEnhancerTitle: (slug: string) =>
+    enhancerTitleMessages[slug] ? resolveLocaleValue(locale, enhancerTitleMessages[slug]) : slug,
+  githubTitle: resolveLocaleValue(locale, githubTitleMessages),
+  githubDescription: resolveLocaleValue(locale, githubDescriptionMessages),
+  githubButtonLabel: resolveLocaleValue(locale, githubButtonMessages),
+  creditsTitle: resolveLocaleValue(locale, creditsTitleMessages),
+  creditsDescription: resolveLocaleValue(locale, creditsDescriptionMessages),
+  disclaimer: resolveLocaleValue(locale, disclaimerMessages),
+});
 
 export const Default: Story = {
   name: 'Default (No Changelog)',
   args: {
     appVersion: '',
     githubUrl: '',
-    t: () => '',
+    enhancersTitle: '',
+    getEnhancerTitle: slug => slug,
+    githubTitle: '',
+    githubDescription: '',
+    githubButtonLabel: '',
+    creditsTitle: '',
+    creditsDescription: '',
+    disclaimer: '',
   },
   render: (args, { globals }) => {
-    const t = createMockTranslationFunction(globals.locale as string);
+    const messages = getMessages(globals.locale as string);
 
     return (
       <PageAbout
         appVersion="2.5.3"
         githubUrl="https://github.com/exile-center/better-trading"
-        t={t}
+        {...messages}
         data-locale={globals.locale}
       />
     );
@@ -353,10 +334,17 @@ export const WithChangelog: Story = {
   args: {
     appVersion: '',
     githubUrl: '',
-    t: () => '',
+    enhancersTitle: '',
+    getEnhancerTitle: slug => slug,
+    githubTitle: '',
+    githubDescription: '',
+    githubButtonLabel: '',
+    creditsTitle: '',
+    creditsDescription: '',
+    disclaimer: '',
   },
   render: (args, { globals }) => {
-    const t = createMockTranslationFunction(globals.locale as string);
+    const messages = getMessages(globals.locale as string);
     const changelogMarkdown = resolveLocaleValue(globals.locale as string, changelogMarkdownMessages);
 
     return (
@@ -367,7 +355,7 @@ export const WithChangelog: Story = {
           slug: '2.0.0',
           markdown: changelogMarkdown,
         }}
-        t={t}
+        {...messages}
         data-locale={globals.locale}
       />
     );
@@ -379,10 +367,17 @@ export const Complete: Story = {
   args: {
     appVersion: '',
     githubUrl: '',
-    t: () => '',
+    enhancersTitle: '',
+    getEnhancerTitle: slug => slug,
+    githubTitle: '',
+    githubDescription: '',
+    githubButtonLabel: '',
+    creditsTitle: '',
+    creditsDescription: '',
+    disclaimer: '',
   },
   render: (args, { globals }) => {
-    const t = createMockTranslationFunction(globals.locale as string);
+    const messages = getMessages(globals.locale as string);
     const changelogMarkdown = resolveLocaleValue(globals.locale as string, changelogMarkdownMessages);
 
     return (
@@ -395,7 +390,7 @@ export const Complete: Story = {
           slug: '2.0.0',
           markdown: changelogMarkdown,
         }}
-        t={t}
+        {...messages}
         data-locale={globals.locale}
       />
     );

@@ -1,4 +1,10 @@
 import PageBookmarks from './index';
+import {
+  copyTradeSuccessMessages,
+  genericAlertMessages,
+  logoAltMessages,
+  modalCloseMessages,
+} from '../../.storybook/common-messages';
 import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
@@ -450,7 +456,12 @@ const restoreBackupErrorMessages = defineMessages({
 
 export const Default: Story = {
   name: 'Bookmarks Page',
-  args: {},
+  args: {
+    copyTradeSuccessMessage: () => '',
+    genericAlertMessage: '',
+    modalCloseLabel: '',
+    logoAlt: '',
+  },
   render: (args, { globals }) => {
     const locale = globals.locale as string;
     return (
@@ -490,6 +501,12 @@ export const Default: Story = {
         updateFolderSuccessMessage={title => `Updated ${title}`}
         importFolderSuccessMessage={title => `Imported ${title}`}
         restoreBackupErrorMessage={resolveLocaleValue(locale, restoreBackupErrorMessages)}
+        copyTradeSuccessMessage={title =>
+          resolveLocaleValue(locale, copyTradeSuccessMessages).replace('{title}', title)
+        }
+        genericAlertMessage={resolveLocaleValue(locale, genericAlertMessages)}
+        modalCloseLabel={resolveLocaleValue(locale, modalCloseMessages)}
+        logoAlt={resolveLocaleValue(locale, logoAltMessages)}
       />
     );
   },

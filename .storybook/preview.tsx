@@ -2,6 +2,8 @@ import type { Preview } from '@storybook/react-vite';
 import React from 'react';
 import '../styles/app.scss';
 import { docsTheme } from './theme'; // added
+import FlashMessages from '../components/FlashMessages';
+import { FlashMessagesProvider, useFlashMessagesContext } from '../contexts/FlashMessagesContext';
 
 // The preview object configures global Storybook parameters & globals.
 const preview: Preview = {
@@ -51,6 +53,12 @@ const preview: Preview = {
   },
 };
 
+// Renders flashes added by components (via useFlashMessagesContext) like the shell does in the extension
+const StoryFlashMessages = () => {
+  const { flashMessages, dismissFlash } = useFlashMessagesContext();
+  return <FlashMessages flashMessages={flashMessages} onDismiss={flash => dismissFlash(flash.id)} />;
+};
+
 export const decorators = [
   (Story: any, context: { globals?: Record<string, any> }) => {
     if (typeof document !== 'undefined') {
@@ -64,9 +72,12 @@ export const decorators = [
       }
     }
     return (
-      <div className="sb-font-wrapper" style={{ padding: '1rem' }}>
-        <Story />
-      </div>
+      <FlashMessagesProvider>
+        <div className="sb-font-wrapper" style={{ padding: '1rem' }}>
+          <Story />
+        </div>
+        <StoryFlashMessages />
+      </FlashMessagesProvider>
     );
   },
 ];

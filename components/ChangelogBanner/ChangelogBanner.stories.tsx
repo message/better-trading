@@ -1,4 +1,5 @@
 import ChangelogBanner from './index.tsx';
+import { logoAltMessages, modalCloseMessages } from '../../.storybook/common-messages';
 import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
@@ -39,9 +40,23 @@ const meta = {
       control: false,
       description: '(Derived from locale in render)',
     },
+    modalCloseLabel: {
+      control: false,
+      description: '(Derived from locale in render)',
+    },
+    logoAlt: {
+      control: false,
+      description: '(Derived from locale in render)',
+    },
   },
   args: {
     version: '2.0.0',
+    noticeText: '',
+    modalButtonLabel: '',
+    modalTitle: '',
+    dismissButtonLabel: '',
+    modalCloseLabel: '',
+    logoAlt: '',
     changelog: {
       slug: '2.0.0',
       markdown: `
@@ -128,6 +143,8 @@ export const Default: Story = {
         modalButtonLabel={modalButtonLabel}
         modalTitle={modalTitleTemplate.replace('{version}', args.version)}
         dismissButtonLabel={dismissButtonLabel}
+        modalCloseLabel={resolveLocaleValue(globals.locale as string, modalCloseMessages)}
+        logoAlt={resolveLocaleValue(globals.locale as string, logoAltMessages)}
         data-locale={globals.locale}
       />
     );
@@ -157,6 +174,8 @@ export const NoChangelog: Story = {
           modalButtonLabel={modalButtonLabel}
           modalTitle={modalTitleTemplate.replace('{version}', args.version)}
           dismissButtonLabel={dismissButtonLabel}
+          modalCloseLabel={resolveLocaleValue(globals.locale as string, modalCloseMessages)}
+          logoAlt={resolveLocaleValue(globals.locale as string, logoAltMessages)}
           data-locale={globals.locale}
         />
       </div>
@@ -212,6 +231,8 @@ export const LongChangelog: Story = {
         modalButtonLabel={modalButtonLabel}
         modalTitle={modalTitleTemplate.replace('{version}', args.version)}
         dismissButtonLabel={dismissButtonLabel}
+        modalCloseLabel={resolveLocaleValue(globals.locale as string, modalCloseMessages)}
+        logoAlt={resolveLocaleValue(globals.locale as string, logoAltMessages)}
         data-locale={globals.locale}
       />
     );

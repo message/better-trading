@@ -8,15 +8,15 @@ import type React from 'react';
 interface ClipboardTextareaProps {
   value: string;
   className?: string;
-  buttonLabel?: string;
-  buttonCopiedLabel?: string;
+  buttonLabel: string;
+  buttonCopiedLabel: string;
 }
 
 export const ClipboardTextarea: React.FC<ClipboardTextareaProps> = ({
   value,
   className,
-  buttonLabel = 'Copy',
-  buttonCopiedLabel = 'Copied!',
+  buttonLabel,
+  buttonCopiedLabel,
 }) => {
   const [hasCopied, setHasCopied] = useState(false);
 

@@ -11,6 +11,8 @@ import type React from 'react';
 
 interface FolderImportProps {
   modalTitle: string;
+  modalCloseLabel: string;
+  logoAlt: string;
   importCodeLabel: string;
   previewLabel: (name: string, tradesCount: number) => string;
   invalidCodeMessage: string;
@@ -22,6 +24,8 @@ interface FolderImportProps {
 
 const FolderImport: React.FC<FolderImportProps> = ({
   modalTitle,
+  modalCloseLabel,
+  logoAlt,
   importCodeLabel,
   previewLabel,
   invalidCodeMessage,
@@ -52,7 +56,7 @@ const FolderImport: React.FC<FolderImportProps> = ({
   };
 
   return (
-    <Modal title={modalTitle} onClose={onCancel} isOpen={true}>
+    <Modal title={modalTitle} closeLabel={modalCloseLabel} logoAlt={logoAlt} onClose={onCancel} isOpen={true}>
       <FormContainer
         onSubmit={() => {
           if (stagedFolder) {

@@ -1,7 +1,7 @@
 import FlashMessages from './index.tsx';
 import { defineMessages, resolveLocaleValue } from '../../.storybook/locale-utils';
 import { useState } from 'react';
-import type { FlashMessage } from './types';
+import type { FlashMessage } from '@/types/flash-message';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

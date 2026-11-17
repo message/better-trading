@@ -50,6 +50,8 @@ interface FolderEditionProps {
   folder: BookmarksFolderStruct;
   version: TradeSiteVersion;
   modalTitle: string;
+  modalCloseLabel: string;
+  logoAlt: string;
   titleLabel: string;
   iconLabel: string;
   saveLabel: string;
@@ -61,6 +63,8 @@ const FolderEdition: React.FC<FolderEditionProps> = ({
   folder: initialFolder,
   version,
   modalTitle,
+  modalCloseLabel,
+  logoAlt,
   titleLabel,
   iconLabel,
   saveLabel,
@@ -86,7 +90,7 @@ const FolderEdition: React.FC<FolderEditionProps> = ({
   };
 
   return (
-    <Modal title={modalTitle} onClose={onCancel} isOpen={true}>
+    <Modal title={modalTitle} closeLabel={modalCloseLabel} logoAlt={logoAlt} onClose={onCancel} isOpen={true}>
       <FormContainer onSubmit={() => onSubmit(folder)} canSubmit={canSubmit}>
         <FormInput label={titleLabel} value={folder.title} autofocus={true} onChange={handleChangeTitle} />
 

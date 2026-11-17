@@ -7,8 +7,11 @@ import { useState, useEffect } from 'react';
 import type { ItemResultsPinnedItem } from '@/types/item-results';
 
 interface PagePinnedItemsProps {
-  // Translation function
-  t: (key: string) => string;
+  warningMessage: string;
+  clearLabel: string;
+  emptyMessage: string;
+  unpinItemLabel: string;
+  scrollToItemLabel: string;
   className?: string;
 }
 
@@ -66,7 +69,14 @@ const usePinnedItems = () => {
  * PagePinnedItems component - Displays and manages pinned items
  * Migrated from old-extension/app/pods/components/page/pinned-items
  */
-const PagePinnedItems = ({ t, className }: PagePinnedItemsProps) => {
+const PagePinnedItems = ({
+  warningMessage,
+  clearLabel,
+  emptyMessage,
+  unpinItemLabel,
+  scrollToItemLabel,
+  className,
+}: PagePinnedItemsProps) => {
   const { pinnedItems, clearPinnedItems, unpinItemById, scrollToItem } = usePinnedItems();
 
   const sortedPinnedItems = [...pinnedItems].sort(
@@ -91,7 +101,7 @@ const PagePinnedItems = ({ t, className }: PagePinnedItemsProps) => {
                 <Button
                   type="button"
                   theme="blue"
-                  label={t('page.pinned-items.scroll-to-item')}
+                  label={scrollToItemLabel}
                   onClick={() => scrollToItem(pinnedItem.id)}
                   className={styles.itemScroll}
                 />
@@ -99,26 +109,20 @@ const PagePinnedItems = ({ t, className }: PagePinnedItemsProps) => {
                 <Button
                   type="button"
                   theme="blue"
-                  label={t('page.pinned-items.unpin-item')}
+                  label={unpinItemLabel}
                   onClick={() => unpinItemById(pinnedItem.id)}
                 />
               </div>
             </div>
           ))}
 
-          <Button
-            type="button"
-            theme="gold"
-            label={t('page.pinned-items.clear')}
-            onClick={clearPinnedItems}
-            icon="times"
-          />
+          <Button type="button" theme="gold" label={clearLabel} onClick={clearPinnedItems} icon="times" />
         </>
       ) : (
-        <AlertMessage message={t('page.pinned-items.empty')} type="warning" />
+        <AlertMessage message={emptyMessage} type="warning" />
       )}
 
-      <AlertMessage message={t('page.pinned-items.warning')} type="warning" />
+      <AlertMessage message={warningMessage} type="warning" />
     </div>
   );
 };

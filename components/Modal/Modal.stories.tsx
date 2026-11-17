@@ -1,28 +1,9 @@
 import Modal from './index';
+import { logoAltMessages, modalCloseMessages } from '../../.storybook/common-messages';
+import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
 import Button from '../Button';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-
-// Helper types for localized messages
-interface LocalizedMessages {
-  'en-US': string;
-  'fr-FR': string;
-  'es-ES': string;
-  'de-DE': string;
-  'pt-BR': string;
-  'ru-RU': string;
-  'zh-CN': string;
-  'ja-JP': string;
-  'ko-KR': string;
-  'th-TH': string;
-}
-
-type DefineMessages = (messages: LocalizedMessages) => LocalizedMessages;
-
-const defineMessages: DefineMessages = messages => messages;
-
-const resolveLocaleValue = (locale: string, messages: LocalizedMessages): string =>
-  messages[locale as keyof LocalizedMessages] || messages['en-US'];
 
 const meta: Meta<typeof Modal> = {
   title: 'Components/Modal',
@@ -213,7 +194,12 @@ export const Basic: Story = {
     return (
       <>
         <Button theme="blue" label={buttonLabel} onClick={() => setIsOpen(true)} />
-        <Modal isOpen={isOpen} title={title} onClose={() => setIsOpen(false)}>
+        <Modal
+          isOpen={isOpen}
+          title={title}
+          closeLabel={resolveLocaleValue(globals.locale as string, modalCloseMessages)}
+          logoAlt={resolveLocaleValue(globals.locale as string, logoAltMessages)}
+          onClose={() => setIsOpen(false)}>
           <p>{content}</p>
         </Modal>
       </>
@@ -235,7 +221,12 @@ export const WithForm: Story = {
     return (
       <>
         <Button theme="blue" label={buttonLabel} onClick={() => setIsOpen(true)} />
-        <Modal isOpen={isOpen} title={title} onClose={() => setIsOpen(false)}>
+        <Modal
+          isOpen={isOpen}
+          title={title}
+          closeLabel={resolveLocaleValue(globals.locale as string, modalCloseMessages)}
+          logoAlt={resolveLocaleValue(globals.locale as string, logoAltMessages)}
+          onClose={() => setIsOpen(false)}>
           <form
             onSubmit={e => {
               e.preventDefault();
@@ -272,7 +263,12 @@ export const WithLongContent: Story = {
     return (
       <>
         <Button theme="blue" label={buttonLabel} onClick={() => setIsOpen(true)} />
-        <Modal isOpen={isOpen} title={title} onClose={() => setIsOpen(false)}>
+        <Modal
+          isOpen={isOpen}
+          title={title}
+          closeLabel={resolveLocaleValue(globals.locale as string, modalCloseMessages)}
+          logoAlt={resolveLocaleValue(globals.locale as string, logoAltMessages)}
+          onClose={() => setIsOpen(false)}>
           <div>
             <p>{content}</p>
             <p>{content}</p>
@@ -296,7 +292,13 @@ export const CustomStyled: Story = {
     return (
       <>
         <Button theme="blue" label={buttonLabel} onClick={() => setIsOpen(true)} />
-        <Modal isOpen={isOpen} title={title} onClose={() => setIsOpen(false)} className="custom-modal-class">
+        <Modal
+          isOpen={isOpen}
+          title={title}
+          closeLabel={resolveLocaleValue(globals.locale as string, modalCloseMessages)}
+          logoAlt={resolveLocaleValue(globals.locale as string, logoAltMessages)}
+          onClose={() => setIsOpen(false)}
+          className="custom-modal-class">
           <p>{content}</p>
         </Modal>
       </>

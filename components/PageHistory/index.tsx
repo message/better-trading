@@ -3,6 +3,7 @@ import styles from './styles.module.scss';
 import AlertMessage from '../AlertMessage';
 import Button from '../Button';
 import LoadingContainer from '../LoadingContainer';
+import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 import { useTradeHistoryContext } from '@/contexts/TradeHistoryContext';
 import { useTradeLocation } from '@/hooks/useTradeLocation';
 import { useCallback, useEffect, useState } from 'react';
@@ -23,6 +24,7 @@ const PageHistory: React.FC<PageHistoryProps> = ({
   genericAlertMessage,
 }) => {
   const tradeHistory = useTradeHistoryContext();
+  const { addFlash } = useFlashMessagesContext();
 
   const [historyEntries, setHistoryEntries] = useState<TradeLocationHistoryStruct[]>([]);
 
@@ -35,9 +37,9 @@ const PageHistory: React.FC<PageHistoryProps> = ({
     try {
       setHistoryEntries([]);
       await tradeHistory.clearHistoryEntries();
-      console.log(clearSuccessMessage);
+      addFlash(clearSuccessMessage, 'success');
     } catch {
-      console.error(genericAlertMessage);
+      addFlash(genericAlertMessage, 'alert');
     }
   };
 
