@@ -6,6 +6,8 @@ import {
   modalCloseMessages,
 } from '../../.storybook/common-messages';
 import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
+import { BookmarksProvider } from '../../contexts/BookmarksContext';
+import { FlashMessagesProvider } from '../../contexts/FlashMessagesContext';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
@@ -22,6 +24,15 @@ const meta = {
   title: 'Pages/PageBookmarks',
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
+  decorators: [
+    Story => (
+      <FlashMessagesProvider>
+        <BookmarksProvider>
+          <Story />
+        </BookmarksProvider>
+      </FlashMessagesProvider>
+    ),
+  ],
   args: {
     collapseAllLabel: '',
     showArchivedLabel: '',
