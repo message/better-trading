@@ -1,6 +1,7 @@
 import styles from './styles.module.scss';
 import AlertMessage from '../AlertMessage';
 import Button from '../Button';
+import XmarkIcon from '@/assets/icons/solid/xmark.svg?react';
 import { useItemResults } from '@/hooks/useItemResults';
 import classnames from 'classnames';
 import { useState, useEffect } from 'react';
@@ -116,7 +117,7 @@ const PagePinnedItems = ({
             </div>
           ))}
 
-          <Button type="button" theme="gold" label={clearLabel} onClick={clearPinnedItems} icon="times" />
+          <Button type="button" theme="gold" label={clearLabel} onClick={clearPinnedItems} icon={XmarkIcon} />
         </>
       ) : (
         <AlertMessage message={emptyMessage} type="warning" />

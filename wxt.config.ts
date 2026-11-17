@@ -14,6 +14,8 @@ const config: UserConfig = {
       { resources: ['assets/images/*'], matches: ['https://*.pathofexile.com/*', 'https://poe.game.daum.net/*'] },
     ],
   },
+  // Icons are sized like font icons (1em) unless CSS says otherwise
+  svgr: { svgrOptions: { icon: true } },
   // outDir: './dist',
   webExt: {
     chromiumArgs: ['https://www.pathofexile.com/trade'],

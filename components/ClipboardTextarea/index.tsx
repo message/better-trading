@@ -1,6 +1,7 @@
 import styles from './styles.module.scss';
 import { copyToClipboard } from '../../utils/copy-to-clipboard';
 import Button from '../Button';
+import ClipboardIcon from '@/assets/icons/solid/clipboard.svg?react';
 import classNames from 'classnames';
 import { useState, useCallback } from 'react';
 import type React from 'react';
@@ -45,7 +46,7 @@ export const ClipboardTextarea: React.FC<ClipboardTextareaProps> = ({
         theme="gold"
         label={copyButtonLabel}
         onClick={handleCopyToClipboard}
-        icon="📋"
+        icon={ClipboardIcon}
         className={styles.clipboardButton}
       />
     </div>

@@ -2,6 +2,7 @@ import styles from './styles.module.scss';
 import Button from '../Button';
 import FormCheckbox from '../FormCheckbox';
 import MarkdownChangelog from '../MarkdownChangelog';
+import GithubIcon from '@/assets/icons/brands/github.svg?react';
 import { useItemResults } from '@/hooks/useItemResults';
 import classnames from 'classnames';
 import type { ChangelogData } from '../ChangelogBanner';
@@ -101,7 +102,7 @@ const PageAbout = ({
 
           <p className={styles.sectionDescription}>{githubDescription}</p>
 
-          <Button href={githubUrl} theme="blue" icon="github" label={githubButtonLabel} />
+          <Button href={githubUrl} theme="blue" icon={GithubIcon} label={githubButtonLabel} />
         </section>
 
         <section className={styles.section}>

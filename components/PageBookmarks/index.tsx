@@ -15,6 +15,9 @@ import styles from './styles.module.scss';
 import AlertMessage from '../AlertMessage';
 import Button from '../Button';
 import LoadingContainer from '../LoadingContainer';
+import CompressIcon from '@/assets/icons/solid/compress.svg?react';
+import FolderPlusIcon from '@/assets/icons/solid/folder-plus.svg?react';
+import SquarePlusIcon from '@/assets/icons/solid/square-plus.svg?react';
 import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import { useBookmarksState } from '@/hooks/useBookmarksState';
@@ -276,7 +279,13 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
     <LoadingContainer task={bookmarks.refreshFolders} size="large">
       <div className={styles.headerActions}>
         {hasActiveFolders && !isShowingArchivedFolders && (
-          <Button type="button" theme="gold" label={collapseAllLabel} icon="🗜️" onClick={handleCollapseAllFolders} />
+          <Button
+            type="button"
+            theme="gold"
+            label={collapseAllLabel}
+            icon={CompressIcon}
+            onClick={handleCollapseAllFolders}
+          />
         )}
 
         {hasArchivedFolders && (
@@ -352,7 +361,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
             className={styles.createFolderButton}
             theme="gold"
             label={createFolderLabel}
-            icon="📁"
+            icon={FolderPlusIcon}
             onClick={handleCreateFolder}
           />
 
@@ -361,7 +370,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
             className={styles.createFolderButton}
             theme="gold"
             label={importFolderLabel}
-            icon="📥"
+            icon={SquarePlusIcon}
             onClick={handleImportFolder}
           />
         </div>

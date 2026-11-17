@@ -7,6 +7,6 @@ export default defineConfig({
     // Add all the vite config from your wxt.config.ts, including the built-in
     // plugins and config WXT sets up automatically.
     WxtVitest(),
-    svgr(),
+    svgr({ svgrOptions: { icon: true } }),
   ],
 });
