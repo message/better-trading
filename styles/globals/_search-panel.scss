@@ -8,7 +8,7 @@
     }
   }
 
-  @media (min-width: #{#1200px + variables.$extension-width}) {
+  @media (min-width: #{1200px + variables.$extension-width}) {
     .col-lg-6,
     #trade .search-bar .search-advanced-pane {
       width: 50%;
