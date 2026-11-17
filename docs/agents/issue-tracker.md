@@ -2,6 +2,17 @@
 
 Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all operations.
 
+## Ticket graph (required)
+
+`bin/next-tickets` (run it from any directory) reads this repo's issues and finds the workable tickets from GitHub's native structure only, never from issue bodies. It groups tickets into waves: everything in wave 1 can be taken in parallel, later waves wait on earlier ones. `bin/next-tickets --lint` checks every open issue against this section; run it after creating or linking issues. Every skill that creates or links issues (`/to-spec`, `/to-tickets`, `/triage`, `/wayfinder`) must therefore set it:
+
+- **Spec**: one issue per spec, no parent.
+- **Ticket**: a native **sub-issue** of its spec (see **Make an issue a sub-issue of a parent**). A ticket without a native parent is invisible to the script.
+- **Blocked by**: one native **dependency** per blocker (see **Blocking**). Do not write a `Blocked by` line or section in the body: the native edge is the only source of truth.
+- **Label**: exactly one of `ready-for-agent` or `ready-for-human` on every ticket.
+- **Body**: a ticket has `## What to build` (or `## Decision to record` for an ADR ticket) and `## Acceptance criteria`. The body may repeat the parent in a `## Parent` section for readers.
+- Sub-issues and dependencies are enabled in this repo, so the text fallbacks below (`Part of #…`, a `Blocked by:` line) never apply.
+
 ## Conventions
 
 - **Create an issue**: `gh issue create --title "..." --body "..."`. Use a heredoc for multi-line bodies.

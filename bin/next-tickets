@@ -1,0 +1,198 @@
+#!/usr/bin/env python3
+"""Dependency-aware ticket picker for better-trading (local copy of the TickerBeam one).
+
+Usage: bin/next-tickets [--lint | help]   (works from any directory)
+
+Reads GitHub's native structure only (sub-issues, dependencies, labels) of the
+repo. A ticket is an open
+issue with a parent (a slice, not a spec) and a ready-for-agent/ready-for-human
+label. Every open blocker puts a ticket one wave behind it:
+
+  wave 1  free to start now, all in parallel: nothing in wave 1 blocks another
+  wave 2  starts when its wave 1 blockers are closed, and so on
+
+Every wave is listed in full, one line per ticket: role (agent / human, colored),
+key, how many open issues it unblocks (transitively), title, then the open
+blockers it waits for. Ordered agent first, then by that count. Assigned tickets
+are listed as in progress; a local branch N-... or */N-... in this clone marks a
+ticket as started. Color is off
+when piped or when NO_COLOR is set.
+
+  --lint  Check open issues against the issue format (docs/agents/issue-tracker.md)
+          and the graph; exit 1 on problems
+"""
+import json
+import os
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+OWNER = "message"
+REPO = "better-trading"
+READY = ("ready-for-agent", "ready-for-human")
+UNTRIAGED = ("needs-triage", "needs-info")  # not tickets yet, lint skips them
+WHAT = ("## What to build", "## Decision to record")  # the second is for ADR tickets
+CRITERIA = "## Acceptance criteria"
+
+QUERY = """
+query($owner: String!, $name: String!, $endCursor: String) {
+  repository(owner: $owner, name: $name) {
+    issues(states: OPEN, first: 100, after: $endCursor) {
+      pageInfo { hasNextPage endCursor }
+      nodes {
+        number title body
+        labels(first: 20) { nodes { name } }
+        assignees(first: 5) { totalCount }
+        parent { number }
+        subIssues(first: 1) { totalCount }
+        blockedBy(first: 50) { nodes { number state } }
+      }
+    }
+  }
+}"""
+
+
+def key(number):
+    return f"#{number}"
+
+
+def load():
+    """All open issues as {key: issue}, with open blockers as keys."""
+    graph = {}
+    out = subprocess.run(
+        ["gh", "api", "graphql", "--paginate", "-F", f"owner={OWNER}", "-F", f"name={REPO}",
+         "-f", f"query={QUERY}", "--jq", ".data.repository.issues.nodes[]"],
+        check=True, capture_output=True, text=True).stdout
+    for line in out.splitlines():
+        n = json.loads(line)
+        graph[key(n["number"])] = {
+            "number": n["number"], "title": n["title"], "body": n["body"] or "",
+            "labels": [l["name"] for l in n["labels"]["nodes"]],
+            "assigned": n["assignees"]["totalCount"] > 0,
+            "parent": n["parent"] and key(n["parent"]["number"]),
+            "subs": n["subIssues"]["totalCount"],
+            "waiting": [key(b["number"]) for b in n["blockedBy"]["nodes"] if b["state"] == "OPEN"],
+        }
+    return graph
+
+
+def waves(graph):
+    """({key: wave}, [cycle members]). A blocker that is not an open issue counts as wave 1."""
+    wave, cyclic = {}, set()
+
+    def visit(k, path):
+        if k in wave:
+            return wave[k]
+        if k in path:
+            cyclic.update(path[path.index(k):])
+            return 0
+        wave[k] = 1 + max((visit(b, path + [k]) for b in graph[k]["waiting"] if b in graph), default=0)
+        return wave[k]
+
+    for k in graph:
+        visit(k, [])
+    return wave, sorted(cyclic)
+
+
+def started(issue):
+    clone = Path(__file__).resolve().parent.parent
+    branches = subprocess.run(["git", "-C", str(clone), "branch", "--format=%(refname:short)"],
+                              capture_output=True, text=True).stdout.split()
+    return any(re.match(rf"(.*/)?{issue['number']}-", b) for b in branches)
+
+
+def lint(graph, cyclic):
+    problems = []
+    for k, i in graph.items():
+        if any(l in UNTRIAGED for l in i["labels"]):
+            continue
+        if i["parent"] is None:
+            if i["subs"] == 0:
+                problems.append(f"{k}: neither a spec (no sub-issues) nor a ticket (no parent): invisible to next-tickets")
+            continue
+        n = sum(l in READY for l in i["labels"])
+        if n != 1:
+            problems.append(f"{k}: needs exactly one of {' / '.join(READY)}, has {n}")
+        if re.search(r"(?im)^\W*blocked by\b", i["body"]):
+            problems.append(f"{k}: 'Blocked by' in the body; use a native dependency and delete the line")
+        if not any(w in i["body"] for w in WHAT):
+            problems.append(f"{k}: body lacks '{WHAT[0]}'")
+        if CRITERIA not in i["body"]:
+            problems.append(f"{k}: body lacks '{CRITERIA}'")
+    problems += [f"{k}: in a dependency cycle" for k in cyclic]
+    print("\n".join(problems) or "ok")
+    return 1 if problems else 0
+
+
+def main():
+    arg = sys.argv[1] if len(sys.argv) == 2 else ""
+    if arg in ("help", "-h", "--help"):
+        print(__doc__)
+        return 0
+    if arg not in ("", "--lint"):
+        print(__doc__, file=sys.stderr)
+        return 2
+
+    graph = load()
+    wave, cyclic = waves(graph)
+    if arg == "--lint":
+        return lint(graph, cyclic)
+
+    dependents = {}
+    for k, i in graph.items():
+        for b in i["waiting"]:
+            dependents.setdefault(b, []).append(k)
+
+    def downstream(k, seen=None):
+        seen = set() if seen is None else seen
+        for d in dependents.get(k, []):
+            if d not in seen:
+                seen.add(d)
+                downstream(d, seen)
+        return seen
+
+    tickets = sorted(
+        (k for k, i in graph.items() if i["parent"] and any(l in READY for l in i["labels"])),
+        key=lambda k: (-len(downstream(k)), graph[k]["number"]))
+
+    color = sys.stdout.isatty() and "NO_COLOR" not in os.environ
+    paint = lambda code, text: f"\033[{code}m{text}\033[0m" if color else text
+    ROLE = {"ready-for-agent": ("agent", "32"), "ready-for-human": ("human", "33")}  # green, yellow
+    width = max((len(k) for k in tickets), default=0)
+
+    def line(k):
+        i = graph[k]
+        role, code = next(ROLE[l] for l in READY if l in i["labels"])
+        n = len(downstream(k))
+        out = f"  {paint(code, role)}  {paint('1', k.ljust(width))}  {paint('2', f'{n:>2}' if n else '  ')}  {i['title']}"
+        if i["assigned"]:
+            out += paint("36", "  [assigned]")
+        elif started(i):
+            out += paint("36", "  [branch exists]")
+        if i["waiting"]:
+            out += paint("31", "  waits: " + ", ".join(i["waiting"]))
+        return out
+
+    def show(title, keys):
+        if keys:
+            print(paint("1", title), *map(line, keys), "", sep="\n")
+
+    print(paint("2", "role  ticket  N = open tickets it unblocks (transitively)  waits = open blockers\n"))
+    now = [k for k in tickets if wave[k] == 1]
+    by_role = lambda keys: sorted(keys, key=lambda k: not "ready-for-agent" in graph[k]["labels"])  # stable: agent first
+    show("IN PROGRESS", [k for k in now if graph[k]["assigned"]])
+    show("START NOW (wave 1, all in parallel; agent = an agent can take it, human = needs you)",
+         by_role(k for k in now if not graph[k]["assigned"]))
+
+    later = [k for k in tickets if wave[k] > 1]
+    for w in sorted({wave[k] for k in later}):
+        show(f"WAVE {w} (after its blockers close)", by_role(k for k in later if wave[k] == w))
+    if cyclic:
+        print("Dependency cycle: " + ", ".join(cyclic), file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
