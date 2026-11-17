@@ -6,7 +6,8 @@ body.bt-body {
 
   // Shrink #trade and shift it left so it sits beside the fixed panel instead of under it.
   // ponytail: 1520px is the trade site's own max content width, update if the site changes it.
-  #trade {
+  #trade,
+  #global-notification {
     max-width: calc(1520px - #{math.div(variables.$extension-width, 1.5)});
     transform: translateX(#{math.div(-1 * variables.$extension-width, 2)});
     transition:
@@ -28,7 +29,8 @@ body.bt-body {
   }
 
   &.bt-is-collapsed {
-    #trade {
+    #trade,
+    #global-notification {
       max-width: 1520px;
       transform: translateX(0);
     }
