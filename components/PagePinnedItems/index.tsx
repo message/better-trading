@@ -1,16 +1,10 @@
 import styles from './styles.module.scss';
 import AlertMessage from '../AlertMessage';
 import Button from '../Button';
+import { useItemResults } from '@/hooks/useItemResults';
 import classnames from 'classnames';
 import { useState, useEffect } from 'react';
-
-interface ItemResultsPinnedItem {
-  id: string;
-  pinnedAt: string;
-  detailsElement: string; // HTML string
-  renderedItemElement: string; // HTML string
-  pricingElement: string; // HTML string
-}
+import type { ItemResultsPinnedItem } from '@/types/item-results';
 
 interface PagePinnedItemsProps {
   // Translation function
@@ -18,31 +12,28 @@ interface PagePinnedItemsProps {
   className?: string;
 }
 
-// TODO: Replace with actual item-results service and flash-messages service once migrated
-// Stub for pinned items functionality
 const usePinnedItems = () => {
+  const itemResults = useItemResults();
   const [pinnedItems, setPinnedItems] = useState<ItemResultsPinnedItem[]>([]);
 
-  const getPinnedItems = () => {
-    // TODO: Implement actual pinned items retrieval from service
-    // For now returning empty array
+  const loadPinnedItems = async () => {
+    const items = await itemResults.getPinnedItems();
+    setPinnedItems(items);
+  };
+
+  const clearPinnedItems = async () => {
+    await itemResults.clearPinnedItems();
     setPinnedItems([]);
   };
 
-  const clearPinnedItems = () => {
-    // TODO: Implement actual clear functionality
-    setPinnedItems([]);
-  };
-
-  const unpinItemById = (itemId: string) => {
-    // TODO: Implement actual unpin functionality
+  const unpinItemById = async (itemId: string) => {
+    await itemResults.unpinItemById(itemId);
     setPinnedItems(prev => prev.filter(item => item.id !== itemId));
   };
 
   const scrollToItem = async (itemId: string): Promise<void> => {
     const itemElement = window.document.querySelector(`div.row[data-id="${itemId}"]`);
     if (!itemElement) {
-      // TODO: Show flash message when service is migrated
       console.warn('Item not found on page');
       return;
     }
@@ -58,19 +49,9 @@ const usePinnedItems = () => {
     itemElement.classList.remove('bt-pinned-glow');
   };
 
-  // Subscribe to pinned items changes on mount
   useEffect(() => {
-    getPinnedItems();
-
-    // TODO: Subscribe to pinned-items-change event from service
-    // const handlePinnedItemsChange = () => {
-    //   getPinnedItems();
-    // };
-    // itemResults.on('pinned-items-change', handlePinnedItemsChange);
-
-    // return () => {
-    //   itemResults.off('pinned-items-change', handlePinnedItemsChange);
-    // };
+    loadPinnedItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
@@ -143,4 +124,4 @@ const PagePinnedItems = ({ t, className }: PagePinnedItemsProps) => {
 };
 
 export default PagePinnedItems;
-export type { PagePinnedItemsProps, ItemResultsPinnedItem };
+export type { PagePinnedItemsProps };

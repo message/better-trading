@@ -11,15 +11,17 @@ import Backup from './Backup';
 import Folder from './Folder';
 import FolderEdition from './FolderEdition';
 import FolderImport from './FolderImport';
-import { bookmarksServiceStub, flashMessagesStub, tradeLocationStub, copyToClipboard } from './services-stub';
 import styles from './styles.module.scss';
-// TODO: These services will be migrated to service/hook layer later
 import AlertMessage from '../AlertMessage';
 import Button from '../Button';
 import LoadingContainer from '../LoadingContainer';
-import { useState, useCallback } from 'react';
+import { useBookmarks } from '@/hooks/useBookmarks';
+import { useBookmarksState } from '@/hooks/useBookmarksState';
+import { useTradeLocation } from '@/hooks/useTradeLocation';
+import { copyToClipboard } from '@/utils/copy-to-clipboard';
+import { getTradeUrl } from '@/utils/trade-location';
+import { useState, useCallback, useEffect } from 'react';
 import type { BookmarksFolderStruct, BookmarksTradeStruct } from '@/types/bookmarks';
-import type { TradeSiteVersion } from '@/types/trade-location';
 import type React from 'react';
 
 const FOLDERS_WARNING_THRESHOLD = 10;
@@ -101,17 +103,20 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   importFolderSuccessMessage,
   restoreBackupErrorMessage,
 }) => {
-  const [folders, setFolders] = useState<BookmarksFolderStruct[]>([]);
+  const bookmarks = useBookmarks();
+  const { expandedFolderIds, toggleFolderExpansion, collapseAllFolders } = useBookmarksState();
+  const { version, league } = useTradeLocation();
+
   const [stagedFolder, setStagedFolder] = useState<BookmarksFolderStruct | null>(null);
-  const [expandedFolderIds, setExpandedFolderIds] = useState<string[]>([]);
   const [isImportingFolder, setIsImportingFolder] = useState(false);
   const [isShowingArchivedFolders, setIsShowingArchivedFolders] = useState(false);
 
-  const version: TradeSiteVersion = tradeLocationStub.version;
-  const league = tradeLocationStub.league;
+  useEffect(() => {
+    bookmarks.refreshFolders();
+  }, [bookmarks]);
 
   // Computed values
-  const applicableFolders = folders.filter(folder => folder.version === version);
+  const applicableFolders = bookmarks.folders.filter(folder => folder.version === version);
   const activeFolders = applicableFolders.filter(folder => !folder.archivedAt);
   const archivedFolders = applicableFolders.filter(folder => Boolean(folder.archivedAt));
   const displayedFolders = isShowingArchivedFolders ? archivedFolders : activeFolders;
@@ -119,107 +124,82 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   const hasActiveFolders = activeFolders.length > 0;
   const foldersWarningIsVisible = !isShowingArchivedFolders && displayedFolders.length >= FOLDERS_WARNING_THRESHOLD;
 
-  const fetchFolders = useCallback(async () => {
-    const fetchedFolders = await bookmarksServiceStub.fetchFolders();
-    setFolders(fetchedFolders);
-    setExpandedFolderIds(bookmarksServiceStub.getExpandedFolderIds());
-  }, []);
-
   const handleDeleteFolder = useCallback(
     async (folder: BookmarksFolderStruct) => {
       try {
-        await bookmarksServiceStub.deleteFolder(folder);
-        await fetchFolders();
-        flashMessagesStub.success(deleteFolderSuccessMessage(folder.title));
+        await bookmarks.deleteFolder(folder);
+        console.log(deleteFolderSuccessMessage(folder.title));
       } catch {
-        flashMessagesStub.alert('An error occurred');
+        console.error('An error occurred');
       }
     },
-    [fetchFolders, deleteFolderSuccessMessage],
+    [bookmarks, deleteFolderSuccessMessage],
   );
 
   const handleToggleFolderArchive = useCallback(
     async (folder: BookmarksFolderStruct) => {
-      await bookmarksServiceStub.toggleFolderArchive(folder);
-      await fetchFolders();
+      await bookmarks.toggleFolderArchive(folder);
       setIsShowingArchivedFolders(isShowingArchivedFolders && hasArchivedFolders);
     },
-    [fetchFolders, isShowingArchivedFolders, hasArchivedFolders],
+    [bookmarks, isShowingArchivedFolders, hasArchivedFolders],
   );
-
-  // TODO: Implement drag-and-drop folder reordering
-  // const handleReorderFolders = useCallback(
-  //   async (reordered: BookmarksFolderStruct[]) => {
-  //     const newFolders = bookmarksServiceStub.partiallyReorderFolders(folders, reordered);
-  //     setFolders(newFolders);
-  //     await bookmarksServiceStub.persistFolders(newFolders);
-  //   },
-  //   [folders],
-  // );
 
   const handlePersistFolder = useCallback(
     async (folder: BookmarksFolderStruct) => {
       try {
         const isNewlyCreated = !folder.id;
-        const folderId = await bookmarksServiceStub.persistFolder(folder);
+        const folderId = await bookmarks.persistFolder(folder);
 
         if (isNewlyCreated) {
-          const newExpandedIds = bookmarksServiceStub.toggleFolderExpansion(expandedFolderIds, folderId);
-          setExpandedFolderIds(newExpandedIds);
+          toggleFolderExpansion(folderId);
         }
-
-        await fetchFolders();
 
         const successMessage = isNewlyCreated
           ? createFolderSuccessMessage(folder.title)
           : updateFolderSuccessMessage(folder.title);
-        flashMessagesStub.success(successMessage);
+        console.log(successMessage);
       } catch {
-        flashMessagesStub.alert('An error occurred');
+        console.error('An error occurred');
       } finally {
         setStagedFolder(null);
       }
     },
-    [expandedFolderIds, fetchFolders, createFolderSuccessMessage, updateFolderSuccessMessage],
+    [bookmarks, toggleFolderExpansion, createFolderSuccessMessage, updateFolderSuccessMessage],
   );
 
   const handlePersistImportedFolder = useCallback(
     async (data: { folder: BookmarksFolderStruct; trades: BookmarksTradeStruct[] }) => {
       try {
-        const folderId = await bookmarksServiceStub.persistFolder(data.folder);
-        await bookmarksServiceStub.persistTrades(data.trades, folderId);
-
-        const newExpandedIds = bookmarksServiceStub.toggleFolderExpansion(expandedFolderIds, folderId);
-        setExpandedFolderIds(newExpandedIds);
-
-        await fetchFolders();
-        flashMessagesStub.success(importFolderSuccessMessage(data.folder.title));
+        const folderId = await bookmarks.persistFolder(data.folder);
+        await bookmarks.persistTrades(data.trades, folderId);
+        toggleFolderExpansion(folderId);
+        console.log(importFolderSuccessMessage(data.folder.title));
       } catch {
-        flashMessagesStub.alert('An error occurred');
+        console.error('An error occurred');
       } finally {
         setIsImportingFolder(false);
       }
     },
-    [expandedFolderIds, fetchFolders, importFolderSuccessMessage],
+    [bookmarks, toggleFolderExpansion, importFolderSuccessMessage],
   );
 
   const handleGenerateBackup = useCallback(async () => {
-    const dataString = await bookmarksServiceStub.generateBackupDataString();
+    const dataString = await bookmarks.generateBackup();
     const blob = new Blob([dataString], { type: 'text/plain' });
     const linkElement = document.createElement('a');
     linkElement.download = 'poe-better-trading-backup.txt';
     linkElement.href = window.URL.createObjectURL(blob);
     linkElement.click();
-  }, []);
+  }, [bookmarks]);
 
   const handleRestoreBackup = useCallback(
     async (dataString: string) => {
-      const success = await bookmarksServiceStub.restoreFromDataString(dataString);
+      const success = await bookmarks.restoreBackup(dataString);
       if (!success) {
-        flashMessagesStub.alert(restoreBackupErrorMessage);
+        console.error(restoreBackupErrorMessage);
       }
     },
-    [restoreBackupErrorMessage],
+    [bookmarks, restoreBackupErrorMessage],
   );
 
   const handleToggleArchiveDisplay = () => {
@@ -227,7 +207,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   };
 
   const handleCreateFolder = () => {
-    const newFolder = bookmarksServiceStub.initializeFolderStruct(version);
+    const newFolder = bookmarks.initializeFolderStruct(version);
     setStagedFolder(newFolder);
   };
 
@@ -240,12 +220,11 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   };
 
   const handleToggleFolderExpansion = (folderId: string) => {
-    const newExpandedIds = bookmarksServiceStub.toggleFolderExpansion(expandedFolderIds, folderId);
-    setExpandedFolderIds(newExpandedIds);
+    toggleFolderExpansion(folderId);
   };
 
   const handleCollapseAllFolders = () => {
-    setExpandedFolderIds([]);
+    collapseAllFolders();
   };
 
   const handleImportFolder = () => {
@@ -257,37 +236,27 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   };
 
   const handleFetchTrades = useCallback(
-    async (folderId: string) => await bookmarksServiceStub.fetchTradesByFolderId(folderId),
-    [],
+    async (folderId: string) => await bookmarks.fetchTradesByFolderId(folderId),
+    [bookmarks],
   );
 
   const handleCopyTradeToClipboard = useCallback(
-    (trade: BookmarksTradeStruct) => {
+    async (trade: BookmarksTradeStruct) => {
       if (!league) return;
-      const tradeUrl = tradeLocationStub.getTradeUrl(
-        trade.location.version,
-        trade.location.type,
-        trade.location.slug,
-        league,
-      );
-      copyToClipboard(tradeUrl);
-      flashMessagesStub.success(`Copied ${trade.title} to clipboard`);
+      const tradeUrl = getTradeUrl(trade.location.version, trade.location.type, trade.location.slug, league);
+      await copyToClipboard(tradeUrl);
+      console.log(`Copied ${trade.title} to clipboard`);
     },
     [league],
   );
 
-  const getTradeUrl = (trade: BookmarksTradeStruct, currentLeague: string | null) => {
+  const handleGetTradeUrl = (trade: BookmarksTradeStruct, currentLeague: string | null) => {
     if (!currentLeague) return '#';
-    return tradeLocationStub.getTradeUrl(
-      trade.location.version,
-      trade.location.type,
-      trade.location.slug,
-      currentLeague,
-    );
+    return getTradeUrl(trade.location.version, trade.location.type, trade.location.slug, currentLeague);
   };
 
   return (
-    <LoadingContainer task={fetchFolders} size="large">
+    <LoadingContainer task={bookmarks.refreshFolders} size="large">
       <div className={styles.headerActions}>
         {hasActiveFolders && !isShowingArchivedFolders && (
           <Button type="button" theme="gold" label={collapseAllLabel} icon="🗜️" onClick={handleCollapseAllFolders} />
@@ -352,7 +321,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
                 onExportFolder={() => {
                   /* TODO: Implement folder export */
                 }}
-                getTradeUrl={getTradeUrl}
+                getTradeUrl={handleGetTradeUrl}
               />
             </div>
           );
@@ -415,7 +384,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
           saveLabel={saveLabel}
           onCancel={handleCancelImportFolder}
           onSubmit={handlePersistImportedFolder}
-          onDeserialize={bookmarksServiceStub.deserializeFolder}
+          onDeserialize={bookmarks.deserializeFolder}
         />
       )}
     </LoadingContainer>

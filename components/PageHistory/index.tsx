@@ -1,11 +1,13 @@
 import EntryLink from './EntryLink';
-import { flashMessagesServiceStub, tradeLocationServiceStub } from './services-stub';
 import styles from './styles.module.scss';
+import { useMockableTradeHistory } from '../../.storybook/mock-providers';
 import AlertMessage from '../AlertMessage';
 import Button from '../Button';
 import LoadingContainer from '../LoadingContainer';
+import { useTradeHistory } from '@/hooks/useTradeHistory';
+import { useTradeLocation } from '@/hooks/useTradeLocation';
 import { useCallback, useEffect, useState } from 'react';
-import type { TradeLocationHistoryStruct } from './types';
+import type { TradeLocationHistoryStruct } from '@/types/trade-location';
 import type React from 'react';
 
 interface PageHistoryProps {
@@ -21,37 +23,36 @@ const PageHistory: React.FC<PageHistoryProps> = ({
   clearSuccessMessage,
   genericAlertMessage,
 }) => {
+  // Use mock provider if available (for Storybook), otherwise use real hook
+  const mockTradeHistory = useMockableTradeHistory();
+  const realTradeHistory = useTradeHistory();
+  const tradeHistory = mockTradeHistory || realTradeHistory;
+
   const [historyEntries, setHistoryEntries] = useState<TradeLocationHistoryStruct[]>([]);
 
   const fetchHistoryEntries = useCallback(async () => {
-    const entries = await tradeLocationServiceStub.fetchHistoryEntries();
+    const entries = await tradeHistory.fetchHistoryEntries();
     setHistoryEntries(entries);
-  }, []);
+  }, [tradeHistory]);
 
   const handleClearHistory = async () => {
     try {
       setHistoryEntries([]);
-      await tradeLocationServiceStub.clearHistoryEntries();
-      flashMessagesServiceStub.success(clearSuccessMessage);
+      await tradeHistory.clearHistoryEntries();
+      console.log(clearSuccessMessage);
     } catch {
-      flashMessagesServiceStub.alert(genericAlertMessage);
+      console.error(genericAlertMessage);
     }
   };
 
-  const handleTradeLocationChange = useCallback(() => {
-    fetchHistoryEntries().catch(error => {
-      console.error('Failed to refetch history entries:', error);
-    });
-  }, [fetchHistoryEntries]);
-
   // Subscribe to trade location changes
-  useEffect(() => {
-    tradeLocationServiceStub.on('change', null, handleTradeLocationChange);
-
-    return () => {
-      tradeLocationServiceStub.off('change', null, handleTradeLocationChange);
-    };
-  }, [handleTradeLocationChange]);
+  useTradeLocation({
+    onChange: () => {
+      fetchHistoryEntries().catch(error => {
+        console.error('Failed to refetch history entries:', error);
+      });
+    },
+  });
 
   // Refetch on window focus
   useEffect(() => {

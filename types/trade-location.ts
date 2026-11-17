@@ -16,8 +16,12 @@ export interface TradeLocationChangeEvent {
   newTradeLocation: TradeLocationStruct;
 }
 
-export interface TradeLocationHistoryStruct extends Required<TradeLocationStruct> {
+export interface TradeLocationHistoryStruct {
   id: string;
+  version: TradeSiteVersion;
+  slug: string;
+  type: string;
+  league: string;
   title: string;
   createdAt: string;
 }

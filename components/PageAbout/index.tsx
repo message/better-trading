@@ -2,8 +2,8 @@ import styles from './styles.module.scss';
 import Button from '../Button';
 import FormCheckbox from '../FormCheckbox';
 import MarkdownChangelog from '../MarkdownChangelog';
+import { useItemResults } from '@/hooks/useItemResults';
 import classnames from 'classnames';
-import { useState } from 'react';
 
 interface Enhancer {
   slug: string;
@@ -27,14 +27,9 @@ interface PageAboutProps {
   className?: string;
 }
 
-// TODO: Replace with actual item-results service once migrated
-// Stub for enhancers functionality
 const useEnhancers = () => {
-  const [disabledEnhancerSlugs, setDisabledEnhancerSlugs] = useState<string[]>([]);
+  const { disabledEnhancerSlugs, setDisabledEnhancerSlugs, getEnhancerSlugs } = useItemResults();
 
-  const getEnhancerSlugs = (): string[] =>
-    // TODO: Implement actual enhancer slugs retrieval from service
-    ['bulk-price', 'item-age', 'collapsed-cards', 'highlight-corrupted', 'highlight-ilvl'];
   const enhancers: Enhancer[] = getEnhancerSlugs().map(slug => ({
     slug,
     isEnabled: !disabledEnhancerSlugs.includes(slug),
@@ -51,7 +46,6 @@ const useEnhancers = () => {
     }
 
     setDisabledEnhancerSlugs(updatedDisabledEnhancerSlugs);
-    // TODO: Persist to storage/service
   };
 
   return { enhancers, toggleDisabledEnhancerSlug };

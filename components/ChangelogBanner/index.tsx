@@ -8,6 +8,7 @@
 
 import styles from './styles.module.scss';
 import Button from '../Button';
+import { getLocalValue, setLocalValue } from '@/utils/storage';
 import { useState, useEffect } from 'react';
 import type React from 'react';
 
@@ -41,22 +42,6 @@ const MarkdownChangelog: React.FC<{ markdown: string }> = ({ markdown }) => (
   <div dangerouslySetInnerHTML={{ __html: markdown }} />
 );
 
-// TODO: Migrate storage service to a hook
-// Temporary stub for now
-const useStorage = () => {
-  const getLocalValue = (key: string): string | null => {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem(key);
-  };
-
-  const setLocalValue = (key: string, value: string): void => {
-    if (typeof window === 'undefined') return;
-    localStorage.setItem(key, value);
-  };
-
-  return { getLocalValue, setLocalValue };
-};
-
 // Constants
 const DISMISSED_CHANGELOG_STORAGE_KEY = 'dismissed-changelog';
 
@@ -87,18 +72,17 @@ const ChangelogBanner: React.FC<ChangelogBannerProps> = ({
   modalTitle = `What's new in version ${version}`,
   dismissButtonLabel = 'Got it!',
 }) => {
-  const storage = useStorage();
   const [isDismissed, setIsDismissed] = useState(false);
   const [modalChangelogIsVisible, setModalChangelogIsVisible] = useState(false);
 
   useEffect(() => {
     if (!changelog) return;
 
-    const dismissedChangelog = storage.getLocalValue(DISMISSED_CHANGELOG_STORAGE_KEY);
+    const dismissedChangelog = getLocalValue(DISMISSED_CHANGELOG_STORAGE_KEY);
     if (dismissedChangelog === changelog.slug) {
       setIsDismissed(true);
     }
-  }, [changelog, storage]);
+  }, [changelog]);
 
   const bannerIsVisible = !isDismissed && !!changelog;
 
@@ -109,7 +93,7 @@ const ChangelogBanner: React.FC<ChangelogBannerProps> = ({
   const dismiss = () => {
     if (!changelog) return;
 
-    storage.setLocalValue(DISMISSED_CHANGELOG_STORAGE_KEY, changelog.slug);
+    setLocalValue(DISMISSED_CHANGELOG_STORAGE_KEY, changelog.slug);
     setIsDismissed(true);
     setModalChangelogIsVisible(false);
   };

@@ -1,7 +1,6 @@
 import PageHistory from './index';
-import { tradeLocationServiceStub } from './services-stub';
 import { defineMessages, resolveLocaleValue } from '../../.storybook/locale-utils';
-import type { TradeLocationHistoryStruct } from './types';
+import { MockTradeHistoryProvider, createMockHistoryEntry } from '../../.storybook/mock-providers';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
@@ -34,24 +33,6 @@ const meta = {
 } satisfies Meta<typeof PageHistory>;
 
 type Story = StoryObj<typeof meta>;
-
-// Mock history data generator
-const createMockHistoryEntry = (
-  id: string,
-  title: string,
-  slug: string,
-  type: string,
-  league: string,
-  hoursAgo: number,
-): TradeLocationHistoryStruct => ({
-  id,
-  title,
-  slug,
-  type,
-  league,
-  version: '2',
-  createdAt: new Date(Date.now() - hoursAgo * 60 * 60 * 1000).toISOString(),
-});
 
 // Localized messages
 const clearButtonMessages = defineMessages({
@@ -124,8 +105,7 @@ export const WithHistory: Story = {
     const clearSuccessMessage = resolveLocaleValue(globals.locale as string, clearSuccessMessages);
     const genericAlertMessage = resolveLocaleValue(globals.locale as string, genericAlertMessages);
 
-    // Mock history data
-    tradeLocationServiceStub.fetchHistoryEntries = async () => [
+    const mockHistoryEntries = [
       createMockHistoryEntry('1', 'Exalted Orb', 'exalted-orb', 'search', 'Crucible', 2),
       createMockHistoryEntry('2', 'Enlighten Support', 'enlighten-support', 'search', 'Crucible', 5),
       createMockHistoryEntry('3', 'Headhunter', 'headhunter', 'search', 'Crucible', 12),
@@ -133,14 +113,16 @@ export const WithHistory: Story = {
     ];
 
     return (
-      <div data-locale={globals.locale}>
-        <PageHistory
-          clearButtonLabel={clearButtonLabel}
-          emptyMessage={emptyMessage}
-          clearSuccessMessage={clearSuccessMessage}
-          genericAlertMessage={genericAlertMessage}
-        />
-      </div>
+      <MockTradeHistoryProvider mockHistoryEntries={mockHistoryEntries}>
+        <div data-locale={globals.locale}>
+          <PageHistory
+            clearButtonLabel={clearButtonLabel}
+            emptyMessage={emptyMessage}
+            clearSuccessMessage={clearSuccessMessage}
+            genericAlertMessage={genericAlertMessage}
+          />
+        </div>
+      </MockTradeHistoryProvider>
     );
   },
 };
@@ -160,18 +142,17 @@ export const EmptyHistory: Story = {
     const clearSuccessMessage = resolveLocaleValue(globals.locale as string, clearSuccessMessages);
     const genericAlertMessage = resolveLocaleValue(globals.locale as string, genericAlertMessages);
 
-    // Mock empty history
-    tradeLocationServiceStub.fetchHistoryEntries = async () => [];
-
     return (
-      <div data-locale={globals.locale}>
-        <PageHistory
-          clearButtonLabel={clearButtonLabel}
-          emptyMessage={emptyMessage}
-          clearSuccessMessage={clearSuccessMessage}
-          genericAlertMessage={genericAlertMessage}
-        />
-      </div>
+      <MockTradeHistoryProvider mockHistoryEntries={[]}>
+        <div data-locale={globals.locale}>
+          <PageHistory
+            clearButtonLabel={clearButtonLabel}
+            emptyMessage={emptyMessage}
+            clearSuccessMessage={clearSuccessMessage}
+            genericAlertMessage={genericAlertMessage}
+          />
+        </div>
+      </MockTradeHistoryProvider>
     );
   },
 };
@@ -191,20 +172,21 @@ export const SingleEntry: Story = {
     const clearSuccessMessage = resolveLocaleValue(globals.locale as string, clearSuccessMessages);
     const genericAlertMessage = resolveLocaleValue(globals.locale as string, genericAlertMessages);
 
-    // Mock single entry
-    tradeLocationServiceStub.fetchHistoryEntries = async () => [
+    const mockHistoryEntries = [
       createMockHistoryEntry('1', "Atziri's Promise", 'atziris-promise', 'search', 'Crucible', 1),
     ];
 
     return (
-      <div data-locale={globals.locale}>
-        <PageHistory
-          clearButtonLabel={clearButtonLabel}
-          emptyMessage={emptyMessage}
-          clearSuccessMessage={clearSuccessMessage}
-          genericAlertMessage={genericAlertMessage}
-        />
-      </div>
+      <MockTradeHistoryProvider mockHistoryEntries={mockHistoryEntries}>
+        <div data-locale={globals.locale}>
+          <PageHistory
+            clearButtonLabel={clearButtonLabel}
+            emptyMessage={emptyMessage}
+            clearSuccessMessage={clearSuccessMessage}
+            genericAlertMessage={genericAlertMessage}
+          />
+        </div>
+      </MockTradeHistoryProvider>
     );
   },
 };
@@ -224,8 +206,7 @@ export const ManyEntries: Story = {
     const clearSuccessMessage = resolveLocaleValue(globals.locale as string, clearSuccessMessages);
     const genericAlertMessage = resolveLocaleValue(globals.locale as string, genericAlertMessages);
 
-    // Mock many entries
-    tradeLocationServiceStub.fetchHistoryEntries = async () => [
+    const mockHistoryEntries = [
       createMockHistoryEntry('1', 'Exalted Orb', 'exalted-orb', 'search', 'Crucible', 1),
       createMockHistoryEntry('2', 'Divine Orb', 'divine-orb', 'search', 'Crucible', 2),
       createMockHistoryEntry('3', 'Mirror of Kalandra', 'mirror-of-kalandra', 'search', 'Crucible', 3),
@@ -239,14 +220,16 @@ export const ManyEntries: Story = {
     ];
 
     return (
-      <div data-locale={globals.locale}>
-        <PageHistory
-          clearButtonLabel={clearButtonLabel}
-          emptyMessage={emptyMessage}
-          clearSuccessMessage={clearSuccessMessage}
-          genericAlertMessage={genericAlertMessage}
-        />
-      </div>
+      <MockTradeHistoryProvider mockHistoryEntries={mockHistoryEntries}>
+        <div data-locale={globals.locale}>
+          <PageHistory
+            clearButtonLabel={clearButtonLabel}
+            emptyMessage={emptyMessage}
+            clearSuccessMessage={clearSuccessMessage}
+            genericAlertMessage={genericAlertMessage}
+          />
+        </div>
+      </MockTradeHistoryProvider>
     );
   },
 };
@@ -266,8 +249,7 @@ export const LongTitles: Story = {
     const clearSuccessMessage = resolveLocaleValue(globals.locale as string, clearSuccessMessages);
     const genericAlertMessage = resolveLocaleValue(globals.locale as string, genericAlertMessages);
 
-    // Mock entries with long titles
-    tradeLocationServiceStub.fetchHistoryEntries = async () => [
+    const mockHistoryEntries = [
       createMockHistoryEntry(
         '1',
         'Rare Jewel with 7% Maximum Life, 14% Critical Strike Multiplier, and 12% Cold Resistance',
@@ -295,14 +277,16 @@ export const LongTitles: Story = {
     ];
 
     return (
-      <div data-locale={globals.locale}>
-        <PageHistory
-          clearButtonLabel={clearButtonLabel}
-          emptyMessage={emptyMessage}
-          clearSuccessMessage={clearSuccessMessage}
-          genericAlertMessage={genericAlertMessage}
-        />
-      </div>
+      <MockTradeHistoryProvider mockHistoryEntries={mockHistoryEntries}>
+        <div data-locale={globals.locale}>
+          <PageHistory
+            clearButtonLabel={clearButtonLabel}
+            emptyMessage={emptyMessage}
+            clearSuccessMessage={clearSuccessMessage}
+            genericAlertMessage={genericAlertMessage}
+          />
+        </div>
+      </MockTradeHistoryProvider>
     );
   },
 };
