@@ -4,15 +4,11 @@ import FormCheckbox from '../FormCheckbox';
 import MarkdownChangelog from '../MarkdownChangelog';
 import { useItemResults } from '@/hooks/useItemResults';
 import classnames from 'classnames';
+import type { ChangelogData } from '../ChangelogBanner';
 
 interface Enhancer {
   slug: string;
   isEnabled: boolean;
-}
-
-interface Changelog {
-  slug: string;
-  markdown: string;
 }
 
 interface PageAboutProps {
@@ -20,7 +16,7 @@ interface PageAboutProps {
   githubUrl: string;
   discordUrl?: string;
   chaosRecipeOverlayUrl?: string;
-  currentChangelog?: Changelog;
+  currentChangelog?: ChangelogData;
   enhancersTitle: string;
   /** Resolves the display title of an enhancer from its slug */
   getEnhancerTitle: (slug: string) => string;
@@ -123,4 +119,4 @@ const PageAbout = ({
 };
 
 export default PageAbout;
-export type { PageAboutProps, Enhancer, Changelog };
+export type { PageAboutProps, Enhancer };

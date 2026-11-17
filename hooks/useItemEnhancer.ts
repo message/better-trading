@@ -32,7 +32,7 @@ interface UseItemEnhancerOptions {
  * const enhancers = [pinnableEnhancer, equivalentPricingsEnhancer];
  * const { enhanceItems, clearEnhancedItems } = useItemEnhancer({
  *   enhancers,
- *   disabledEnhancerSlugs: ['pinnable']
+ *   disabledEnhancerSlugs: ['regroup-similars']
  * });
  */
 const useItemEnhancer = (options: UseItemEnhancerOptions) => {

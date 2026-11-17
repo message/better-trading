@@ -25,8 +25,6 @@ class PinnableEnhancer {
     this.options = options;
   }
 
-  slug = 'pinnable';
-
   enhance(itemElement: HTMLDivElement): void {
     const detailsElement = itemElement.querySelector('.details .btns');
     if (!detailsElement) return;
