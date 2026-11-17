@@ -9,6 +9,10 @@ const config: UserConfig = {
     description: '__MSG_extension_description__',
     default_locale: 'en',
     permissions: ['activeTab', 'storage'],
+    // Images are used by the content script on the trade site (see utils/extension-url.ts)
+    web_accessible_resources: [
+      { resources: ['assets/images/*'], matches: ['https://*.pathofexile.com/*', 'https://poe.game.daum.net/*'] },
+    ],
   },
   // outDir: './dist',
   webExt: {

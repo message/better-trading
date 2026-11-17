@@ -1,4 +1,5 @@
 import styles from './styles.module.scss';
+import { getExtensionUrl } from '@/utils/extension-url';
 import classNames from 'classnames';
 import { useEffect } from 'react';
 import ReactModal from 'react-modal';
@@ -30,7 +31,11 @@ const Modal: React.FC<ModalProps> = ({ title, onClose, children, isOpen, classNa
       shouldCloseOnEsc={true}>
       <header className={styles.header}>
         <h1 className={styles.headerTitle}>
-          <img className={styles.headerTitleLogo} src="/assets/images/logo.png" alt="Better Trading" />
+          <img
+            className={styles.headerTitleLogo}
+            src={getExtensionUrl('/assets/images/logo.png')}
+            alt="Better Trading"
+          />
           {title}
         </h1>
 

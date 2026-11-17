@@ -1,5 +1,6 @@
 import '@/styles/app.scss';
 import App from './App.tsx';
+import { getIsSidePanelCollapsed } from '@/utils/side-panel-collapse';
 import { createRoot } from 'react-dom/client';
 
 // TODO: extract to separate package
@@ -30,6 +31,15 @@ export default defineContentScript({
       append: 'last',
       onMount: container => {
         container.id = 'better-trading-container';
+
+        // Same as 1.9.1: styles apply only when the trade app is present (i.e. the site is not in maintenance)
+        if (document.querySelector('#trade')) {
+          document.body.classList.add('bt-body');
+          if (getIsSidePanelCollapsed()) document.body.classList.add('bt-is-collapsed');
+        } else {
+          container.style.display = 'none';
+        }
+
         const root = createRoot(container);
         root.render(<App />);
 
