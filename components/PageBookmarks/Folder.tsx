@@ -3,6 +3,8 @@ import BookmarkFolderIcon from '../BookmarkFolderIcon';
 import Button from '../Button';
 import ContextualMenu from '../ContextualMenu';
 import LoadingContainer from '../LoadingContainer';
+import ChevronDownIcon from '@/assets/icons/solid/chevron-down.svg?react';
+import SortIcon from '@/assets/icons/solid/sort.svg?react';
 import classnames from 'classnames';
 import { useState, useEffect, useCallback } from 'react';
 import type { BookmarksFolderStruct, BookmarksTradeStruct } from '@/types/bookmarks';
@@ -98,7 +100,7 @@ const Folder: React.FC<FolderProps> = ({
           tabIndex={0}>
           {folder.icon && <BookmarkFolderIcon icon={folder.icon} className={styles.headerIcon} />}
           <div className={styles.headerLabel}>{folder.title}</div>
-          {!isArchived && <span className={styles.expansionIndicator}>▼</span>}
+          {!isArchived && <ChevronDownIcon className={styles.expansionIndicator} />}
         </div>
 
         <div className={styles.headerActions}>
@@ -114,7 +116,7 @@ const Folder: React.FC<FolderProps> = ({
 
           {/* TODO: Add drag handle for reordering folders */}
           <button type="button" className={styles.headerAction}>
-            ⇕
+            <SortIcon />
           </button>
         </div>
       </div>
@@ -150,7 +152,7 @@ const Folder: React.FC<FolderProps> = ({
 
                   {/* TODO: Add drag handle for reordering trades */}
                   <button type="button" className={styles.tradeAction}>
-                    ⇕
+                    <SortIcon />
                   </button>
                 </div>
               </li>
