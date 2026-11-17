@@ -1,7 +1,7 @@
 import { bookmarksStorage } from '@/services/bookmarks/storage';
 import { generateBackupDataString, restoreFromDataString } from '@/utils/bookmarks/backup';
 import { deserialize, serialize } from '@/utils/bookmarks/export';
-import { createContext, useCallback, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import type { PersistFolderOptions } from '@/services/bookmarks/storage';
 import type {
   BookmarksFolderStruct,
@@ -240,28 +240,52 @@ const BookmarksProvider = ({ children }: BookmarksProviderProps) => {
     [refreshFolders],
   );
 
-  const value: BookmarksContextValue = {
-    folders,
-    refreshFolders,
-    fetchFolders,
-    fetchTradesByFolderId,
-    fetchTradeByLocation,
-    persistFolder,
-    persistFolders,
-    persistTrade,
-    persistTrades,
-    deleteTrade,
-    deleteFolder,
-    toggleTradeCompletion,
-    toggleFolderArchive,
-    partiallyReorderFolders,
-    initializeFolderStruct,
-    initializeTradeStructFrom,
-    serializeFolder,
-    deserializeFolder,
-    generateBackup,
-    restoreBackup,
-  };
+  const value: BookmarksContextValue = useMemo(
+    () => ({
+      folders,
+      refreshFolders,
+      fetchFolders,
+      fetchTradesByFolderId,
+      fetchTradeByLocation,
+      persistFolder,
+      persistFolders,
+      persistTrade,
+      persistTrades,
+      deleteTrade,
+      deleteFolder,
+      toggleTradeCompletion,
+      toggleFolderArchive,
+      partiallyReorderFolders,
+      initializeFolderStruct,
+      initializeTradeStructFrom,
+      serializeFolder,
+      deserializeFolder,
+      generateBackup,
+      restoreBackup,
+    }),
+    [
+      folders,
+      refreshFolders,
+      fetchFolders,
+      fetchTradesByFolderId,
+      fetchTradeByLocation,
+      persistFolder,
+      persistFolders,
+      persistTrade,
+      persistTrades,
+      deleteTrade,
+      deleteFolder,
+      toggleTradeCompletion,
+      toggleFolderArchive,
+      partiallyReorderFolders,
+      initializeFolderStruct,
+      initializeTradeStructFrom,
+      serializeFolder,
+      deserializeFolder,
+      generateBackup,
+      restoreBackup,
+    ],
+  );
 
   return <BookmarksContext.Provider value={value}>{children}</BookmarksContext.Provider>;
 };

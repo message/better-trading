@@ -124,9 +124,12 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   const [isImportingFolder, setIsImportingFolder] = useState(false);
   const [isShowingArchivedFolders, setIsShowingArchivedFolders] = useState(false);
 
+  const { refreshFolders, fetchTradesByFolderId, generateBackup } = bookmarks;
+
+  // Depend on the stable function, not on `bookmarks`: its value changes after every refresh and would loop
   useEffect(() => {
-    bookmarks.refreshFolders();
-  }, [bookmarks]);
+    refreshFolders();
+  }, [refreshFolders]);
 
   // Computed values
   const applicableFolders = bookmarks.folders.filter(folder => folder.version === version);
@@ -204,13 +207,13 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   );
 
   const handleGenerateBackup = useCallback(async () => {
-    const dataString = await bookmarks.generateBackup();
+    const dataString = await generateBackup();
     const blob = new Blob([dataString], { type: 'text/plain' });
     const linkElement = document.createElement('a');
     linkElement.download = 'poe-better-trading-backup.txt';
     linkElement.href = window.URL.createObjectURL(blob);
     linkElement.click();
-  }, [bookmarks]);
+  }, [generateBackup]);
 
   const handleRestoreBackup = useCallback(
     async (dataString: string) => {
@@ -256,8 +259,8 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   };
 
   const handleFetchTrades = useCallback(
-    async (folderId: string) => await bookmarks.fetchTradesByFolderId(folderId),
-    [bookmarks],
+    async (folderId: string) => await fetchTradesByFolderId(folderId),
+    [fetchTradesByFolderId],
   );
 
   const handleCopyTradeToClipboard = useCallback(
