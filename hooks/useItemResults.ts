@@ -1,27 +1,16 @@
 import { useItemResultsContext } from '@/contexts/ItemResultsContext';
-import { useItemEnhancer } from '@/hooks/useItemEnhancer';
 import type { ItemResultsPinnedItem } from '@/types/item-results';
 
-interface UseItemResultsOptions {
-  enabled?: boolean;
-}
-
 /**
- * Hook to manage item results enhancement and pinning
+ * Read/write access to item enhancer settings and pinned items, for page components.
  *
- * Orchestrates item result enhancers and provides access to pinned items.
- * Uses the ItemResultsContext for configuration and the useItemEnhancer hook
- * for actual enhancement execution.
- *
- * @param options - Configuration options
- * @param options.enabled - Whether enhancement is active (default: true)
+ * Does NOT mount the item enhancer: `useItemEnhancer` observes the whole trade page via a MutationObserver
+ * and must be mounted exactly once, in the shell (wired in #6), not by every page that calls this hook.
  *
  * @example
  * const { clearPinnedItems, getPinnedItems, disabledEnhancerSlugs } = useItemResults();
  */
-const useItemResults = (options: UseItemResultsOptions = {}) => {
-  const { enabled = true } = options;
-
+const useItemResults = () => {
   const {
     disabledEnhancerSlugs,
     enabledEnhancers,
@@ -32,13 +21,6 @@ const useItemResults = (options: UseItemResultsOptions = {}) => {
     getPinnedItems: getPinnedItemsFromContext,
     getEnhancerSlugs,
   } = useItemResultsContext();
-
-  // Set up item enhancement with MutationObserver
-  useItemEnhancer({
-    enhancers: enabledEnhancers,
-    disabledEnhancerSlugs,
-    enabled,
-  });
 
   const clearPinnedItems = async (): Promise<void> => {
     await clearPinnedItemsFromContext();
@@ -63,4 +45,3 @@ const useItemResults = (options: UseItemResultsOptions = {}) => {
 };
 
 export { useItemResults };
-export type { UseItemResultsOptions };
