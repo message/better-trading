@@ -8,39 +8,11 @@
 
 import styles from './styles.module.scss';
 import Button from '../Button';
+import MarkdownChangelog from '../MarkdownChangelog';
+import Modal from '../Modal';
 import { getLocalValue, setLocalValue } from '@/utils/storage';
 import { useState, useEffect } from 'react';
 import type React from 'react';
-
-// TODO: Migrate these components from old-extension
-// Temporary stubs for now
-
-interface ModalProps {
-  title: string;
-  onClose: () => void;
-  children: React.ReactNode;
-}
-
-const Modal: React.FC<ModalProps> = ({ title, onClose, children }) => (
-  <div
-    className="modal-overlay"
-    onClick={onClose}
-    onKeyDown={e => e.key === 'Escape' && onClose()}
-    role="button"
-    tabIndex={0}>
-    <div className="modal-content" onClick={e => e.stopPropagation()} onKeyDown={e => e.stopPropagation()} role="none">
-      <div className="modal-header">
-        <h2>{title}</h2>
-        <button onClick={onClose}>×</button>
-      </div>
-      <div className="modal-body">{children}</div>
-    </div>
-  </div>
-);
-
-const MarkdownChangelog: React.FC<{ markdown: string }> = ({ markdown }) => (
-  <div dangerouslySetInnerHTML={{ __html: markdown }} />
-);
 
 // Constants
 const DISMISSED_CHANGELOG_STORAGE_KEY = 'dismissed-changelog';
@@ -110,8 +82,8 @@ const ChangelogBanner: React.FC<ChangelogBannerProps> = ({
         <Button type="button" theme="blue" label={modalButtonLabel} onClick={openChangelog} icon="info-circle" />
       </div>
 
-      {modalChangelogIsVisible && changelog && (
-        <Modal title={modalTitle} onClose={dismiss}>
+      {changelog && (
+        <Modal title={modalTitle} onClose={dismiss} isOpen={modalChangelogIsVisible}>
           <MarkdownChangelog markdown={changelog.markdown} />
 
           <Button

@@ -1,5 +1,6 @@
-import RootPageMenu, { RootPage } from './index.tsx';
+import RootPageMenu from './index.tsx';
 import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
+import { RootPage } from '@/types/root-page';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 

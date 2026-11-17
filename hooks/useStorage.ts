@@ -2,7 +2,7 @@ import { getValue, setValue, deleteValue } from '@/utils/storage';
 import { useState, useEffect, useCallback } from 'react';
 
 /**
- * React hook for accessing chrome.storage.local with expiration support
+ * React hook for the `bt-` prefixed localStorage wrapper (see utils/storage.ts) with expiration support
  *
  * @param key - Storage key (will be prefixed with 'bt-')
  * @param league - Optional league name to scope the key

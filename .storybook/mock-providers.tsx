@@ -5,21 +5,14 @@
  * instead of using real browser storage and APIs.
  */
 
-import { createContext, useContext } from 'react';
-import type { ReactNode } from 'react';
+import { TradeHistoryContext } from '@/contexts/TradeHistoryContext';
+import type { TradeHistoryContextValue } from '@/contexts/TradeHistoryContext';
 import type { TradeLocationHistoryStruct } from '@/types/trade-location';
+import type { ReactNode } from 'react';
 
 // =============================================================================
 // Trade History Mock Provider
 // =============================================================================
-
-interface TradeHistoryContextValue {
-  fetchHistoryEntries: () => Promise<TradeLocationHistoryStruct[]>;
-  clearHistoryEntries: () => Promise<void>;
-  maybeLogTradeLocation: (location: unknown) => Promise<void>;
-}
-
-const TradeHistoryContext = createContext<TradeHistoryContextValue | null>(null);
 
 interface TradeHistoryProviderProps {
   children: ReactNode;
@@ -38,11 +31,6 @@ export const MockTradeHistoryProvider = ({ children, mockHistoryEntries = [] }: 
   };
 
   return <TradeHistoryContext.Provider value={value}>{children}</TradeHistoryContext.Provider>;
-};
-
-export const useMockableTradeHistory = () => {
-  const mockContext = useContext(TradeHistoryContext);
-  return mockContext;
 };
 
 // =============================================================================

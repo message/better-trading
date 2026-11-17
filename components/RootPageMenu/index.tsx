@@ -2,14 +2,8 @@ import styles from './styles.module.scss';
 import ClockIcon from '../../assets/icons/solid/clock-rotate-left.svg?react';
 import FolderOpenIcon from '../../assets/icons/solid/folder-open.svg?react';
 import ThumbTackIcon from '../../assets/icons/solid/thumbtack.svg?react';
+import { RootPage } from '@/types/root-page';
 import classnames from 'classnames';
-
-// TODO: Move this enum to a shared types file once other components are migrated
-enum RootPage {
-  BOOKMARKS = 'BOOKMARKS',
-  PINNED_ITEMS = 'PINNED_ITEMS',
-  HISTORY = 'HISTORY',
-}
 
 interface MenuItem {
   page: RootPage;
@@ -86,5 +80,4 @@ const RootPageMenu = ({ currentPage, onChange, t, className }: RootPageMenuProps
 };
 
 export default RootPageMenu;
-export { RootPage };
 export type { RootPageMenuProps, MenuItem };

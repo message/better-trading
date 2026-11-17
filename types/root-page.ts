@@ -1,0 +1,5 @@
+export enum RootPage {
+  BOOKMARKS = 'BOOKMARKS',
+  PINNED_ITEMS = 'PINNED_ITEMS',
+  HISTORY = 'HISTORY',
+}

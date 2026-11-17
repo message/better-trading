@@ -7,8 +7,16 @@ const TRADE_REALMS = ['xbox', 'sony', 'poe2'];
 
 const parseVersion = (tradePathPrefix: string): TradeSiteVersion => (tradePathPrefix === 'trade2' ? '2' : '1');
 
+const decodePart = (part: string): string => {
+  try {
+    return decodeURIComponent(part);
+  } catch {
+    return part;
+  }
+};
+
 const parseCurrentPath = (pathname: string): ExactTradeLocationStruct => {
-  const pathParts = pathname.split('/').slice(1);
+  const pathParts = pathname.split('/').slice(1).map(decodePart);
   let versionPart: string;
   let type: string | undefined;
   let league: string | undefined;
@@ -46,7 +54,8 @@ const compareExactTradeLocations = (
 
 const getTradeUrl = (version: TradeSiteVersion, type: string, slug: string, league: string): string => {
   const basePath = version === '2' ? 'trade2' : 'trade';
-  return [BASE_URL, basePath, type, league, slug].join('/');
+  const encodedLeague = league.split('/').map(encodeURIComponent).join('/');
+  return [BASE_URL, basePath, type, encodedLeague, slug].join('/');
 };
 
 export { parseCurrentPath, compareTradeLocations, compareExactTradeLocations, getTradeUrl };

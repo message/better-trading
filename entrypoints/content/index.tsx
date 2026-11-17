@@ -24,8 +24,6 @@ export default defineContentScript({
   matches: WEB_ACCESSIBLE_MATCHES,
 
   async main(ctx) {
-    console.log('Hello content script.');
-
     const ui = createIntegratedUi(ctx, {
       position: 'inline',
       anchor: 'body',

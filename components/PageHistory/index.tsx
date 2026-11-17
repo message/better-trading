@@ -1,10 +1,9 @@
 import EntryLink from './EntryLink';
 import styles from './styles.module.scss';
-import { useMockableTradeHistory } from '../../.storybook/mock-providers';
 import AlertMessage from '../AlertMessage';
 import Button from '../Button';
 import LoadingContainer from '../LoadingContainer';
-import { useTradeHistory } from '@/hooks/useTradeHistory';
+import { useTradeHistoryContext } from '@/contexts/TradeHistoryContext';
 import { useTradeLocation } from '@/hooks/useTradeLocation';
 import { useCallback, useEffect, useState } from 'react';
 import type { TradeLocationHistoryStruct } from '@/types/trade-location';
@@ -23,10 +22,7 @@ const PageHistory: React.FC<PageHistoryProps> = ({
   clearSuccessMessage,
   genericAlertMessage,
 }) => {
-  // Use mock provider if available (for Storybook), otherwise use real hook
-  const mockTradeHistory = useMockableTradeHistory();
-  const realTradeHistory = useTradeHistory();
-  const tradeHistory = mockTradeHistory || realTradeHistory;
+  const tradeHistory = useTradeHistoryContext();
 
   const [historyEntries, setHistoryEntries] = useState<TradeLocationHistoryStruct[]>([]);
 
