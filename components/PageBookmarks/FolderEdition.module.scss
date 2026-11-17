@@ -32,7 +32,8 @@
     background-color: rgba(variables.$gold, 0.5);
   }
 
-  &:hover {
+  &:hover,
+  &:has(.iconButton:focus-visible) {
     border-color: variables.$gold-alt;
   }
 }
@@ -44,6 +45,8 @@
   cursor: pointer;
   display: block;
   width: 100%;
+  // Keyboard focus is shown on the cell border instead (see .iconOption)
+  outline: none;
 }
 
 .iconOption .iconOptionImage {
