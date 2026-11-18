@@ -23,11 +23,14 @@ class EquivalentPricingsEnhancer {
 
   private chaosRatios: PoeNinjaCurrenciesRatios | null = null;
 
-  /** Loads the ratios for the current league; PoE 2 is not supported, and a poe.ninja failure only skips pricings */
+  /**
+   * Loads the ratios for the current league. PoE 2 and console realm leagues (`sony/Standard`) are not on poe.ninja,
+   * and a poe.ninja failure only skips pricings.
+   */
   async prepare(): Promise<void> {
     const { league, version } = parseCurrentPath(window.location.pathname);
     this.chaosRatios = null;
-    if (version !== '1' || !league) return;
+    if (version !== '1' || !league || league.includes('/')) return;
 
     try {
       this.chaosRatios = await fetchChaosRatios(league);

@@ -32,7 +32,7 @@ There is no test runner configured (no vitest/jest scripts). The husky pre-commi
   into `body` (`#better-trading-container`). `App.tsx` is still a placeholder: components are not wired in yet.
 - `background.ts` — service worker. Its only job is proxying `poe.ninja` API requests
   (`{ query: 'poe-ninja', resource }` message) because content scripts can't fetch cross-origin. Called via
-  `utils/extension-background.ts` / `hooks/usePoeNinja.ts`.
+  `utils/extension-background.ts` from `services/poe-ninja.ts`.
 
 **Layers** (all imported with the `@/` alias, e.g. `@/hooks/useBookmarks`):
 - `components/<Name>/index.tsx` + `styles.module.scss` + `<Name>.stories.tsx` — presentational UI. Page-level
@@ -42,7 +42,7 @@ There is no test runner configured (no vitest/jest scripts). The husky pre-commi
 - `hooks/` — React hooks; `useBookmarks` is a thin wrapper over `BookmarksContext`.
 - `contexts/` — `BookmarksContext` holds `folders` state and wraps `services/bookmarks/storage`, refreshing state
   after every mutation; `ItemResultsContext` wires the enhancer services and pinned items.
-- `services/` — non-React logic: `bookmarks/storage.ts` (persistence) and `item-results/enhancers/*`
+- `services/` — non-React logic: `bookmarks/storage.ts` (persistence), `poe-ninja.ts` (chaos ratios, cached 1 h) and `item-results/enhancers/*`
   (pinnable, equivalent-pricings, regroup-similars) implementing `ItemResultsEnhancerService` from `types/item-results.ts`.
 - `utils/` — pure helpers (storage, trade-location parsing, bookmark export/backup, DOM item parsing).
 - `types/` — shared types (`*Struct` naming for persisted shapes).
