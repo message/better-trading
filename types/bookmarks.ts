@@ -61,6 +61,7 @@ export enum BookmarksFolderAscendancyRangerIcon {
   DEADEYE = 'deadeye',
   RAIDER = 'raider',
   PATHFINDER = 'pathfinder',
+  WARDEN = 'warden',
 }
 
 export enum BookmarksFolderAscendancyTemplarIcon {
@@ -71,6 +72,8 @@ export enum BookmarksFolderAscendancyTemplarIcon {
 
 export enum BookmarksFolderAscendancyScionIcon {
   ASCENDANT = 'ascendant',
+  RELIQUARIAN = 'reliquarian',
+  LUMINARY = 'luminary',
 }
 
 export enum BookmarksFolderAscendancyPoE2WarriorIcon {
