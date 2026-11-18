@@ -407,13 +407,9 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
 
   // Reorders the displayed Folders among themselves: archived and other Game Version Folders keep their slots
   const foldersListId = useId();
-  const handleMoveFolder = async (fromIndex: number, toIndex: number) => {
+  const handleMoveFolder = (fromIndex: number, toIndex: number) => {
     const reorderedFolders = reorder({ list: displayedFolders, startIndex: fromIndex, finishIndex: toIndex });
-    try {
-      await bookmarks.persistFolders(bookmarks.partiallyReorderFolders(bookmarks.folders, reorderedFolders));
-    } catch {
-      addFlash(genericAlertMessage, 'alert');
-    }
+    bookmarks.reorderFolders(reorderedFolders).catch(() => addFlash(genericAlertMessage, 'alert'));
   };
 
   const handleReorderTrades = async (trades: BookmarksTradeStruct[], folderId: string) => {
@@ -421,6 +417,8 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
       await bookmarks.persistTrades(trades, folderId);
     } catch {
       addFlash(genericAlertMessage, 'alert');
+      // Refreshing the Folders reloads the Trades from storage, dropping the order shown optimistically
+      await refreshFolders();
     }
   };
 

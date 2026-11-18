@@ -33,7 +33,7 @@ const SortableTrade: React.FC<SortableTradeProps> = ({
   children,
   menu,
 }) => {
-  const { itemRef, handleRef, isDragging, dropEdge, handleKeyDown } = useSortable<HTMLLIElement, HTMLButtonElement>({
+  const { itemRef, handleProps, isDragging, dropEdge } = useSortable<HTMLLIElement, HTMLButtonElement>({
     listId,
     index,
     count,
@@ -51,13 +51,11 @@ const SortableTrade: React.FC<SortableTradeProps> = ({
         {menu}
 
         <button
-          ref={handleRef}
+          {...handleProps}
           type="button"
           className={classnames(styles.tradeAction, styles.handle)}
           title={reorderLabel}
-          aria-label={reorderLabel}
-          aria-keyshortcuts="ArrowUp ArrowDown"
-          onKeyDown={handleKeyDown}>
+          aria-label={reorderLabel}>
           <SortIcon className={styles.handleIcon} />
         </button>
       </div>
@@ -163,7 +161,7 @@ const Folder: React.FC<FolderProps> = ({
     if (isExpanded) void loadTrades();
   }, [folder, isExpanded, loadTrades]);
 
-  const { itemRef, handleRef, isDragging, dropEdge, handleKeyDown } = useSortable<HTMLDivElement, HTMLButtonElement>({
+  const { itemRef, handleProps, isDragging, dropEdge } = useSortable<HTMLDivElement, HTMLButtonElement>({
     listId,
     index,
     count,
@@ -173,6 +171,8 @@ const Folder: React.FC<FolderProps> = ({
   // Show the new order right away; persisting it refreshes the Folders, which reloads the trades from storage
   const tradesListId = useId();
   const handleMoveTrade = (fromIndex: number, toIndex: number) => {
+    // A fetch already in flight read the old order: let it resolve without overwriting the new one
+    latestFetchRef.current++;
     const reorderedTrades = reorder({ list: trades, startIndex: fromIndex, finishIndex: toIndex });
     setTrades(reorderedTrades);
     void onReorderTrades(reorderedTrades);
@@ -212,13 +212,11 @@ const Folder: React.FC<FolderProps> = ({
           />
 
           <button
-            ref={handleRef}
+            {...handleProps}
             type="button"
             className={classnames(styles.headerAction, styles.handle)}
             title={reorderLabel}
-            aria-label={reorderLabel}
-            aria-keyshortcuts="ArrowUp ArrowDown"
-            onKeyDown={handleKeyDown}>
+            aria-label={reorderLabel}>
             <SortIcon className={styles.handleIcon} />
           </button>
         </div>

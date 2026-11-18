@@ -12,7 +12,10 @@ interface SortableOptions {
   listId: string;
   index: number;
   count: number;
-  /** Called with the new position; the caller persists it and re-renders the list in the new order */
+  /**
+   * Called with the new position. The caller must re-render the list in the new order synchronously (optimistically),
+   * so the next key press reads the new index, then persist it.
+   */
   onMove: (fromIndex: number, toIndex: number) => void;
 }
 
@@ -87,7 +90,9 @@ const useSortable = <TItem extends HTMLElement, THandle extends HTMLElement>({
     onMove(index, toIndex);
   };
 
-  return { itemRef, handleRef, isDragging, dropEdge, handleKeyDown };
+  const handleProps = { ref: handleRef, onKeyDown: handleKeyDown, 'aria-keyshortcuts': 'ArrowUp ArrowDown' };
+
+  return { itemRef, handleProps, isDragging, dropEdge };
 };
 
 export { useSortable };
