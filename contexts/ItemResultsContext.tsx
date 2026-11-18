@@ -1,10 +1,13 @@
+import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
+import { useItemEnhancer } from '@/hooks/useItemEnhancer';
 import { equivalentPricingsEnhancer } from '@/services/item-results/enhancers/equivalent-pricings';
-import { pinnableEnhancer } from '@/services/item-results/enhancers/pinnable';
-import { regroupSimilarsEnhancer } from '@/services/item-results/enhancers/regroup-similars';
+import { PinnableEnhancer } from '@/services/item-results/enhancers/pinnable';
+import { RegroupSimilarsEnhancer } from '@/services/item-results/enhancers/regroup-similars';
 import * as highlightStatFilters from '@/utils/item-results/enhancers/highlight-stat-filters';
 import * as maximumSockets from '@/utils/item-results/enhancers/maximum-sockets';
 import { getLocalValue, setLocalValue } from '@/utils/storage';
-import { createContext, useCallback, useContext, useState } from 'react';
+import { parseCurrentPath } from '@/utils/trade-location';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import type { ItemResultsEnhancerService, ItemResultsPinnedItem } from '@/types/item-results';
 import type { ReactNode } from 'react';
 
@@ -12,69 +15,93 @@ const DISABLED_ENHANCERS_STORAGE_KEY = 'disabled-enhancers';
 
 interface ItemResultsContextValue {
   disabledEnhancerSlugs: string[];
-  enabledEnhancers: ItemResultsEnhancerService[];
-  allEnhancers: ItemResultsEnhancerService[];
   setDisabledEnhancerSlugs: (slugs: string[]) => void;
-  clearPinnedItems: () => Promise<void>;
-  unpinItemById: (itemId: string) => Promise<void>;
-  getPinnedItems: () => Promise<ItemResultsPinnedItem[]>;
-  getEnhancerSlugs: () => string[];
+  /** Slugs of the enhancers the user can toggle */
+  enhancerSlugs: string[];
+  pinnedItems: ItemResultsPinnedItem[];
+  clearPinnedItems: () => void;
+  unpinItemById: (itemId: string) => void;
 }
 
 const ItemResultsContext = createContext<ItemResultsContextValue | null>(null);
 
+interface ItemResultsMessages {
+  pinLabel: string;
+  unpinLabel: string;
+  maximumSocketsWarning: (maximum: number) => string;
+  regroupSimilarsLabel: (count: number) => string;
+  genericAlertMessage: string;
+}
+
 interface ItemResultsProviderProps {
   children: ReactNode;
+  messages: ItemResultsMessages;
+  /** Called after any pin, unpin or clear, like the 1.9.1 `pinned-items-change` event */
+  onPinnedItemsChange?: () => void;
 }
 
 /**
- * All available item result enhancers
- * Order matters - enhancers run in this order
+ * Owns the item result enhancers and mounts the observer over the trade results (once, so mount this provider once).
+ * The enhancers are created once with the strings given on first render; the order of the list is the order they run in.
  */
-const ALL_ENHANCERS: ItemResultsEnhancerService[] = [
-  highlightStatFilters,
-  maximumSockets,
-  pinnableEnhancer,
-  equivalentPricingsEnhancer,
-  regroupSimilarsEnhancer,
-];
+const ItemResultsProvider = ({ children, messages, onPinnedItemsChange }: ItemResultsProviderProps) => {
+  const { addFlash } = useFlashMessagesContext();
+  const [pinnedItems, setPinnedItems] = useState<ItemResultsPinnedItem[]>([]);
+  const [disabledEnhancerSlugs, setDisabledEnhancerSlugsState] = useState<string[]>(() =>
+    (getLocalValue(DISABLED_ENHANCERS_STORAGE_KEY) || '').split(',').filter(Boolean),
+  );
 
-const ItemResultsProvider = ({ children }: ItemResultsProviderProps) => {
-  const [disabledEnhancerSlugs, setDisabledEnhancerSlugsState] = useState<string[]>(() => {
-    const stored = getLocalValue(DISABLED_ENHANCERS_STORAGE_KEY) || '';
-    return stored.split(',').filter(Boolean);
+  // The enhancers live outside React, so they call back through refs to always reach the latest callbacks
+  const callbacksRef = useRef({ addFlash, onPinnedItemsChange });
+  useEffect(() => {
+    callbacksRef.current = { addFlash, onPinnedItemsChange };
+  }, [addFlash, onPinnedItemsChange]);
+
+  const [{ pinnable, enhancers }] = useState(() => {
+    const pinnableEnhancer: PinnableEnhancer = new PinnableEnhancer({
+      pinButtonText: messages.pinLabel,
+      unpinButtonText: messages.unpinLabel,
+      onAlert: () => callbacksRef.current.addFlash(messages.genericAlertMessage, 'alert'),
+      onPinnedItemsChange: () => {
+        setPinnedItems(pinnableEnhancer.getPinnedItems());
+        callbacksRef.current.onPinnedItemsChange?.();
+      },
+    });
+
+    const allEnhancers: ItemResultsEnhancerService[] = [
+      highlightStatFilters,
+      {
+        slug: maximumSockets.slug,
+        enhance: (itemElement, parsedItem) =>
+          parsedItem &&
+          maximumSockets.enhance(itemElement, parsedItem, {
+            tradeLocationVersion: parseCurrentPath(window.location.pathname).version,
+            warningMessage: messages.maximumSocketsWarning,
+          }),
+      },
+      pinnableEnhancer,
+      // ponytail: a no-op until poe.ninja ratios are wired in (#7)
+      equivalentPricingsEnhancer,
+      new RegroupSimilarsEnhancer({ toggleButtonText: messages.regroupSimilarsLabel }),
+    ];
+
+    return { pinnable: pinnableEnhancer, enhancers: allEnhancers };
   });
+
+  useItemEnhancer(enhancers, disabledEnhancerSlugs);
 
   const setDisabledEnhancerSlugs = useCallback((slugs: string[]) => {
     setLocalValue(DISABLED_ENHANCERS_STORAGE_KEY, slugs.join(','));
     setDisabledEnhancerSlugsState(slugs);
   }, []);
 
-  const enabledEnhancers = ALL_ENHANCERS.filter(
-    enhancer => !enhancer.slug || !disabledEnhancerSlugs.includes(enhancer.slug),
-  );
-
-  const clearPinnedItems = useCallback(async () => {
-    pinnableEnhancer.clear();
-  }, []);
-
-  const unpinItemById = useCallback(async (itemId: string) => {
-    pinnableEnhancer.unpinItemById(itemId);
-  }, []);
-
-  const getPinnedItems = useCallback(async () => pinnableEnhancer.getPinnedItems(), []);
-
-  const getEnhancerSlugs = useCallback(() => ALL_ENHANCERS.map(enhancer => enhancer.slug || '').filter(Boolean), []);
-
   const value: ItemResultsContextValue = {
     disabledEnhancerSlugs,
-    enabledEnhancers,
-    allEnhancers: ALL_ENHANCERS,
     setDisabledEnhancerSlugs,
-    clearPinnedItems,
-    unpinItemById,
-    getPinnedItems,
-    getEnhancerSlugs,
+    enhancerSlugs: enhancers.flatMap(enhancer => (enhancer.slug ? [enhancer.slug] : [])),
+    pinnedItems,
+    clearPinnedItems: () => pinnable.clear(),
+    unpinItemById: itemId => pinnable.unpinItemById(itemId),
   };
 
   return <ItemResultsContext.Provider value={value}>{children}</ItemResultsContext.Provider>;
@@ -88,4 +115,5 @@ const useItemResultsContext = () => {
   return context;
 };
 
-export { ItemResultsProvider, useItemResultsContext };
+export { ItemResultsContext, ItemResultsProvider, useItemResultsContext };
+export type { ItemResultsContextValue, ItemResultsMessages };

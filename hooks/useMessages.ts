@@ -78,6 +78,7 @@ const buildMessages = () => ({
     emptyMessage: i18n.t('pagePinnedItemsEmpty'),
     unpinItemLabel: i18n.t('pagePinnedItemsUnpinItem'),
     scrollToItemLabel: i18n.t('pagePinnedItemsScrollToItem'),
+    genericAlertMessage: i18n.t('genericAlertFlash'),
   },
 
   pageHistory: {
@@ -136,6 +137,7 @@ const buildMessages = () => ({
     unpinLabel: i18n.t('itemResultsPinnableUnpin'),
     maximumSocketsWarning: (maximum: number) => i18n.t('itemResultsMaximumSocketsWarning', [maximum]),
     regroupSimilarsLabel: (count: number) => i18n.t('itemResultsRegroupSimilarsButton', count),
+    genericAlertMessage: i18n.t('genericAlertFlash'),
   },
 });
 

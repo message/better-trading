@@ -1,5 +1,7 @@
 import PagePinnedItems from './index.tsx';
+import { genericAlertMessages } from '../../.storybook/common-messages';
 import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
+import { MockItemResultsProvider, createMockPinnedItem } from '../../.storybook/mock-providers';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
@@ -16,6 +18,15 @@ const meta = {
     emptyMessage: { control: false, description: '(Provided by render)' },
     unpinItemLabel: { control: false, description: '(Provided by render)' },
     scrollToItemLabel: { control: false, description: '(Provided by render)' },
+    genericAlertMessage: { control: false, description: '(Provided by render)' },
+  },
+  args: {
+    warningMessage: '',
+    clearLabel: '',
+    emptyMessage: '',
+    unpinItemLabel: '',
+    scrollToItemLabel: '',
+    genericAlertMessage: '',
   },
 } satisfies Meta<typeof PagePinnedItems>;
 
@@ -93,42 +104,30 @@ const getMessages = (locale: string) => ({
   emptyMessage: resolveLocaleValue(locale, emptyMessages),
   unpinItemLabel: resolveLocaleValue(locale, unpinItemMessages),
   scrollToItemLabel: resolveLocaleValue(locale, scrollToItemMessages),
+  genericAlertMessage: resolveLocaleValue(locale, genericAlertMessages),
 });
+
+const mockPinnedItems = [
+  createMockPinnedItem('item-1', 'Tabula Rasa', '1 divine', 5),
+  createMockPinnedItem('item-2', 'Headhunter', '40 divine', 2),
+];
 
 export const Empty: Story = {
   name: 'Empty State',
-  args: {
-    warningMessage: '',
-    clearLabel: '',
-    emptyMessage: '',
-    unpinItemLabel: '',
-    scrollToItemLabel: '',
-  },
-  render: (args, { globals }) => {
-    const messages = getMessages(globals.locale as string);
-
-    return <PagePinnedItems {...messages} data-locale={globals.locale} />;
-  },
+  render: (_args, { globals }) => (
+    <MockItemResultsProvider>
+      <PagePinnedItems {...getMessages(globals.locale as string)} />
+    </MockItemResultsProvider>
+  ),
 };
 
-export const WithWarningOnly: Story = {
-  name: 'Warning Message',
-  args: {
-    warningMessage: '',
-    clearLabel: '',
-    emptyMessage: '',
-    unpinItemLabel: '',
-    scrollToItemLabel: '',
-  },
-  render: (args, { globals }) => {
-    const messages = getMessages(globals.locale as string);
-
-    return (
-      <div data-locale={globals.locale}>
-        <PagePinnedItems {...messages} />
-      </div>
-    );
-  },
+/** Unpin and clear work; "scroll to item" flashes an alert since the results are not on the page */
+export const WithPinnedItems: Story = {
+  render: (_args, { globals }) => (
+    <MockItemResultsProvider mockPinnedItems={mockPinnedItems}>
+      <PagePinnedItems {...getMessages(globals.locale as string)} />
+    </MockItemResultsProvider>
+  ),
 };
 
 export default meta;

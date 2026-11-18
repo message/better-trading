@@ -40,7 +40,7 @@ const Shell = () => {
   };
 
   return (
-    <>
+    <ItemResultsProvider messages={messages.itemResults} onPinnedItemsChange={() => changePage(RootPage.PINNED_ITEMS)}>
       <ChangelogBanner changelog={currentChangelog} {...messages.changelogBanner(appVersion)} />
 
       <Header
@@ -69,19 +69,16 @@ const Shell = () => {
       )}
 
       <FlashMessages flashMessages={flashMessages} onDismiss={flash => dismissFlash(flash.id)} />
-    </>
+    </ItemResultsProvider>
   );
 };
 
-// ponytail: the item enhancer (useItemEnhancer) is not mounted yet, wiring it is #6
 const App = () => (
   <FlashMessagesProvider>
     <BookmarksProvider>
-      <ItemResultsProvider>
-        <TradeHistoryProvider>
-          <Shell />
-        </TradeHistoryProvider>
-      </ItemResultsProvider>
+      <TradeHistoryProvider>
+        <Shell />
+      </TradeHistoryProvider>
     </BookmarksProvider>
   </FlashMessagesProvider>
 );

@@ -2,10 +2,9 @@ import styles from './styles.module.scss';
 import AlertMessage from '../AlertMessage';
 import Button from '../Button';
 import XmarkIcon from '@/assets/icons/solid/xmark.svg?react';
+import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 import { useItemResults } from '@/hooks/useItemResults';
 import classnames from 'classnames';
-import { useState, useEffect } from 'react';
-import type { ItemResultsPinnedItem } from '@/types/item-results';
 
 interface PagePinnedItemsProps {
   warningMessage: string;
@@ -13,58 +12,19 @@ interface PagePinnedItemsProps {
   emptyMessage: string;
   unpinItemLabel: string;
   scrollToItemLabel: string;
+  genericAlertMessage: string;
   className?: string;
 }
 
-const usePinnedItems = () => {
-  const itemResults = useItemResults();
-  const [pinnedItems, setPinnedItems] = useState<ItemResultsPinnedItem[]>([]);
+const SCROLL_ANIMATION_DELAY_MS = 250;
+const SCROLL_ANIMATION_DURATION_MS = 2000;
 
-  const loadPinnedItems = async () => {
-    const items = await itemResults.getPinnedItems();
-    setPinnedItems(items);
-  };
+const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-  const clearPinnedItems = async () => {
-    await itemResults.clearPinnedItems();
-    setPinnedItems([]);
-  };
-
-  const unpinItemById = async (itemId: string) => {
-    await itemResults.unpinItemById(itemId);
-    setPinnedItems(prev => prev.filter(item => item.id !== itemId));
-  };
-
-  const scrollToItem = async (itemId: string): Promise<void> => {
-    const itemElement = window.document.querySelector(`div.row[data-id="${itemId}"]`);
-    if (!itemElement) {
-      console.warn('Item not found on page');
-      return;
-    }
-
-    itemElement.scrollIntoView({ block: 'center' });
-
-    // Add glow effect
-    await new Promise(resolve => setTimeout(resolve, 250));
-    itemElement.classList.add('bt-pinned-glow');
-
-    // Remove glow effect after animation
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    itemElement.classList.remove('bt-pinned-glow');
-  };
-
-  useEffect(() => {
-    loadPinnedItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return {
-    pinnedItems,
-    clearPinnedItems,
-    unpinItemById,
-    scrollToItem,
-  };
-};
+/** Shows a copy of an element taken from the trade results (it may still be displayed there) */
+const ClonedElement = ({ element }: { element: HTMLElement }) => (
+  <div ref={container => container?.replaceChildren(element.cloneNode(true))} />
+);
 
 /**
  * PagePinnedItems component - Displays and manages pinned items
@@ -76,9 +36,27 @@ const PagePinnedItems = ({
   emptyMessage,
   unpinItemLabel,
   scrollToItemLabel,
+  genericAlertMessage,
   className,
 }: PagePinnedItemsProps) => {
-  const { pinnedItems, clearPinnedItems, unpinItemById, scrollToItem } = usePinnedItems();
+  const { pinnedItems, clearPinnedItems, unpinItemById } = useItemResults();
+  const { addFlash } = useFlashMessagesContext();
+
+  const scrollToItem = async (itemId: string) => {
+    const itemElement = document.querySelector(`div.row[data-id="${CSS.escape(itemId)}"]`);
+    if (!itemElement) {
+      addFlash(genericAlertMessage, 'alert');
+      return;
+    }
+
+    itemElement.scrollIntoView({ block: 'center' });
+
+    await wait(SCROLL_ANIMATION_DELAY_MS);
+    itemElement.classList.add('bt-pinned-glow');
+
+    await wait(SCROLL_ANIMATION_DURATION_MS);
+    itemElement.classList.remove('bt-pinned-glow');
+  };
 
   const sortedPinnedItems = [...pinnedItems].sort(
     (pinnedItemA, pinnedItemB) => new Date(pinnedItemA.pinnedAt).getTime() - new Date(pinnedItemB.pinnedAt).getTime(),
@@ -90,13 +68,13 @@ const PagePinnedItems = ({
         <>
           {sortedPinnedItems.map(pinnedItem => (
             <div key={pinnedItem.id} className={styles.itemWrapper}>
-              <div dangerouslySetInnerHTML={{ __html: pinnedItem.detailsElement }} />
+              <ClonedElement element={pinnedItem.detailsElement} />
 
               <div className={styles.renderedItemWrapper}>
-                <div dangerouslySetInnerHTML={{ __html: pinnedItem.renderedItemElement }} />
+                <ClonedElement element={pinnedItem.renderedItemElement} />
               </div>
 
-              <div dangerouslySetInnerHTML={{ __html: pinnedItem.pricingElement }} />
+              <ClonedElement element={pinnedItem.pricingElement} />
 
               <div className={styles.itemActions}>
                 <Button
