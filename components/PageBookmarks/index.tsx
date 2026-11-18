@@ -30,7 +30,12 @@ import { useTradeLocation } from '@/hooks/useTradeLocation';
 import { copyToClipboard } from '@/utils/copy-to-clipboard';
 import { recommendTitle } from '@/utils/search-panel';
 import { getTradeUrl } from '@/utils/trade-location';
-import { useState, useCallback, useEffect } from 'react';
+import { reorder } from '@atlaskit/pragmatic-drag-and-drop/utils/reorder';
+import {
+  autoScrollForElements,
+  autoScrollWindowForElements,
+} from '@atlaskit/pragmatic-drag-and-drop-auto-scroll/element';
+import { useState, useCallback, useEffect, useId } from 'react';
 import type { TradeSource } from './TradeEdition';
 import type { BookmarksFolderStruct, BookmarksTradeStruct } from '@/types/bookmarks';
 import type React from 'react';
@@ -82,6 +87,8 @@ interface PageBookmarksProps {
   uncompleteTradeLabel: string;
   editTradeLabel: string;
   deleteTradeLabel: string;
+  /** Drag handle label of Folders and Trades (also reorderable with the arrow keys) */
+  reorderLabel: string;
   tradeModalTitle: string;
   tradeTitleLabel: string;
   tradeSourceLabel: string;
@@ -136,6 +143,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   uncompleteTradeLabel,
   editTradeLabel,
   deleteTradeLabel,
+  reorderLabel,
   tradeModalTitle,
   tradeTitleLabel,
   tradeSourceLabel,
@@ -180,6 +188,12 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
     window.addEventListener('focus', handleFocus);
     return () => window.removeEventListener('focus', handleFocus);
   }, [refreshFolders]);
+
+  // Scroll while dragging near an edge: the extension panel scrolls, Storybook (no panel) scrolls the window
+  useEffect(() => {
+    const panel = document.getElementById('better-trading-container');
+    return panel ? autoScrollForElements({ element: panel }) : autoScrollWindowForElements();
+  }, []);
 
   // Computed values
   const applicableFolders = bookmarks.folders.filter(folder => folder.version === version);
@@ -391,6 +405,25 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
     }
   };
 
+  // Reorders the displayed Folders among themselves: archived and other Game Version Folders keep their slots
+  const foldersListId = useId();
+  const handleMoveFolder = async (fromIndex: number, toIndex: number) => {
+    const reorderedFolders = reorder({ list: displayedFolders, startIndex: fromIndex, finishIndex: toIndex });
+    try {
+      await bookmarks.persistFolders(bookmarks.partiallyReorderFolders(bookmarks.folders, reorderedFolders));
+    } catch {
+      addFlash(genericAlertMessage, 'alert');
+    }
+  };
+
+  const handleReorderTrades = async (trades: BookmarksTradeStruct[], folderId: string) => {
+    try {
+      await bookmarks.persistTrades(trades, folderId);
+    } catch {
+      addFlash(genericAlertMessage, 'alert');
+    }
+  };
+
   const handleGetTradeUrl = (trade: BookmarksTradeStruct, currentLeague: string | null) => {
     if (!currentLeague) return '#';
     return getTradeUrl(trade.location.version, trade.location.type, trade.location.slug, currentLeague);
@@ -420,15 +453,17 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
         )}
       </div>
 
-      {/* TODO: Add drag-and-drop for folder reordering using a library like @dnd-kit */}
       <div className={styles.foldersWrapper}>
-        {displayedFolders.map(folder => {
+        {displayedFolders.map((folder, folderIndex) => {
           const folderId = folder.id;
           if (!folderId) return null;
           return (
             <div key={folderId} className={styles.folderWrapper}>
               <Folder
                 folder={folder as BookmarksFolderStruct & { id: string }}
+                index={folderIndex}
+                count={displayedFolders.length}
+                listId={foldersListId}
                 isExpanded={!folder.archivedAt && expandedFolderIds.includes(folderId)}
                 isArchived={Boolean(folder.archivedAt)}
                 league={league}
@@ -445,6 +480,9 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
                 uncompleteTradeLabel={uncompleteTradeLabel}
                 editTradeLabel={editTradeLabel}
                 deleteTradeLabel={deleteTradeLabel}
+                reorderLabel={reorderLabel}
+                onMove={handleMoveFolder}
+                onReorderTrades={trades => handleReorderTrades(trades, folderId)}
                 onExpansionToggle={() => handleToggleFolderExpansion(folderId)}
                 onEdit={() => handleStageFolder(folder)}
                 onDelete={() => handleDeleteFolder(folder)}

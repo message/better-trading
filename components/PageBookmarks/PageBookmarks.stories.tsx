@@ -1,4 +1,5 @@
 import PageBookmarks from './index';
+import folderStyles from './Folder.module.scss';
 import { seedChromeStorage } from '../../.storybook/chrome-storage-mock';
 import {
   copyTradeSuccessMessages,
@@ -14,6 +15,9 @@ import {
 import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
 import { MockTradeHistoryProvider } from '../../.storybook/mock-providers';
 import { BookmarksProvider } from '../../contexts/BookmarksContext';
+import { bookmarksStorage } from '@/services/bookmarks/storage';
+import { setLocalValue } from '@/utils/storage';
+import { expect, fireEvent, userEvent, waitFor, within } from 'storybook/test';
 import type { TradeLocationHistoryStruct } from '@/types/trade-location';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
@@ -62,6 +66,11 @@ const meta = {
   title: 'Pages/PageBookmarks',
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
+  // Every story starts from the same Bookmarks with all Folders collapsed (stories below reorder them)
+  beforeEach: () => {
+    seedChromeStorage(seed);
+    setLocalValue('bookmark-folders-expansion', '');
+  },
   decorators: [
     // Flash messages come from the global decorator in .storybook/preview.tsx
     Story => (
@@ -103,6 +112,7 @@ const meta = {
     uncompleteTradeLabel: '',
     editTradeLabel: '',
     deleteTradeLabel: '',
+    reorderLabel: '',
     tradeModalTitle: '',
     tradeTitleLabel: '',
     tradeSourceLabel: '',
@@ -126,7 +136,7 @@ const meta = {
 type Story = StoryObj<typeof meta>;
 
 // Stored exactly as 1.9.1 does. The PoE 2 folder is hidden on this (PoE 1) page.
-seedChromeStorage({
+const seed = {
   'bookmark-folders': [
     { id: 'f-chaos', title: 'Chaos recipe', version: '1', icon: 'chaos', archivedAt: null },
     { id: 'f-jugg', title: 'Juggernaut gear', version: '1', icon: 'juggernaut', archivedAt: null },
@@ -150,7 +160,7 @@ seedChromeStorage({
       completedAt: null,
     },
   ],
-});
+};
 
 // Localized messages for all labels and strings
 const collapseAllMessages = defineMessages({
@@ -530,6 +540,19 @@ const deleteTradeMessages = defineMessages({
   'th-TH': 'ลบการซื้อขาย',
 });
 
+const reorderMessages = defineMessages({
+  'en-US': 'Drag to reorder, or use the arrow keys',
+  'fr-FR': 'Glisser pour réorganiser, ou utiliser les flèches',
+  'es-ES': 'Arrastra para reordenar o usa las flechas',
+  'de-DE': 'Zum Sortieren ziehen oder die Pfeiltasten verwenden',
+  'pt-BR': 'Arraste para reordenar ou use as setas',
+  'ru-RU': 'Перетащите, чтобы изменить порядок, или используйте стрелки',
+  'zh-CN': '拖动以排序，或使用方向键',
+  'ja-JP': 'ドラッグまたは矢印キーで並べ替え',
+  'ko-KR': '드래그하거나 화살표 키로 순서 변경',
+  'th-TH': 'ลากเพื่อจัดลำดับ หรือใช้ปุ่มลูกศร',
+});
+
 const restoreBackupErrorMessages = defineMessages({
   'en-US': 'Failed to restore backup. The file may be corrupted.',
   'fr-FR': 'Échec de la restauration de la sauvegarde. Le fichier peut être corrompu.',
@@ -699,6 +722,38 @@ const updateTradeLocationSuccessMessages = defineMessages({
   'th-TH': 'อัปเดตตำแหน่งของการซื้อขาย "{title}" แล้ว',
 });
 
+// Reordering helpers. Folders and Trades are the elements Pragmatic Drag and Drop marks `draggable`.
+const findDraggable = async (canvasElement: HTMLElement, title: string) =>
+  (await within(canvasElement).findByText(title)).closest<HTMLElement>('[draggable="true"]')!;
+
+// A Folder's own handle comes before the handles of its Trades
+const getHandle = (draggableElement: HTMLElement, locale: string) =>
+  within(draggableElement).getAllByRole('button', { name: resolveLocaleValue(locale, reorderMessages) })[0];
+
+const getFolderTitles = (canvasElement: HTMLElement) =>
+  Array.from(canvasElement.querySelectorAll(`.${folderStyles.headerLabel}`), element => element.textContent);
+
+const centerOf = (element: Element) => {
+  const { left, top, width, height } = element.getBoundingClientRect();
+  return { clientX: left + width / 2, clientY: top + height / 2 };
+};
+
+/**
+ * Starts a native drag from the handle of `source` and holds it over the lower half of `target`. No drop follows, so
+ * the story stays in the drag state until the pointer moves over it.
+ */
+const holdDragOver = async (source: HTMLElement, handle: HTMLElement, target: HTMLElement) => {
+  const dataTransfer = new DataTransfer();
+  // Pragmatic Drag and Drop only starts the drag when the pointer is over the handle
+  fireEvent.dragStart(source, { ...centerOf(handle), dataTransfer });
+  await new Promise(requestAnimationFrame);
+  const { left, width, bottom } = target.getBoundingClientRect();
+  const position = { clientX: left + width / 2, clientY: bottom - 3, dataTransfer };
+  fireEvent.dragEnter(target, position);
+  fireEvent.dragOver(target, position);
+  await waitFor(() => expect(target).toHaveAttribute('data-drop-edge', 'bottom'));
+};
+
 export const Default: Story = {
   name: 'Bookmarks Page',
   args: {
@@ -741,6 +796,7 @@ export const Default: Story = {
         uncompleteTradeLabel={resolveLocaleValue(locale, uncompleteTradeMessages)}
         editTradeLabel={resolveLocaleValue(locale, editTradeMessages)}
         deleteTradeLabel={resolveLocaleValue(locale, deleteTradeMessages)}
+        reorderLabel={resolveLocaleValue(locale, reorderMessages)}
         tradeModalTitle={resolveLocaleValue(locale, tradeModalTitleMessages)}
         tradeTitleLabel={resolveLocaleValue(locale, tradeTitleLabelMessages)}
         tradeSourceLabel={resolveLocaleValue(locale, tradeSourceLabelMessages)}
@@ -765,6 +821,81 @@ export const Default: Story = {
       />
     );
   },
+};
+
+/** Moving Folders and Trades with ArrowUp / ArrowDown on their focused handle; the new order is persisted */
+export const KeyboardReorder: Story = {
+  ...Default,
+  name: 'Reorder by Keyboard',
+  beforeEach: () => setLocalValue('bookmark-folders-expansion', 'f-jugg'),
+  play: async ({ canvasElement, globals }) => {
+    const locale = globals.locale as string;
+
+    const folderHandle = getHandle(await findDraggable(canvasElement, 'Chaos recipe'), locale);
+    folderHandle.focus();
+    await userEvent.keyboard('{ArrowDown}');
+    await waitFor(() =>
+      expect(getFolderTitles(canvasElement)).toEqual([
+        'Juggernaut gear',
+        'Chaos recipe',
+        'Miscellaneous searches without an icon',
+      ]),
+    );
+    await expect(folderHandle).toHaveFocus();
+    // The archived and the PoE 2 Folders keep their slots
+    const folders = await bookmarksStorage.fetchFolders();
+    await expect(folders.map(folder => folder.id)).toEqual(['f-jugg', 'f-chaos', 'f-misc', 'f-old', 'f-titan']);
+
+    const tradeHandle = getHandle(await findDraggable(canvasElement, 'Life chest'), locale);
+    tradeHandle.focus();
+    await userEvent.keyboard('{ArrowUp}');
+    await waitFor(async () => {
+      const trades = await bookmarksStorage.fetchTradesByFolderId('f-jugg');
+      await expect(trades.map(trade => trade.id)).toEqual(['t-2', 't-1', 't-3']);
+    });
+    await expect(tradeHandle).toHaveFocus();
+  },
+};
+
+/** "Chaos recipe" dragged by its handle: dimmed, with the drop line below "Juggernaut gear" */
+export const DraggingFolder: Story = {
+  ...Default,
+  name: 'Dragging a Folder',
+  play: async ({ canvasElement, globals }) => {
+    const source = await findDraggable(canvasElement, 'Chaos recipe');
+    const target = await findDraggable(canvasElement, 'Juggernaut gear');
+    await holdDragOver(source, getHandle(source, globals.locale as string), target);
+    await waitFor(() => expect(source).toHaveClass(folderStyles.isDragging));
+  },
+};
+
+/** "Kaom boots" dragged within its Folder: dimmed, with the drop line below "Life chest" */
+export const DraggingTrade: Story = {
+  ...Default,
+  name: 'Dragging a Trade',
+  beforeEach: () => setLocalValue('bookmark-folders-expansion', 'f-jugg'),
+  play: async ({ canvasElement, globals }) => {
+    const source = await findDraggable(canvasElement, 'Kaom boots');
+    const target = await findDraggable(canvasElement, 'Life chest');
+    await holdDragOver(source, getHandle(source, globals.locale as string), target);
+    await waitFor(() => expect(source).toHaveClass(folderStyles.isDragging));
+  },
+};
+
+/** Enough Folders to overflow: dragging one near the top or bottom edge scrolls the page */
+export const ManyFolders: Story = {
+  ...Default,
+  name: 'Many Folders (auto-scroll)',
+  beforeEach: () =>
+    seedChromeStorage({
+      'bookmark-folders': Array.from({ length: 30 }, (_, index) => ({
+        id: `f-${index + 1}`,
+        title: `Folder ${index + 1}`,
+        version: '1',
+        icon: null,
+        archivedAt: null,
+      })),
+    }),
 };
 
 export default meta;

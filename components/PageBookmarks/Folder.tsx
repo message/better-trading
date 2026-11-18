@@ -5,13 +5,72 @@ import ContextualMenu from '../ContextualMenu';
 import LoadingContainer from '../LoadingContainer';
 import ChevronDownIcon from '@/assets/icons/solid/chevron-down.svg?react';
 import SortIcon from '@/assets/icons/solid/sort.svg?react';
+import { useSortable } from '@/hooks/useSortable';
+import { reorder } from '@atlaskit/pragmatic-drag-and-drop/utils/reorder';
 import classnames from 'classnames';
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useId, useRef } from 'react';
 import type { BookmarksFolderStruct, BookmarksTradeStruct } from '@/types/bookmarks';
 import type React from 'react';
 
+interface SortableTradeProps {
+  listId: string;
+  index: number;
+  count: number;
+  reorderLabel: string;
+  onMove: (fromIndex: number, toIndex: number) => void;
+  /** The Trade link */
+  children: React.ReactNode;
+  /** The Trade contextual menu, shown before the drag handle */
+  menu: React.ReactNode;
+}
+
+const SortableTrade: React.FC<SortableTradeProps> = ({
+  listId,
+  index,
+  count,
+  reorderLabel,
+  onMove,
+  children,
+  menu,
+}) => {
+  const { itemRef, handleRef, isDragging, dropEdge, handleKeyDown } = useSortable<HTMLLIElement, HTMLButtonElement>({
+    listId,
+    index,
+    count,
+    onMove,
+  });
+
+  return (
+    <li
+      ref={itemRef}
+      className={classnames(styles.trade, isDragging && styles.isDragging)}
+      data-drop-edge={dropEdge ?? undefined}>
+      {children}
+
+      <div className={styles.tradeActions}>
+        {menu}
+
+        <button
+          ref={handleRef}
+          type="button"
+          className={classnames(styles.tradeAction, styles.handle)}
+          title={reorderLabel}
+          aria-label={reorderLabel}
+          aria-keyshortcuts="ArrowUp ArrowDown"
+          onKeyDown={handleKeyDown}>
+          <SortIcon className={styles.handleIcon} />
+        </button>
+      </div>
+    </li>
+  );
+};
+
 interface FolderProps {
   folder: BookmarksFolderStruct & { id: string };
+  /** Position among the displayed Folders, for reordering */
+  index: number;
+  count: number;
+  listId: string;
   isExpanded: boolean;
   isArchived: boolean;
   league: string | null;
@@ -28,6 +87,9 @@ interface FolderProps {
   uncompleteTradeLabel: string;
   editTradeLabel: string;
   deleteTradeLabel: string;
+  reorderLabel: string;
+  onMove: (fromIndex: number, toIndex: number) => void;
+  onReorderTrades: (trades: BookmarksTradeStruct[]) => Promise<void>;
   onExpansionToggle: () => void;
   onEdit: () => void;
   onArchiveToggle: () => Promise<void>;
@@ -45,6 +107,9 @@ interface FolderProps {
 
 const Folder: React.FC<FolderProps> = ({
   folder,
+  index,
+  count,
+  listId,
   isExpanded,
   isArchived,
   league,
@@ -61,6 +126,9 @@ const Folder: React.FC<FolderProps> = ({
   uncompleteTradeLabel,
   editTradeLabel,
   deleteTradeLabel,
+  reorderLabel,
+  onMove,
+  onReorderTrades,
   onExpansionToggle,
   onEdit,
   onArchiveToggle,
@@ -95,8 +163,31 @@ const Folder: React.FC<FolderProps> = ({
     if (isExpanded) void loadTrades();
   }, [folder, isExpanded, loadTrades]);
 
+  const { itemRef, handleRef, isDragging, dropEdge, handleKeyDown } = useSortable<HTMLDivElement, HTMLButtonElement>({
+    listId,
+    index,
+    count,
+    onMove,
+  });
+
+  // Show the new order right away; persisting it refreshes the Folders, which reloads the trades from storage
+  const tradesListId = useId();
+  const handleMoveTrade = (fromIndex: number, toIndex: number) => {
+    const reorderedTrades = reorder({ list: trades, startIndex: fromIndex, finishIndex: toIndex });
+    setTrades(reorderedTrades);
+    void onReorderTrades(reorderedTrades);
+  };
+
   return (
-    <div className={classnames(styles.folder, isExpanded && styles.isExpanded, isArchived && styles.isArchived)}>
+    <div
+      ref={itemRef}
+      className={classnames(
+        styles.folder,
+        isExpanded && styles.isExpanded,
+        isArchived && styles.isArchived,
+        isDragging && styles.isDragging,
+      )}
+      data-drop-edge={dropEdge ?? undefined}>
       <div className={styles.header}>
         <div
           className={styles.expansionWrapper}
@@ -120,8 +211,14 @@ const Folder: React.FC<FolderProps> = ({
             ]}
           />
 
-          {/* TODO: Add drag handle for reordering folders */}
-          <button type="button" className={styles.headerAction}>
+          <button
+            ref={handleRef}
+            type="button"
+            className={classnames(styles.headerAction, styles.handle)}
+            title={reorderLabel}
+            aria-label={reorderLabel}
+            aria-keyshortcuts="ArrowUp ArrowDown"
+            onKeyDown={handleKeyDown}>
             <SortIcon className={styles.handleIcon} />
           </button>
         </div>
@@ -129,16 +226,16 @@ const Folder: React.FC<FolderProps> = ({
 
       {isExpanded && (
         <LoadingContainer task={loadTrades} size="small">
-          {/* TODO: Add drag-and-drop for reordering trades */}
           <ul className={styles.trades}>
-            {trades.map(trade => (
-              <li key={trade.id} className={styles.trade}>
-                <a href={getTradeUrl(trade, league)} className={styles.tradeLink}>
-                  {trade.completedAt && <span className={styles.tradeLinkCompleted}>✓</span>}
-                  {trade.title}
-                </a>
-
-                <div className={styles.tradeActions}>
+            {trades.map((trade, tradeIndex) => (
+              <SortableTrade
+                key={trade.id}
+                listId={tradesListId}
+                index={tradeIndex}
+                count={trades.length}
+                reorderLabel={reorderLabel}
+                onMove={handleMoveTrade}
+                menu={
                   <ContextualMenu
                     className={styles.tradeAction}
                     items={[
@@ -155,13 +252,12 @@ const Folder: React.FC<FolderProps> = ({
                       { label: deleteTradeLabel, onClick: () => onDeleteTrade(trade) },
                     ]}
                   />
-
-                  {/* TODO: Add drag handle for reordering trades */}
-                  <button type="button" className={styles.tradeAction}>
-                    <SortIcon className={styles.handleIcon} />
-                  </button>
-                </div>
-              </li>
+                }>
+                <a href={getTradeUrl(trade, league)} className={styles.tradeLink}>
+                  {trade.completedAt && <span className={styles.tradeLinkCompleted}>✓</span>}
+                  {trade.title}
+                </a>
+              </SortableTrade>
             ))}
           </ul>
 

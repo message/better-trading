@@ -125,6 +125,7 @@ const buildMessages = () => ({
     uncompleteTradeLabel: i18n.t('pageBookmarksFolderUncompleteTrade'),
     editTradeLabel: i18n.t('pageBookmarksFolderEditTrade'),
     deleteTradeLabel: i18n.t('pageBookmarksFolderDeleteTrade'),
+    reorderLabel: i18n.t('pageBookmarksFolderReorder'),
     tradeModalTitle: i18n.t('pageBookmarksFolderTradeEditionModalTitle'),
     tradeTitleLabel: i18n.t('pageBookmarksFolderTradeEditionTitleLabel'),
     tradeSourceLabel: i18n.t('pageBookmarksFolderTradeEditionSourceLabel'),

@@ -80,6 +80,7 @@ pageBookmarksFolderCopyTradeToClipboard: Copy URL to clipboard
 pageBookmarksFolderCopyTradeToClipboardSuccessFlash: 'Trade URL for "$1" has been copied to the clipboard.'
 pageBookmarksFolderEditTrade: Edit
 pageBookmarksFolderDeleteTrade: Delete
+pageBookmarksFolderReorder: Drag to reorder, or use the arrow keys
 pageBookmarksFolderUpdateTradeLocation: Save active trade
 pageBookmarksFolderCompleteTrade: Mark as complete
 pageBookmarksFolderUncompleteTrade: Unmark as complete
