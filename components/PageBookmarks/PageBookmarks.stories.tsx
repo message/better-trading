@@ -12,8 +12,41 @@ import {
   updateFolderSuccessMessages,
 } from '../../.storybook/common-messages';
 import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
+import { MockTradeHistoryProvider } from '../../.storybook/mock-providers';
 import { BookmarksProvider } from '../../contexts/BookmarksContext';
+import type { TradeLocationHistoryStruct } from '@/types/trade-location';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+
+// Trade History entries a new Trade can be saved from (Storybook has no current search). The PoE 2 one is hidden.
+const historyEntries: TradeLocationHistoryStruct[] = [
+  {
+    id: 'h-1',
+    title: 'Tabula Rasa',
+    version: '1',
+    type: 'search',
+    slug: 'ghi789',
+    league: 'Standard',
+    createdAt: '2025-09-01T10:00:00.000Z',
+  },
+  {
+    id: 'h-2',
+    title: 'Divine Orb',
+    version: '1',
+    type: 'exchange',
+    slug: 'jkl012',
+    league: 'Standard',
+    createdAt: '2025-09-01T09:00:00.000Z',
+  },
+  {
+    id: 'h-3',
+    title: 'Poe 2 bow',
+    version: '2',
+    type: 'search',
+    slug: 'mno345',
+    league: 'poe2/Rise of the Abyssal',
+    createdAt: '2025-09-01T08:00:00.000Z',
+  },
+];
 
 /**
  * PageBookmarks component manages bookmark folders for Path of Exile trade searches.
@@ -33,7 +66,9 @@ const meta = {
     // Flash messages come from the global decorator in .storybook/preview.tsx
     Story => (
       <BookmarksProvider>
-        <Story />
+        <MockTradeHistoryProvider mockHistoryEntries={historyEntries}>
+          <Story />
+        </MockTradeHistoryProvider>
       </BookmarksProvider>
     ),
   ],
@@ -68,6 +103,18 @@ const meta = {
     uncompleteTradeLabel: '',
     editTradeLabel: '',
     deleteTradeLabel: '',
+    tradeModalTitle: '',
+    tradeTitleLabel: '',
+    tradeSourceLabel: '',
+    currentSearchLabel: '',
+    tradeDeletionModalTitle: '',
+    tradeDeletionConfirmation: () => '',
+    tradeDeletionDeleteLabel: '',
+    tradeDeletionCancelLabel: '',
+    createTradeSuccessMessage: () => '',
+    updateTradeSuccessMessage: () => '',
+    deleteTradeSuccessMessage: () => '',
+    updateTradeLocationSuccessMessage: () => '',
     deleteFolderSuccessMessage: () => '',
     createFolderSuccessMessage: () => '',
     updateFolderSuccessMessage: () => '',
@@ -94,6 +141,13 @@ seedChromeStorage({
       title: 'Life chest',
       location: { version: '1', type: 'search', slug: 'def456' },
       completedAt: 'Mon, 01 Sep 2025 10:00:00 GMT',
+    },
+    // Saved by an old release, before the Game Version was stored
+    {
+      id: 't-3',
+      title: 'Legacy exchange (no version)',
+      location: { type: 'exchange', slug: 'xyz999' },
+      completedAt: null,
     },
   ],
 });
@@ -489,6 +543,162 @@ const restoreBackupErrorMessages = defineMessages({
   'th-TH': 'การกู้คืนการสำรองล้มเหลว ไฟล์อาจเสียหาย',
 });
 
+const tradeModalTitleMessages = defineMessages({
+  'en-US': 'Bookmark trade',
+  'fr-FR': "Enregistrer l'échange",
+  'es-ES': 'Guardar intercambio',
+  'de-DE': 'Handel merken',
+  'pt-BR': 'Salvar negociação',
+  'ru-RU': 'Сохранить обмен',
+  'zh-CN': '收藏交易',
+  'ja-JP': '取引をブックマーク',
+  'ko-KR': '거래 북마크',
+  'th-TH': 'บุ๊กมาร์กการซื้อขาย',
+});
+
+const tradeTitleLabelMessages = defineMessages({
+  'en-US': 'Title',
+  'fr-FR': 'Titre',
+  'es-ES': 'Título',
+  'de-DE': 'Titel',
+  'pt-BR': 'Título',
+  'ru-RU': 'Название',
+  'zh-CN': '标题',
+  'ja-JP': 'タイトル',
+  'ko-KR': '제목',
+  'th-TH': 'ชื่อ',
+});
+
+const tradeSourceLabelMessages = defineMessages({
+  'en-US': 'Search',
+  'fr-FR': 'Recherche',
+  'es-ES': 'Búsqueda',
+  'de-DE': 'Suche',
+  'pt-BR': 'Pesquisa',
+  'ru-RU': 'Поиск',
+  'zh-CN': '搜索',
+  'ja-JP': '検索',
+  'ko-KR': '검색',
+  'th-TH': 'การค้นหา',
+});
+
+const currentSearchMessages = defineMessages({
+  'en-US': 'Current search',
+  'fr-FR': 'Recherche actuelle',
+  'es-ES': 'Búsqueda actual',
+  'de-DE': 'Aktuelle Suche',
+  'pt-BR': 'Pesquisa atual',
+  'ru-RU': 'Текущий поиск',
+  'zh-CN': '当前搜索',
+  'ja-JP': '現在の検索',
+  'ko-KR': '현재 검색',
+  'th-TH': 'การค้นหาปัจจุบัน',
+});
+
+const tradeDeletionModalTitleMessages = defineMessages({
+  'en-US': 'Confirm deletion',
+  'fr-FR': 'Confirmer la suppression',
+  'es-ES': 'Confirmar eliminación',
+  'de-DE': 'Löschen bestätigen',
+  'pt-BR': 'Confirmar exclusão',
+  'ru-RU': 'Подтвердите удаление',
+  'zh-CN': '确认删除',
+  'ja-JP': '削除の確認',
+  'ko-KR': '삭제 확인',
+  'th-TH': 'ยืนยันการลบ',
+});
+
+const tradeDeletionConfirmationMessages = defineMessages({
+  'en-US': 'Delete the bookmark "{title}"?',
+  'fr-FR': 'Supprimer le favori « {title} » ?',
+  'es-ES': '¿Eliminar el marcador "{title}"?',
+  'de-DE': 'Lesezeichen „{title}“ löschen?',
+  'pt-BR': 'Excluir o favorito "{title}"?',
+  'ru-RU': 'Удалить закладку «{title}»?',
+  'zh-CN': '删除书签“{title}”？',
+  'ja-JP': 'ブックマーク「{title}」を削除しますか？',
+  'ko-KR': '"{title}" 북마크를 삭제할까요?',
+  'th-TH': 'ลบบุ๊กมาร์ก "{title}" หรือไม่',
+});
+
+const tradeDeletionDeleteMessages = defineMessages({
+  'en-US': 'Delete',
+  'fr-FR': 'Supprimer',
+  'es-ES': 'Eliminar',
+  'de-DE': 'Löschen',
+  'pt-BR': 'Excluir',
+  'ru-RU': 'Удалить',
+  'zh-CN': '删除',
+  'ja-JP': '削除',
+  'ko-KR': '삭제',
+  'th-TH': 'ลบ',
+});
+
+const tradeDeletionCancelMessages = defineMessages({
+  'en-US': 'Cancel',
+  'fr-FR': 'Annuler',
+  'es-ES': 'Cancelar',
+  'de-DE': 'Abbrechen',
+  'pt-BR': 'Cancelar',
+  'ru-RU': 'Отмена',
+  'zh-CN': '取消',
+  'ja-JP': 'キャンセル',
+  'ko-KR': '취소',
+  'th-TH': 'ยกเลิก',
+});
+
+const createTradeSuccessMessages = defineMessages({
+  'en-US': 'The trade "{title}" has been created.',
+  'fr-FR': "L'échange « {title} » a été créé.",
+  'es-ES': 'Se ha creado el intercambio "{title}".',
+  'de-DE': 'Der Handel „{title}“ wurde erstellt.',
+  'pt-BR': 'A negociação "{title}" foi criada.',
+  'ru-RU': 'Обмен «{title}» создан.',
+  'zh-CN': '交易“{title}”已创建。',
+  'ja-JP': '取引「{title}」を作成しました。',
+  'ko-KR': '"{title}" 거래가 생성되었습니다.',
+  'th-TH': 'สร้างการซื้อขาย "{title}" แล้ว',
+});
+
+const updateTradeSuccessMessages = defineMessages({
+  'en-US': 'The trade "{title}" has been updated.',
+  'fr-FR': "L'échange « {title} » a été mis à jour.",
+  'es-ES': 'Se ha actualizado el intercambio "{title}".',
+  'de-DE': 'Der Handel „{title}“ wurde aktualisiert.',
+  'pt-BR': 'A negociação "{title}" foi atualizada.',
+  'ru-RU': 'Обмен «{title}» обновлён.',
+  'zh-CN': '交易“{title}”已更新。',
+  'ja-JP': '取引「{title}」を更新しました。',
+  'ko-KR': '"{title}" 거래가 업데이트되었습니다.',
+  'th-TH': 'อัปเดตการซื้อขาย "{title}" แล้ว',
+});
+
+const deleteTradeSuccessMessages = defineMessages({
+  'en-US': 'The trade "{title}" has been deleted.',
+  'fr-FR': "L'échange « {title} » a été supprimé.",
+  'es-ES': 'Se ha eliminado el intercambio "{title}".',
+  'de-DE': 'Der Handel „{title}“ wurde gelöscht.',
+  'pt-BR': 'A negociação "{title}" foi excluída.',
+  'ru-RU': 'Обмен «{title}» удалён.',
+  'zh-CN': '交易“{title}”已删除。',
+  'ja-JP': '取引「{title}」を削除しました。',
+  'ko-KR': '"{title}" 거래가 삭제되었습니다.',
+  'th-TH': 'ลบการซื้อขาย "{title}" แล้ว',
+});
+
+const updateTradeLocationSuccessMessages = defineMessages({
+  'en-US': 'The trade location for "{title}" has been updated.',
+  'fr-FR': "L'emplacement de l'échange « {title} » a été mis à jour.",
+  'es-ES': 'Se ha actualizado la ubicación del intercambio "{title}".',
+  'de-DE': 'Der Ort des Handels „{title}“ wurde aktualisiert.',
+  'pt-BR': 'O local da negociação "{title}" foi atualizado.',
+  'ru-RU': 'Адрес обмена «{title}» обновлён.',
+  'zh-CN': '交易“{title}”的位置已更新。',
+  'ja-JP': '取引「{title}」の場所を更新しました。',
+  'ko-KR': '"{title}" 거래 위치가 업데이트되었습니다.',
+  'th-TH': 'อัปเดตตำแหน่งของการซื้อขาย "{title}" แล้ว',
+});
+
 export const Default: Story = {
   name: 'Bookmarks Page',
   args: {
@@ -531,6 +741,18 @@ export const Default: Story = {
         uncompleteTradeLabel={resolveLocaleValue(locale, uncompleteTradeMessages)}
         editTradeLabel={resolveLocaleValue(locale, editTradeMessages)}
         deleteTradeLabel={resolveLocaleValue(locale, deleteTradeMessages)}
+        tradeModalTitle={resolveLocaleValue(locale, tradeModalTitleMessages)}
+        tradeTitleLabel={resolveLocaleValue(locale, tradeTitleLabelMessages)}
+        tradeSourceLabel={resolveLocaleValue(locale, tradeSourceLabelMessages)}
+        currentSearchLabel={resolveLocaleValue(locale, currentSearchMessages)}
+        tradeDeletionModalTitle={resolveLocaleValue(locale, tradeDeletionModalTitleMessages)}
+        tradeDeletionConfirmation={titleMessage(locale, tradeDeletionConfirmationMessages)}
+        tradeDeletionDeleteLabel={resolveLocaleValue(locale, tradeDeletionDeleteMessages)}
+        tradeDeletionCancelLabel={resolveLocaleValue(locale, tradeDeletionCancelMessages)}
+        createTradeSuccessMessage={titleMessage(locale, createTradeSuccessMessages)}
+        updateTradeSuccessMessage={titleMessage(locale, updateTradeSuccessMessages)}
+        deleteTradeSuccessMessage={titleMessage(locale, deleteTradeSuccessMessages)}
+        updateTradeLocationSuccessMessage={titleMessage(locale, updateTradeLocationSuccessMessages)}
         deleteFolderSuccessMessage={titleMessage(locale, deleteFolderSuccessMessages)}
         createFolderSuccessMessage={titleMessage(locale, createFolderSuccessMessages)}
         updateFolderSuccessMessage={titleMessage(locale, updateFolderSuccessMessages)}

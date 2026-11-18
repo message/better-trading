@@ -88,7 +88,7 @@ pageBookmarksFolderUpdateTradeSuccessFlash: 'The trade "$1" has been updated.'
 pageBookmarksFolderCreateTradeSuccessFlash: 'The trade "$1" has been created.'
 pageBookmarksFolderPersistTradeLocationSuccessFlash: 'The trade location for "$1" has been updated.'
 pageBookmarksFolderTradeDeletionModalTitle: Confirm deletion
-pageBookmarksFolderTradeDeletionConfirmation: 'Delete the bookmark <strong>$1</strong> ?'
+pageBookmarksFolderTradeDeletionConfirmation: 'Delete the bookmark "$1"?'
 pageBookmarksFolderTradeDeletionDelete: Delete
 pageBookmarksFolderTradeDeletionCancel: Cancel
 pageBookmarksFolderFolderDeletionModalTitle: Confirm deletion
@@ -108,6 +108,8 @@ pageBookmarksFolderFolderExportEmbedCodeHelper: Code snippet that can be used to
 pageBookmarksFolderFolderExportClose: Close
 pageBookmarksFolderTradeEditionModalTitle: Bookmark trade
 pageBookmarksFolderTradeEditionTitleLabel: Title
+pageBookmarksFolderTradeEditionSourceLabel: Search
+pageBookmarksFolderTradeEditionCurrentSearch: Current search
 pageBookmarksFolderTradeEditionSave: Save
 pageBookmarksFolderEditionModalTitle: Bookmark folder
 pageBookmarksFolderEditionTitleLabel: Title

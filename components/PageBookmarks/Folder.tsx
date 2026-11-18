@@ -6,7 +6,7 @@ import LoadingContainer from '../LoadingContainer';
 import ChevronDownIcon from '@/assets/icons/solid/chevron-down.svg?react';
 import SortIcon from '@/assets/icons/solid/sort.svg?react';
 import classnames from 'classnames';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import type { BookmarksFolderStruct, BookmarksTradeStruct } from '@/types/bookmarks';
 import type React from 'react';
 
@@ -35,7 +35,7 @@ interface FolderProps {
   onFetchTrades: (folderId: string) => Promise<BookmarksTradeStruct[]>;
   onCreateTrade: () => void;
   onEditTrade: (trade: BookmarksTradeStruct) => void;
-  onDeleteTrade: (trade: BookmarksTradeStruct) => Promise<void>;
+  onDeleteTrade: (trade: BookmarksTradeStruct) => void;
   onCopyTradeToClipboard: (trade: BookmarksTradeStruct) => void;
   onUpdateTradeLocation: (trade: BookmarksTradeStruct) => Promise<void>;
   onToggleTradeCompletion: (trade: BookmarksTradeStruct) => Promise<void>;
@@ -82,6 +82,15 @@ const Folder: React.FC<FolderProps> = ({
     setTrades(await onFetchTrades(folder.id));
   }, [folder.id, onFetchTrades]);
 
+  // Every Bookmarks mutation (and the window-focus refetch) refreshes the folders with fresh objects: reload the
+  // trades then, without the spinner. ponytail: reloads every expanded folder, scope it if storage reads get slow.
+  const previousFolderRef = useRef(folder);
+  useEffect(() => {
+    if (previousFolderRef.current === folder) return;
+    previousFolderRef.current = folder;
+    if (isExpanded) void loadTrades();
+  }, [folder, isExpanded, loadTrades]);
+
   return (
     <div className={classnames(styles.folder, isExpanded && styles.isExpanded, isArchived && styles.isArchived)}>
       <div className={styles.header}>
@@ -120,7 +129,7 @@ const Folder: React.FC<FolderProps> = ({
           <ul className={styles.trades}>
             {trades.map(trade => (
               <li key={trade.id} className={styles.trade}>
-                <a href={getTradeUrl(trade, league)} className={styles.tradeLink} target="_blank" rel="noreferrer">
+                <a href={getTradeUrl(trade, league)} className={styles.tradeLink}>
                   {trade.completedAt && <span className={styles.tradeLinkCompleted}>✓</span>}
                   {trade.title}
                 </a>
