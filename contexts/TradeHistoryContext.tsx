@@ -1,5 +1,6 @@
 import { useTradeHistory } from '@/hooks/useTradeHistory';
 import { useTradeLocation } from '@/hooks/useTradeLocation';
+import { recommendTitle } from '@/utils/search-panel';
 import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import type { TradeLocationHistoryStruct } from '@/types/trade-location';
 import type { ReactNode } from 'react';
@@ -31,11 +32,12 @@ const TradeHistoryProvider = ({ children }: TradeHistoryProviderProps) => {
     await tradeHistory.clearHistoryEntries();
   }, [tradeHistory]);
 
-  // Same as 1.9.1: the search is logged before the change is published, so the refreshed list includes it
+  // Entries are refreshed only once the search is logged, so the History page always includes it
   useTradeLocation({
     onChange: ({ newTradeLocation }) => {
+      const title = recommendTitle();
       logQueueRef.current = logQueueRef.current
-        .then(() => tradeHistory.maybeLogTradeLocation(newTradeLocation))
+        .then(() => tradeHistory.maybeLogTradeLocation(newTradeLocation, title))
         .then(refreshHistoryEntries)
         .catch(error => console.error('Failed to log the trade location:', error));
     },
