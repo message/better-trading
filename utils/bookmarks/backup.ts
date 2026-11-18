@@ -1,6 +1,6 @@
 import { deserialize, serialize } from './export';
 import { bookmarksStorage } from '@/services/bookmarks/storage';
-import type { BookmarksFolderStruct } from '@/types/bookmarks';
+import type { BookmarksFolderStruct, BookmarksTradeStruct } from '@/types/bookmarks';
 
 const SECTION_DELIMITER = '\n--------------------\n';
 const LINE_DELIMITER = '\n';
@@ -23,44 +23,45 @@ const generateBackupDataString = async (): Promise<string> => {
   return [activeFolderStrings.join(LINE_DELIMITER), archivedFolderStrings.join(LINE_DELIMITER)].join(SECTION_DELIMITER);
 };
 
+/** Parses one section of a Backup (one Export String per line); null if any line is not a valid Export String */
+const parseSection = (section = '', folderOverrides: Partial<BookmarksFolderStruct> = {}) => {
+  const folders: Array<[BookmarksFolderStruct, BookmarksTradeStruct[]]> = [];
+
+  for (const line of section.split(LINE_DELIMITER)) {
+    if (!line.trim()) continue;
+
+    const parsed = deserialize(line);
+    if (!parsed) return null;
+
+    folders.push([{ ...parsed[0], ...folderOverrides }, parsed[1]]);
+  }
+
+  return folders;
+};
+
+/**
+ * Adds every Folder of a Backup to the existing ones. The whole Backup is parsed first: a Backup with any invalid
+ * line, or with no Folder at all, writes nothing and returns false (1.9.1 skipped the invalid lines instead).
+ */
 const restoreFromDataString = async (stringData: string): Promise<boolean> => {
+  // A Backup edited on Windows may come back with CRLF line endings
+  const [activeSection, archivedSection] = stringData.replaceAll('\r\n', '\n').split(SECTION_DELIMITER);
+  const activeFolders = parseSection(activeSection);
+  const archivedFolders = parseSection(archivedSection, { archivedAt: new Date().toUTCString() });
+  if (!activeFolders || !archivedFolders) return false;
+
+  const folders = [...activeFolders, ...archivedFolders];
+  if (folders.length === 0) return false;
+
   try {
-    const [activeSection, archivedSection] = stringData.split(SECTION_DELIMITER);
-    const activeFolderStrings = activeSection.split(LINE_DELIMITER).filter(Boolean);
-    const archivedFolderStrings = archivedSection.split(LINE_DELIMITER).filter(Boolean);
-
-    const restoredActiveFoldersCount = await restoreFolders(activeFolderStrings);
-    const restoredArchivedFoldersCount = await restoreFolders(archivedFolderStrings, {
-      archivedAt: new Date().toUTCString(),
-    });
-
-    return restoredActiveFoldersCount + restoredArchivedFoldersCount > 0;
+    for (const [folder, trades] of folders) {
+      const folderId = await bookmarksStorage.persistFolder(folder);
+      await bookmarksStorage.persistTrades(trades, folderId);
+    }
+    return true;
   } catch {
     return false;
   }
-};
-
-const restoreFolders = async (
-  folderStrings: string[],
-  folderOverrides: Partial<BookmarksFolderStruct> = {},
-): Promise<number> => {
-  let restoredFoldersCount = 0;
-
-  for (const folderString of folderStrings) {
-    const deserializedData = deserialize(folderString);
-    if (!deserializedData) continue;
-
-    const [folder, trades] = deserializedData;
-
-    const folderId = await bookmarksStorage.persistFolder({
-      ...folder,
-      ...folderOverrides,
-    });
-    await bookmarksStorage.persistTrades(trades, folderId);
-    restoredFoldersCount++;
-  }
-
-  return restoredFoldersCount;
 };
 
 export { generateBackupDataString, restoreFromDataString };

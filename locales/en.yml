@@ -99,12 +99,8 @@ pageBookmarksFolderFolderDeletionConfirmation:
 pageBookmarksFolderFolderDeletionDelete: Delete
 pageBookmarksFolderFolderDeletionCancel: Cancel
 pageBookmarksFolderFolderExportModalTitle: Bookmark folder export
-pageBookmarksFolderFolderExportPreviewUrl: Preview page
-pageBookmarksFolderFolderExportPreviewUrlButton: Open in a new tab
 pageBookmarksFolderFolderExportExportCode: Export code
 pageBookmarksFolderFolderExportExportCodeHelper: This code can be used to restore a folder. It can be used for backup and sharing purposes.
-pageBookmarksFolderFolderExportEmbedCode: Embed code snippet
-pageBookmarksFolderFolderExportEmbedCodeHelper: Code snippet that can be used to include the folder's preview into a website.
 pageBookmarksFolderFolderExportClose: Close
 pageBookmarksFolderTradeEditionModalTitle: Bookmark trade
 pageBookmarksFolderTradeEditionTitleLabel: Title

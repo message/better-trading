@@ -10,6 +10,7 @@
 import Backup from './Backup';
 import Folder from './Folder';
 import FolderEdition from './FolderEdition';
+import FolderExport from './FolderExport';
 import FolderImport from './FolderImport';
 import styles from './styles.module.scss';
 import TradeDeletion from './TradeDeletion';
@@ -68,6 +69,12 @@ interface PageBookmarksProps {
   importCodeLabel: string;
   importPreviewLabel: (name: string, tradesCount: number) => string;
   invalidCodeMessage: string;
+  exportModalTitle: string;
+  exportCodeLabel: string;
+  exportCodeHelper: string;
+  exportCloseLabel: string;
+  copyToClipboardLabel: string;
+  copiedToClipboardLabel: string;
   // Folder/Trade labels
   editFolderLabel: string;
   archiveFolderLabel: string;
@@ -123,6 +130,12 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   importCodeLabel,
   importPreviewLabel,
   invalidCodeMessage,
+  exportModalTitle,
+  exportCodeLabel,
+  exportCodeHelper,
+  exportCloseLabel,
+  copyToClipboardLabel,
+  copiedToClipboardLabel,
   editFolderLabel,
   archiveFolderLabel,
   restoreFolderLabel,
@@ -166,11 +179,12 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
 
   const [stagedFolder, setStagedFolder] = useState<BookmarksFolderStruct | null>(null);
   const [isImportingFolder, setIsImportingFolder] = useState(false);
+  const [exportString, setExportString] = useState<string | null>(null);
   const [isShowingArchivedFolders, setIsShowingArchivedFolders] = useState(false);
   const [stagedTrade, setStagedTrade] = useState<StagedTrade | null>(null);
   const [stagedDeletingTrade, setStagedDeletingTrade] = useState<StagedDeletingTrade | null>(null);
 
-  const { refreshFolders, fetchTradesByFolderId, generateBackup } = bookmarks;
+  const { refreshFolders, fetchTradesByFolderId, serializeFolder, generateBackup } = bookmarks;
 
   // The initial fetch is the LoadingContainer task; afterwards refetch on window focus so that changes made
   // in another tab show up (same as 1.9.1). Depend on the stable function, not on `bookmarks`: it changes
@@ -286,13 +300,21 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
 
   const handleRestoreBackup = useCallback(
     async (dataString: string) => {
-      const success = await bookmarks.restoreBackup(dataString);
+      const success = await bookmarks.restoreBackup(dataString).catch(() => false);
       if (!success) {
         addFlash(restoreBackupErrorMessage, 'alert');
       }
     },
     [bookmarks, restoreBackupErrorMessage, addFlash],
   );
+
+  const handleExportFolder = async (folder: BookmarksFolderStruct & { id: string }) => {
+    try {
+      setExportString(serializeFolder(folder, await fetchTradesByFolderId(folder.id)));
+    } catch {
+      addFlash(genericAlertMessage, 'alert');
+    }
+  };
 
   const handleToggleArchiveDisplay = () => {
     setIsShowingArchivedFolders(!isShowingArchivedFolders);
@@ -336,10 +358,14 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
     async (trade: BookmarksTradeStruct) => {
       if (!league) return;
       const tradeUrl = getTradeUrl(trade.location.version, trade.location.type, trade.location.slug, league);
-      await copyToClipboard(tradeUrl);
-      addFlash(copyTradeSuccessMessage(trade.title), 'success');
+      try {
+        await copyToClipboard(tradeUrl);
+        addFlash(copyTradeSuccessMessage(trade.title), 'success');
+      } catch {
+        addFlash(genericAlertMessage, 'alert');
+      }
     },
-    [league, copyTradeSuccessMessage, addFlash],
+    [league, copyTradeSuccessMessage, genericAlertMessage, addFlash],
   );
 
   const handleCreateTrade = async (folderId: string) => {
@@ -456,9 +482,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
                 onCopyTradeToClipboard={handleCopyTradeToClipboard}
                 onUpdateTradeLocation={trade => handleUpdateTradeLocation(trade, folderId)}
                 onToggleTradeCompletion={trade => handleToggleTradeCompletion(trade, folderId)}
-                onExportFolder={() => {
-                  /* TODO: Implement folder export */
-                }}
+                onExportFolder={() => handleExportFolder({ ...folder, id: folderId })}
                 getTradeUrl={handleGetTradeUrl}
               />
             </div>
@@ -540,6 +564,21 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
           cancelLabel={tradeDeletionCancelLabel}
           onCancel={() => setStagedDeletingTrade(null)}
           onConfirm={handleDeleteTrade}
+        />
+      )}
+
+      {exportString !== null && (
+        <FolderExport
+          exportString={exportString}
+          modalTitle={exportModalTitle}
+          modalCloseLabel={modalCloseLabel}
+          logoAlt={logoAlt}
+          exportCodeLabel={exportCodeLabel}
+          exportCodeHelper={exportCodeHelper}
+          copyLabel={copyToClipboardLabel}
+          copiedLabel={copiedToClipboardLabel}
+          closeLabel={exportCloseLabel}
+          onClose={() => setExportString(null)}
         />
       )}
 

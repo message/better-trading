@@ -28,6 +28,8 @@ const Backup: React.FC<BackupProps> = ({
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+    // Let the same file be picked again, e.g. after a failed restore
+    event.target.value = '';
     if (!file) return;
 
     const fileReader = new FileReader();

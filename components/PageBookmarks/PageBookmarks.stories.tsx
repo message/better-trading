@@ -90,6 +90,12 @@ const meta = {
     importCodeLabel: '',
     importPreviewLabel: () => '',
     invalidCodeMessage: '',
+    exportModalTitle: '',
+    exportCodeLabel: '',
+    exportCodeHelper: '',
+    exportCloseLabel: '',
+    copyToClipboardLabel: '',
+    copiedToClipboardLabel: '',
     editFolderLabel: '',
     archiveFolderLabel: '',
     restoreFolderLabel: '',
@@ -359,6 +365,84 @@ const invalidCodeMessages = defineMessages({
   'ja-JP': '無効なインポートコード',
   'ko-KR': '잘못된 가져오기 코드',
   'th-TH': 'รหัสนำเข้าไม่ถูกต้อง',
+});
+
+const exportModalTitleMessages = defineMessages({
+  'en-US': 'Bookmark folder export',
+  'fr-FR': 'Exportation du dossier de favoris',
+  'es-ES': 'Exportación de la carpeta de marcadores',
+  'de-DE': 'Export des Lesezeichenordners',
+  'pt-BR': 'Exportação da pasta de favoritos',
+  'ru-RU': 'Экспорт папки закладок',
+  'zh-CN': '导出书签文件夹',
+  'ja-JP': 'ブックマークフォルダのエクスポート',
+  'ko-KR': '북마크 폴더 내보내기',
+  'th-TH': 'ส่งออกโฟลเดอร์บุ๊กมาร์ก',
+});
+
+const exportCodeLabelMessages = defineMessages({
+  'en-US': 'Export code',
+  'fr-FR': "Code d'exportation",
+  'es-ES': 'Código de exportación',
+  'de-DE': 'Exportcode',
+  'pt-BR': 'Código de exportação',
+  'ru-RU': 'Код экспорта',
+  'zh-CN': '导出代码',
+  'ja-JP': 'エクスポートコード',
+  'ko-KR': '내보내기 코드',
+  'th-TH': 'รหัสส่งออก',
+});
+
+const exportCodeHelperMessages = defineMessages({
+  'en-US': 'This code can be used to restore a folder. It can be used for backup and sharing purposes.',
+  'fr-FR': 'Ce code permet de restaurer un dossier. Il peut servir de sauvegarde ou être partagé.',
+  'es-ES': 'Este código permite restaurar una carpeta. Sirve como copia de seguridad o para compartirla.',
+  'de-DE': 'Mit diesem Code lässt sich ein Ordner wiederherstellen. Er eignet sich zur Sicherung und zum Teilen.',
+  'pt-BR': 'Este código pode restaurar uma pasta. Serve como backup ou para compartilhá-la.',
+  'ru-RU': 'По этому коду можно восстановить папку. Он подходит для резервной копии и для того, чтобы поделиться.',
+  'zh-CN': '此代码可用于恢复文件夹，也可用于备份和分享。',
+  'ja-JP': 'このコードでフォルダを復元できます。バックアップや共有に使えます。',
+  'ko-KR': '이 코드로 폴더를 복원할 수 있습니다. 백업과 공유에 사용할 수 있습니다.',
+  'th-TH': 'ใช้รหัสนี้เพื่อกู้คืนโฟลเดอร์ได้ ใช้สำรองข้อมูลหรือแชร์ก็ได้',
+});
+
+const exportCloseMessages = defineMessages({
+  'en-US': 'Close',
+  'fr-FR': 'Fermer',
+  'es-ES': 'Cerrar',
+  'de-DE': 'Schließen',
+  'pt-BR': 'Fechar',
+  'ru-RU': 'Закрыть',
+  'zh-CN': '关闭',
+  'ja-JP': '閉じる',
+  'ko-KR': '닫기',
+  'th-TH': 'ปิด',
+});
+
+const copyToClipboardMessages = defineMessages({
+  'en-US': 'Copy to clipboard',
+  'fr-FR': 'Copier dans le presse-papiers',
+  'es-ES': 'Copiar al portapapeles',
+  'de-DE': 'In die Zwischenablage kopieren',
+  'pt-BR': 'Copiar para a área de transferência',
+  'ru-RU': 'Скопировать в буфер обмена',
+  'zh-CN': '复制到剪贴板',
+  'ja-JP': 'クリップボードにコピー',
+  'ko-KR': '클립보드에 복사',
+  'th-TH': 'คัดลอกไปยังคลิปบอร์ด',
+});
+
+const copiedToClipboardMessages = defineMessages({
+  'en-US': 'Copied',
+  'fr-FR': 'Copié',
+  'es-ES': 'Copiado',
+  'de-DE': 'Kopiert',
+  'pt-BR': 'Copiado',
+  'ru-RU': 'Скопировано',
+  'zh-CN': '已复制',
+  'ja-JP': 'コピーしました',
+  'ko-KR': '복사됨',
+  'th-TH': 'คัดลอกแล้ว',
 });
 
 const editFolderMessages = defineMessages({
@@ -728,6 +812,12 @@ export const Default: Story = {
         importCodeLabel={resolveLocaleValue(locale, importCodeLabelMessages)}
         importPreviewLabel={(name, count) => `${name} (${count} trades)`}
         invalidCodeMessage={resolveLocaleValue(locale, invalidCodeMessages)}
+        exportModalTitle={resolveLocaleValue(locale, exportModalTitleMessages)}
+        exportCodeLabel={resolveLocaleValue(locale, exportCodeLabelMessages)}
+        exportCodeHelper={resolveLocaleValue(locale, exportCodeHelperMessages)}
+        exportCloseLabel={resolveLocaleValue(locale, exportCloseMessages)}
+        copyToClipboardLabel={resolveLocaleValue(locale, copyToClipboardMessages)}
+        copiedToClipboardLabel={resolveLocaleValue(locale, copiedToClipboardMessages)}
         editFolderLabel={resolveLocaleValue(locale, editFolderMessages)}
         archiveFolderLabel={resolveLocaleValue(locale, archiveFolderMessages)}
         restoreFolderLabel={resolveLocaleValue(locale, restoreFolderMessages)}
