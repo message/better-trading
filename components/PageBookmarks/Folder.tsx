@@ -78,8 +78,12 @@ const Folder: React.FC<FolderProps> = ({
   const [trades, setTrades] = useState<BookmarksTradeStruct[]>([]);
 
   // Run by the LoadingContainer below, which only mounts while the folder is expanded
+  // Only the latest fetch may set the trades: quick successive mutations can resolve out of order
+  const latestFetchRef = useRef(0);
   const loadTrades = useCallback(async () => {
-    setTrades(await onFetchTrades(folder.id));
+    const fetchId = ++latestFetchRef.current;
+    const fetchedTrades = await onFetchTrades(folder.id);
+    if (fetchId === latestFetchRef.current) setTrades(fetchedTrades);
   }, [folder.id, onFetchTrades]);
 
   // Every Bookmarks mutation (and the window-focus refetch) refreshes the folders with fresh objects: reload the

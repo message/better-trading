@@ -37,10 +37,16 @@ import type React from 'react';
 
 const FOLDERS_WARNING_THRESHOLD = 10;
 
-/** A Trade being created (`trade` null) or edited, or confirmed for deletion, in the Folder `folderId` */
+/** A Trade being created (`trade` null) or edited in the Folder `folderId` */
 interface StagedTrade {
   folderId: string;
   trade: BookmarksTradeStruct | null;
+}
+
+/** A Trade awaiting deletion confirmation */
+interface StagedDeletingTrade {
+  folderId: string;
+  trade: BookmarksTradeStruct;
 }
 
 interface PageBookmarksProps {
@@ -162,7 +168,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   const [isImportingFolder, setIsImportingFolder] = useState(false);
   const [isShowingArchivedFolders, setIsShowingArchivedFolders] = useState(false);
   const [stagedTrade, setStagedTrade] = useState<StagedTrade | null>(null);
-  const [stagedDeletingTrade, setStagedDeletingTrade] = useState<StagedTrade | null>(null);
+  const [stagedDeletingTrade, setStagedDeletingTrade] = useState<StagedDeletingTrade | null>(null);
 
   const { refreshFolders, fetchTradesByFolderId, generateBackup } = bookmarks;
 
@@ -355,7 +361,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   };
 
   const handleDeleteTrade = async () => {
-    if (!stagedDeletingTrade?.trade) return;
+    if (!stagedDeletingTrade) return;
     const { trade, folderId } = stagedDeletingTrade;
     try {
       await bookmarks.deleteTrade(trade, folderId);
@@ -417,12 +423,13 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
       {/* TODO: Add drag-and-drop for folder reordering using a library like @dnd-kit */}
       <div className={styles.foldersWrapper}>
         {displayedFolders.map(folder => {
-          if (!folder.id) return null;
+          const folderId = folder.id;
+          if (!folderId) return null;
           return (
-            <div key={folder.id} className={styles.folderWrapper}>
+            <div key={folderId} className={styles.folderWrapper}>
               <Folder
                 folder={folder as BookmarksFolderStruct & { id: string }}
-                isExpanded={!folder.archivedAt && expandedFolderIds.includes(folder.id)}
+                isExpanded={!folder.archivedAt && expandedFolderIds.includes(folderId)}
                 isArchived={Boolean(folder.archivedAt)}
                 league={league}
                 editFolderLabel={editFolderLabel}
@@ -438,17 +445,17 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
                 uncompleteTradeLabel={uncompleteTradeLabel}
                 editTradeLabel={editTradeLabel}
                 deleteTradeLabel={deleteTradeLabel}
-                onExpansionToggle={() => handleToggleFolderExpansion(folder.id as string)}
+                onExpansionToggle={() => handleToggleFolderExpansion(folderId)}
                 onEdit={() => handleStageFolder(folder)}
                 onDelete={() => handleDeleteFolder(folder)}
                 onArchiveToggle={() => handleToggleFolderArchive(folder)}
                 onFetchTrades={handleFetchTrades}
-                onCreateTrade={() => handleCreateTrade(folder.id as string)}
-                onEditTrade={trade => setStagedTrade({ folderId: folder.id as string, trade })}
-                onDeleteTrade={trade => setStagedDeletingTrade({ folderId: folder.id as string, trade })}
+                onCreateTrade={() => handleCreateTrade(folderId)}
+                onEditTrade={trade => setStagedTrade({ folderId: folderId, trade })}
+                onDeleteTrade={trade => setStagedDeletingTrade({ folderId: folderId, trade })}
                 onCopyTradeToClipboard={handleCopyTradeToClipboard}
-                onUpdateTradeLocation={trade => handleUpdateTradeLocation(trade, folder.id as string)}
-                onToggleTradeCompletion={trade => handleToggleTradeCompletion(trade, folder.id as string)}
+                onUpdateTradeLocation={trade => handleUpdateTradeLocation(trade, folderId)}
+                onToggleTradeCompletion={trade => handleToggleTradeCompletion(trade, folderId)}
                 onExportFolder={() => {
                   /* TODO: Implement folder export */
                 }}
@@ -508,7 +515,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
         />
       )}
 
-      {stagedTrade && (stagedTrade.trade || tradeSources.length > 0) && (
+      {stagedTrade && (
         <TradeEdition
           trade={stagedTrade.trade}
           sources={tradeSources}
@@ -523,7 +530,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
         />
       )}
 
-      {stagedDeletingTrade?.trade && (
+      {stagedDeletingTrade && (
         <TradeDeletion
           modalTitle={tradeDeletionModalTitle}
           modalCloseLabel={modalCloseLabel}
