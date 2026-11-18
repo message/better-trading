@@ -2,7 +2,7 @@
  * Locale maps for strings shared by several stories (logo alt, modal close, header buttons...).
  * Mirrors the keys of `locales/en.yml`; consumed with `resolveLocaleValue`.
  */
-import { defineMessages } from './locale-utils';
+import { defineMessages, resolveLocaleValue } from './locale-utils';
 
 export const logoAltMessages = defineMessages({
   'en-US': 'Better Trading Logo',
@@ -119,4 +119,60 @@ export const copyTradeSuccessMessages = defineMessages({
   'ja-JP': '「{title}」の取引 URL をクリップボードにコピーしました。',
   'ko-KR': '"{title}" 거래 URL이 클립보드에 복사되었습니다.',
   'th-TH': 'คัดลอก URL การซื้อขายของ "{title}" ไปยังคลิปบอร์ดแล้ว',
+});
+
+/** Builds a `(title) => message` formatter, as the page components take for flash messages */
+export const titleMessage = (locale: string, messages: Record<string, string>) => (title: string) =>
+  resolveLocaleValue(locale, messages).replace('{title}', title);
+
+export const createFolderSuccessMessages = defineMessages({
+  'en-US': 'The folder "{title}" has been created.',
+  'fr-FR': 'Le dossier « {title} » a été créé.',
+  'es-ES': 'Se ha creado la carpeta "{title}".',
+  'de-DE': 'Der Ordner „{title}“ wurde erstellt.',
+  'pt-BR': 'A pasta "{title}" foi criada.',
+  'ru-RU': 'Папка «{title}» создана.',
+  'zh-CN': '文件夹“{title}”已创建。',
+  'ja-JP': 'フォルダ「{title}」を作成しました。',
+  'ko-KR': '"{title}" 폴더가 생성되었습니다.',
+  'th-TH': 'สร้างโฟลเดอร์ "{title}" แล้ว',
+});
+
+export const updateFolderSuccessMessages = defineMessages({
+  'en-US': 'The folder "{title}" has been updated.',
+  'fr-FR': 'Le dossier « {title} » a été mis à jour.',
+  'es-ES': 'Se ha actualizado la carpeta "{title}".',
+  'de-DE': 'Der Ordner „{title}“ wurde aktualisiert.',
+  'pt-BR': 'A pasta "{title}" foi atualizada.',
+  'ru-RU': 'Папка «{title}» обновлена.',
+  'zh-CN': '文件夹“{title}”已更新。',
+  'ja-JP': 'フォルダ「{title}」を更新しました。',
+  'ko-KR': '"{title}" 폴더가 업데이트되었습니다.',
+  'th-TH': 'อัปเดตโฟลเดอร์ "{title}" แล้ว',
+});
+
+export const deleteFolderSuccessMessages = defineMessages({
+  'en-US': 'The folder "{title}" has been deleted.',
+  'fr-FR': 'Le dossier « {title} » a été supprimé.',
+  'es-ES': 'Se ha eliminado la carpeta "{title}".',
+  'de-DE': 'Der Ordner „{title}“ wurde gelöscht.',
+  'pt-BR': 'A pasta "{title}" foi excluída.',
+  'ru-RU': 'Папка «{title}» удалена.',
+  'zh-CN': '文件夹“{title}”已删除。',
+  'ja-JP': 'フォルダ「{title}」を削除しました。',
+  'ko-KR': '"{title}" 폴더가 삭제되었습니다.',
+  'th-TH': 'ลบโฟลเดอร์ "{title}" แล้ว',
+});
+
+export const importFolderSuccessMessages = defineMessages({
+  'en-US': 'The folder "{title}" has been imported.',
+  'fr-FR': 'Le dossier « {title} » a été importé.',
+  'es-ES': 'Se ha importado la carpeta "{title}".',
+  'de-DE': 'Der Ordner „{title}“ wurde importiert.',
+  'pt-BR': 'A pasta "{title}" foi importada.',
+  'ru-RU': 'Папка «{title}» импортирована.',
+  'zh-CN': '文件夹“{title}”已导入。',
+  'ja-JP': 'フォルダ「{title}」をインポートしました。',
+  'ko-KR': '"{title}" 폴더를 가져왔습니다.',
+  'th-TH': 'นำเข้าโฟลเดอร์ "{title}" แล้ว',
 });

@@ -146,32 +146,26 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   const hasActiveFolders = activeFolders.length > 0;
   const foldersWarningIsVisible = !isShowingArchivedFolders && displayedFolders.length >= FOLDERS_WARNING_THRESHOLD;
 
-  // Leave the archive view once its last folder is restored or deleted, it would be empty with no way back
-  const leaveEmptyArchiveView = useCallback(
-    (removedFolder: BookmarksFolderStruct) =>
-      setIsShowingArchivedFolders(isShowing => isShowing && archivedFolders.some(({ id }) => id !== removedFolder.id)),
-    [archivedFolders],
-  );
+  // Leave the archive view once it runs empty (restore, delete or a change in another tab): its toggle is hidden then
+  if (isShowingArchivedFolders && !hasArchivedFolders) setIsShowingArchivedFolders(false);
 
   const handleDeleteFolder = useCallback(
     async (folder: BookmarksFolderStruct) => {
       try {
         await bookmarks.deleteFolder(folder);
-        leaveEmptyArchiveView(folder);
         addFlash(deleteFolderSuccessMessage(folder.title), 'success');
       } catch {
         addFlash(genericAlertMessage, 'alert');
       }
     },
-    [bookmarks, leaveEmptyArchiveView, deleteFolderSuccessMessage, genericAlertMessage, addFlash],
+    [bookmarks, deleteFolderSuccessMessage, genericAlertMessage, addFlash],
   );
 
   const handleToggleFolderArchive = useCallback(
     async (folder: BookmarksFolderStruct) => {
       await bookmarks.toggleFolderArchive(folder);
-      leaveEmptyArchiveView(folder);
     },
-    [bookmarks, leaveEmptyArchiveView],
+    [bookmarks],
   );
 
   const handlePersistFolder = useCallback(

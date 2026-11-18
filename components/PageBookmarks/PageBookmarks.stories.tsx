@@ -2,9 +2,14 @@ import PageBookmarks from './index';
 import { seedChromeStorage } from '../../.storybook/chrome-storage-mock';
 import {
   copyTradeSuccessMessages,
+  createFolderSuccessMessages,
+  deleteFolderSuccessMessages,
   genericAlertMessages,
+  importFolderSuccessMessages,
   logoAltMessages,
   modalCloseMessages,
+  titleMessage,
+  updateFolderSuccessMessages,
 } from '../../.storybook/common-messages';
 import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
 import { BookmarksProvider } from '../../contexts/BookmarksContext';
@@ -91,61 +96,6 @@ seedChromeStorage({
       completedAt: 'Mon, 01 Sep 2025 10:00:00 GMT',
     },
   ],
-});
-
-const withTitle = (locale: string, messages: Record<string, string>) => (title: string) =>
-  resolveLocaleValue(locale, messages).replace('{title}', title);
-
-const createFolderSuccessMessages = defineMessages({
-  'en-US': 'The folder "{title}" has been created.',
-  'fr-FR': 'Le dossier « {title} » a été créé.',
-  'es-ES': 'Se ha creado la carpeta "{title}".',
-  'de-DE': 'Der Ordner „{title}“ wurde erstellt.',
-  'pt-BR': 'A pasta "{title}" foi criada.',
-  'ru-RU': 'Папка «{title}» создана.',
-  'zh-CN': '文件夹“{title}”已创建。',
-  'ja-JP': 'フォルダ「{title}」を作成しました。',
-  'ko-KR': '"{title}" 폴더가 생성되었습니다.',
-  'th-TH': 'สร้างโฟลเดอร์ "{title}" แล้ว',
-});
-
-const updateFolderSuccessMessages = defineMessages({
-  'en-US': 'The folder "{title}" has been updated.',
-  'fr-FR': 'Le dossier « {title} » a été mis à jour.',
-  'es-ES': 'Se ha actualizado la carpeta "{title}".',
-  'de-DE': 'Der Ordner „{title}“ wurde aktualisiert.',
-  'pt-BR': 'A pasta "{title}" foi atualizada.',
-  'ru-RU': 'Папка «{title}» обновлена.',
-  'zh-CN': '文件夹“{title}”已更新。',
-  'ja-JP': 'フォルダ「{title}」を更新しました。',
-  'ko-KR': '"{title}" 폴더가 업데이트되었습니다.',
-  'th-TH': 'อัปเดตโฟลเดอร์ "{title}" แล้ว',
-});
-
-const deleteFolderSuccessMessages = defineMessages({
-  'en-US': 'The folder "{title}" has been deleted.',
-  'fr-FR': 'Le dossier « {title} » a été supprimé.',
-  'es-ES': 'Se ha eliminado la carpeta "{title}".',
-  'de-DE': 'Der Ordner „{title}“ wurde gelöscht.',
-  'pt-BR': 'A pasta "{title}" foi excluída.',
-  'ru-RU': 'Папка «{title}» удалена.',
-  'zh-CN': '文件夹“{title}”已删除。',
-  'ja-JP': 'フォルダ「{title}」を削除しました。',
-  'ko-KR': '"{title}" 폴더가 삭제되었습니다.',
-  'th-TH': 'ลบโฟลเดอร์ "{title}" แล้ว',
-});
-
-const importFolderSuccessMessages = defineMessages({
-  'en-US': 'The folder "{title}" has been imported.',
-  'fr-FR': 'Le dossier « {title} » a été importé.',
-  'es-ES': 'Se ha importado la carpeta "{title}".',
-  'de-DE': 'Der Ordner „{title}“ wurde importiert.',
-  'pt-BR': 'A pasta "{title}" foi importada.',
-  'ru-RU': 'Папка «{title}» импортирована.',
-  'zh-CN': '文件夹“{title}”已导入。',
-  'ja-JP': 'フォルダ「{title}」をインポートしました。',
-  'ko-KR': '"{title}" 폴더를 가져왔습니다.',
-  'th-TH': 'นำเข้าโฟลเดอร์ "{title}" แล้ว',
 });
 
 // Localized messages for all labels and strings
@@ -581,12 +531,12 @@ export const Default: Story = {
         uncompleteTradeLabel={resolveLocaleValue(locale, uncompleteTradeMessages)}
         editTradeLabel={resolveLocaleValue(locale, editTradeMessages)}
         deleteTradeLabel={resolveLocaleValue(locale, deleteTradeMessages)}
-        deleteFolderSuccessMessage={withTitle(locale, deleteFolderSuccessMessages)}
-        createFolderSuccessMessage={withTitle(locale, createFolderSuccessMessages)}
-        updateFolderSuccessMessage={withTitle(locale, updateFolderSuccessMessages)}
-        importFolderSuccessMessage={withTitle(locale, importFolderSuccessMessages)}
+        deleteFolderSuccessMessage={titleMessage(locale, deleteFolderSuccessMessages)}
+        createFolderSuccessMessage={titleMessage(locale, createFolderSuccessMessages)}
+        updateFolderSuccessMessage={titleMessage(locale, updateFolderSuccessMessages)}
+        importFolderSuccessMessage={titleMessage(locale, importFolderSuccessMessages)}
         restoreBackupErrorMessage={resolveLocaleValue(locale, restoreBackupErrorMessages)}
-        copyTradeSuccessMessage={withTitle(locale, copyTradeSuccessMessages)}
+        copyTradeSuccessMessage={titleMessage(locale, copyTradeSuccessMessages)}
         genericAlertMessage={resolveLocaleValue(locale, genericAlertMessages)}
         modalCloseLabel={resolveLocaleValue(locale, modalCloseMessages)}
         logoAlt={resolveLocaleValue(locale, logoAltMessages)}
