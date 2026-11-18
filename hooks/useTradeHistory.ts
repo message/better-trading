@@ -2,7 +2,7 @@ import { recommendTitle } from '@/utils/search-panel';
 import { getValue, setValue, deleteValue } from '@/utils/storage';
 import { compareTradeLocations } from '@/utils/trade-location';
 import { uniqueId } from '@/utils/unique-id';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import type { TradeLocationHistoryStruct, TradeLocationStruct } from '@/types/trade-location';
 
 // Constants
@@ -52,11 +52,10 @@ const useTradeHistory = () => {
 
   const clearHistoryEntries = useCallback(async () => deleteValue(HISTORY_KEY), []);
 
-  return {
-    maybeLogTradeLocation,
-    fetchHistoryEntries,
-    clearHistoryEntries,
-  };
+  return useMemo(
+    () => ({ maybeLogTradeLocation, fetchHistoryEntries, clearHistoryEntries }),
+    [maybeLogTradeLocation, fetchHistoryEntries, clearHistoryEntries],
+  );
 };
 
 export { useTradeHistory };

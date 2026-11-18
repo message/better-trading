@@ -12,6 +12,7 @@ import { FlashMessagesProvider, useFlashMessagesContext } from '@/contexts/Flash
 import { ItemResultsProvider } from '@/contexts/ItemResultsContext';
 import { TradeHistoryProvider } from '@/contexts/TradeHistoryContext';
 import { useMessages } from '@/hooks/useMessages';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { RootPage } from '@/types/root-page';
 import { currentChangelog } from '@/utils/changelog';
 import { getLocalValue, setLocalValue } from '@/utils/storage';
@@ -31,6 +32,7 @@ const Shell = () => {
   const { flashMessages, dismissFlash } = useFlashMessagesContext();
   const [currentPage, setCurrentPage] = useState<RootPage>(readStoredPage);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  usePageTitle();
 
   const appVersion = browser.runtime.getManifest().version;
 

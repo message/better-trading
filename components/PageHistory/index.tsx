@@ -6,9 +6,7 @@ import LoadingContainer from '../LoadingContainer';
 import XmarkIcon from '@/assets/icons/solid/xmark.svg?react';
 import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 import { useTradeHistoryContext } from '@/contexts/TradeHistoryContext';
-import { useTradeLocation } from '@/hooks/useTradeLocation';
-import { useCallback, useEffect, useState } from 'react';
-import type { TradeLocationHistoryStruct } from '@/types/trade-location';
+import { useEffect } from 'react';
 import type React from 'react';
 
 interface PageHistoryProps {
@@ -16,6 +14,8 @@ interface PageHistoryProps {
   emptyMessage: string;
   clearSuccessMessage: string;
   genericAlertMessage: string;
+  /** Formats an entry's ISO creation date relative to now, e.g. "5 minutes ago" */
+  formatCreatedAt: (createdAt: string) => string;
 }
 
 const PageHistory: React.FC<PageHistoryProps> = ({
@@ -23,57 +23,36 @@ const PageHistory: React.FC<PageHistoryProps> = ({
   emptyMessage,
   clearSuccessMessage,
   genericAlertMessage,
+  formatCreatedAt,
 }) => {
-  const tradeHistory = useTradeHistoryContext();
+  const { historyEntries, refreshHistoryEntries, clearHistoryEntries } = useTradeHistoryContext();
   const { addFlash } = useFlashMessagesContext();
-
-  const [historyEntries, setHistoryEntries] = useState<TradeLocationHistoryStruct[]>([]);
-
-  const fetchHistoryEntries = useCallback(async () => {
-    const entries = await tradeHistory.fetchHistoryEntries();
-    setHistoryEntries(entries);
-  }, [tradeHistory]);
 
   const handleClearHistory = async () => {
     try {
-      setHistoryEntries([]);
-      await tradeHistory.clearHistoryEntries();
+      await clearHistoryEntries();
       addFlash(clearSuccessMessage, 'success');
     } catch {
       addFlash(genericAlertMessage, 'alert');
     }
   };
 
-  // Subscribe to trade location changes
-  useTradeLocation({
-    onChange: () => {
-      fetchHistoryEntries().catch(error => {
-        console.error('Failed to refetch history entries:', error);
-      });
-    },
-  });
-
-  // Refetch on window focus
+  // Searches made in other tabs show up when coming back to this one
   useEffect(() => {
     const handleWindowFocus = () => {
-      fetchHistoryEntries().catch(error => {
-        console.error('Failed to refetch history entries on focus:', error);
-      });
+      refreshHistoryEntries().catch(error => console.error('Failed to refetch history entries on focus:', error));
     };
 
     window.addEventListener('focus', handleWindowFocus);
-
-    return () => {
-      window.removeEventListener('focus', handleWindowFocus);
-    };
-  }, [fetchHistoryEntries]);
+    return () => window.removeEventListener('focus', handleWindowFocus);
+  }, [refreshHistoryEntries]);
 
   return (
-    <LoadingContainer task={fetchHistoryEntries} size="large">
+    <LoadingContainer task={refreshHistoryEntries} size="large">
       {historyEntries.length > 0 ? (
         <>
           {historyEntries.map(historyEntry => (
-            <EntryLink key={historyEntry.id} historyEntry={historyEntry} />
+            <EntryLink key={historyEntry.id} historyEntry={historyEntry} formatCreatedAt={formatCreatedAt} />
           ))}
           <Button
             type="button"
