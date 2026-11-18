@@ -13,44 +13,11 @@ import {
   updateFolderSuccessMessages,
 } from '../../.storybook/common-messages';
 import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
-import { MockTradeHistoryProvider } from '../../.storybook/mock-providers';
 import { BookmarksProvider } from '../../contexts/BookmarksContext';
 import { bookmarksStorage } from '@/services/bookmarks/storage';
 import { setLocalValue } from '@/utils/storage';
 import { expect, fireEvent, userEvent, waitFor, within } from 'storybook/test';
-import type { TradeLocationHistoryStruct } from '@/types/trade-location';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-
-// Trade History entries a new Trade can be saved from (Storybook has no current search). The PoE 2 one is hidden.
-const historyEntries: TradeLocationHistoryStruct[] = [
-  {
-    id: 'h-1',
-    title: 'Tabula Rasa',
-    version: '1',
-    type: 'search',
-    slug: 'ghi789',
-    league: 'Standard',
-    createdAt: '2025-09-01T10:00:00.000Z',
-  },
-  {
-    id: 'h-2',
-    title: 'Divine Orb',
-    version: '1',
-    type: 'exchange',
-    slug: 'jkl012',
-    league: 'Standard',
-    createdAt: '2025-09-01T09:00:00.000Z',
-  },
-  {
-    id: 'h-3',
-    title: 'Poe 2 bow',
-    version: '2',
-    type: 'search',
-    slug: 'mno345',
-    league: 'poe2/Rise of the Abyssal',
-    createdAt: '2025-09-01T08:00:00.000Z',
-  },
-];
 
 /**
  * PageBookmarks component manages bookmark folders for Path of Exile trade searches.
@@ -75,9 +42,7 @@ const meta = {
     // Flash messages come from the global decorator in .storybook/preview.tsx
     Story => (
       <BookmarksProvider>
-        <MockTradeHistoryProvider mockHistoryEntries={historyEntries}>
-          <Story />
-        </MockTradeHistoryProvider>
+        <Story />
       </BookmarksProvider>
     ),
   ],
@@ -121,8 +86,6 @@ const meta = {
     reorderLabel: '',
     tradeModalTitle: '',
     tradeTitleLabel: '',
-    tradeSourceLabel: '',
-    currentSearchLabel: '',
     tradeDeletionModalTitle: '',
     tradeDeletionConfirmation: () => '',
     tradeDeletionDeleteLabel: '',
@@ -676,32 +639,6 @@ const tradeTitleLabelMessages = defineMessages({
   'th-TH': 'ชื่อ',
 });
 
-const tradeSourceLabelMessages = defineMessages({
-  'en-US': 'Search',
-  'fr-FR': 'Recherche',
-  'es-ES': 'Búsqueda',
-  'de-DE': 'Suche',
-  'pt-BR': 'Pesquisa',
-  'ru-RU': 'Поиск',
-  'zh-CN': '搜索',
-  'ja-JP': '検索',
-  'ko-KR': '검색',
-  'th-TH': 'การค้นหา',
-});
-
-const currentSearchMessages = defineMessages({
-  'en-US': 'Current search',
-  'fr-FR': 'Recherche actuelle',
-  'es-ES': 'Búsqueda actual',
-  'de-DE': 'Aktuelle Suche',
-  'pt-BR': 'Pesquisa atual',
-  'ru-RU': 'Текущий поиск',
-  'zh-CN': '当前搜索',
-  'ja-JP': '現在の検索',
-  'ko-KR': '현재 검색',
-  'th-TH': 'การค้นหาปัจจุบัน',
-});
-
 const tradeDeletionModalTitleMessages = defineMessages({
   'en-US': 'Confirm deletion',
   'fr-FR': 'Confirmer la suppression',
@@ -889,8 +826,6 @@ export const Default: Story = {
         reorderLabel={resolveLocaleValue(locale, reorderMessages)}
         tradeModalTitle={resolveLocaleValue(locale, tradeModalTitleMessages)}
         tradeTitleLabel={resolveLocaleValue(locale, tradeTitleLabelMessages)}
-        tradeSourceLabel={resolveLocaleValue(locale, tradeSourceLabelMessages)}
-        currentSearchLabel={resolveLocaleValue(locale, currentSearchMessages)}
         tradeDeletionModalTitle={resolveLocaleValue(locale, tradeDeletionModalTitleMessages)}
         tradeDeletionConfirmation={titleMessage(locale, tradeDeletionConfirmationMessages)}
         tradeDeletionDeleteLabel={resolveLocaleValue(locale, tradeDeletionDeleteMessages)}

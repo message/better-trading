@@ -129,8 +129,6 @@ const buildMessages = () => ({
     reorderLabel: i18n.t('pageBookmarksFolderReorder'),
     tradeModalTitle: i18n.t('pageBookmarksFolderTradeEditionModalTitle'),
     tradeTitleLabel: i18n.t('pageBookmarksFolderTradeEditionTitleLabel'),
-    tradeSourceLabel: i18n.t('pageBookmarksFolderTradeEditionSourceLabel'),
-    currentSearchLabel: i18n.t('pageBookmarksFolderTradeEditionCurrentSearch'),
     tradeDeletionModalTitle: i18n.t('pageBookmarksFolderTradeDeletionModalTitle'),
     tradeDeletionConfirmation: (title: string) => i18n.t('pageBookmarksFolderTradeDeletionConfirmation', [title]),
     tradeDeletionDeleteLabel: i18n.t('pageBookmarksFolderTradeDeletionDelete'),
