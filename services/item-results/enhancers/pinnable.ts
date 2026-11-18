@@ -123,7 +123,5 @@ class PinnableEnhancer {
   }
 }
 
-const pinnableEnhancer = new PinnableEnhancer();
-
-export { pinnableEnhancer, PinnableEnhancer };
+export { PinnableEnhancer };
 export type { PinnableOptions };

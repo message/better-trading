@@ -1,5 +1,6 @@
 import PageAbout from './index.tsx';
 import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
+import { MockItemResultsProvider } from '../../.storybook/mock-providers';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
@@ -10,6 +11,13 @@ const meta = {
   title: 'Pages/PageAbout',
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
+  decorators: [
+    Story => (
+      <MockItemResultsProvider>
+        <Story />
+      </MockItemResultsProvider>
+    ),
+  ],
   argTypes: {
     appVersion: {
       control: 'text',

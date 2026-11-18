@@ -1,7 +1,11 @@
 import PageHistory from './index';
 import { defineMessages, resolveLocaleValue } from '../../.storybook/locale-utils';
 import { MockTradeHistoryProvider, createMockHistoryEntry } from '../../.storybook/mock-providers';
+import { formatDistance } from 'date-fns';
+import { de, enUS, es, fr, ja, ko, ptBR, ru, th, zhCN } from 'date-fns/locale';
+import type { TradeLocationHistoryStruct } from '@/types/trade-location';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Locale } from 'date-fns';
 
 /**
  * PageHistory displays a list of previously visited trade searches,
@@ -28,6 +32,10 @@ const meta = {
     genericAlertMessage: {
       control: 'text',
       description: 'Generic alert message for errors',
+    },
+    formatCreatedAt: {
+      control: false,
+      description: "Formats an entry's ISO creation date relative to now",
     },
   },
 } satisfies Meta<typeof PageHistory>;
@@ -90,205 +98,126 @@ const genericAlertMessages = defineMessages({
   'th-TH': 'เกิดข้อผิดพลาด กรุณาลองอีกครั้ง',
 });
 
-export const WithHistory: Story = {
-  name: 'With History',
-  args: {
-    clearButtonLabel: '',
-    emptyMessage: '',
-    clearSuccessMessage: '',
-    genericAlertMessage: '',
-  },
-  render: (_args, context) => {
-    const { globals } = context;
-    const clearButtonLabel = resolveLocaleValue(globals.locale as string, clearButtonMessages);
-    const emptyMessage = resolveLocaleValue(globals.locale as string, emptyHistoryMessages);
-    const clearSuccessMessage = resolveLocaleValue(globals.locale as string, clearSuccessMessages);
-    const genericAlertMessage = resolveLocaleValue(globals.locale as string, genericAlertMessages);
+const dateLocales: Record<string, Locale> = {
+  'en-US': enUS,
+  'fr-FR': fr,
+  'es-ES': es,
+  'de-DE': de,
+  'pt-BR': ptBR,
+  'ru-RU': ru,
+  'zh-CN': zhCN,
+  'ja-JP': ja,
+  'ko-KR': ko,
+  'th-TH': th,
+};
 
-    const mockHistoryEntries = [
-      createMockHistoryEntry('1', 'Exalted Orb', 'exalted-orb', 'search', 'Crucible', 2),
-      createMockHistoryEntry('2', 'Enlighten Support', 'enlighten-support', 'search', 'Crucible', 5),
-      createMockHistoryEntry('3', 'Headhunter', 'headhunter', 'search', 'Crucible', 12),
-      createMockHistoryEntry('4', 'Mageblood', 'mageblood', 'search', 'Crucible', 24),
-    ];
+const emptyArgs = {
+  clearButtonLabel: '',
+  emptyMessage: '',
+  clearSuccessMessage: '',
+  genericAlertMessage: '',
+  formatCreatedAt: () => '',
+};
+
+// Args are ignored: every string comes from the locale toolbar, like the shell does from locales/
+const renderWithEntries =
+  (buildEntries: () => TradeLocationHistoryStruct[]): Story['render'] =>
+  (_args, { globals }) => {
+    const locale = globals.locale as string;
+    const dateLocale = resolveLocaleValue(locale, dateLocales);
 
     return (
-      <MockTradeHistoryProvider mockHistoryEntries={mockHistoryEntries}>
-        <div data-locale={globals.locale}>
+      <MockTradeHistoryProvider mockHistoryEntries={buildEntries()}>
+        <div data-locale={locale}>
           <PageHistory
-            clearButtonLabel={clearButtonLabel}
-            emptyMessage={emptyMessage}
-            clearSuccessMessage={clearSuccessMessage}
-            genericAlertMessage={genericAlertMessage}
+            clearButtonLabel={resolveLocaleValue(locale, clearButtonMessages)}
+            emptyMessage={resolveLocaleValue(locale, emptyHistoryMessages)}
+            clearSuccessMessage={resolveLocaleValue(locale, clearSuccessMessages)}
+            genericAlertMessage={resolveLocaleValue(locale, genericAlertMessages)}
+            formatCreatedAt={createdAt =>
+              formatDistance(new Date(createdAt), new Date(), {
+                addSuffix: true,
+                includeSeconds: true,
+                locale: dateLocale,
+              })
+            }
           />
         </div>
       </MockTradeHistoryProvider>
     );
-  },
+  };
+
+export const WithHistory: Story = {
+  name: 'With History',
+  args: emptyArgs,
+  render: renderWithEntries(() => [
+    createMockHistoryEntry('1', 'Exalted Orb', 'exalted-orb', 'search', 'Crucible', 2),
+    createMockHistoryEntry('2', 'Enlighten Support', 'enlighten-support', 'search', 'Crucible', 5),
+    createMockHistoryEntry('3', 'Headhunter', 'headhunter', 'search', 'Crucible', 12),
+    createMockHistoryEntry('4', 'Mageblood', 'mageblood', 'search', 'Crucible', 24),
+  ]),
 };
 
 export const EmptyHistory: Story = {
   name: 'Empty History',
-  args: {
-    clearButtonLabel: '',
-    emptyMessage: '',
-    clearSuccessMessage: '',
-    genericAlertMessage: '',
-  },
-  render: (_args, context) => {
-    const { globals } = context;
-    const clearButtonLabel = resolveLocaleValue(globals.locale as string, clearButtonMessages);
-    const emptyMessage = resolveLocaleValue(globals.locale as string, emptyHistoryMessages);
-    const clearSuccessMessage = resolveLocaleValue(globals.locale as string, clearSuccessMessages);
-    const genericAlertMessage = resolveLocaleValue(globals.locale as string, genericAlertMessages);
-
-    return (
-      <MockTradeHistoryProvider mockHistoryEntries={[]}>
-        <div data-locale={globals.locale}>
-          <PageHistory
-            clearButtonLabel={clearButtonLabel}
-            emptyMessage={emptyMessage}
-            clearSuccessMessage={clearSuccessMessage}
-            genericAlertMessage={genericAlertMessage}
-          />
-        </div>
-      </MockTradeHistoryProvider>
-    );
-  },
+  args: emptyArgs,
+  render: renderWithEntries(() => []),
 };
 
 export const SingleEntry: Story = {
   name: 'Single Entry',
-  args: {
-    clearButtonLabel: '',
-    emptyMessage: '',
-    clearSuccessMessage: '',
-    genericAlertMessage: '',
-  },
-  render: (_args, context) => {
-    const { globals } = context;
-    const clearButtonLabel = resolveLocaleValue(globals.locale as string, clearButtonMessages);
-    const emptyMessage = resolveLocaleValue(globals.locale as string, emptyHistoryMessages);
-    const clearSuccessMessage = resolveLocaleValue(globals.locale as string, clearSuccessMessages);
-    const genericAlertMessage = resolveLocaleValue(globals.locale as string, genericAlertMessages);
-
-    const mockHistoryEntries = [
-      createMockHistoryEntry('1', "Atziri's Promise", 'atziris-promise', 'search', 'Crucible', 1),
-    ];
-
-    return (
-      <MockTradeHistoryProvider mockHistoryEntries={mockHistoryEntries}>
-        <div data-locale={globals.locale}>
-          <PageHistory
-            clearButtonLabel={clearButtonLabel}
-            emptyMessage={emptyMessage}
-            clearSuccessMessage={clearSuccessMessage}
-            genericAlertMessage={genericAlertMessage}
-          />
-        </div>
-      </MockTradeHistoryProvider>
-    );
-  },
+  args: emptyArgs,
+  render: renderWithEntries(() => [
+    createMockHistoryEntry('1', "Atziri's Promise", 'atziris-promise', 'search', 'Crucible', 1),
+  ]),
 };
 
 export const ManyEntries: Story = {
   name: 'Many Entries',
-  args: {
-    clearButtonLabel: '',
-    emptyMessage: '',
-    clearSuccessMessage: '',
-    genericAlertMessage: '',
-  },
-  render: (_args, context) => {
-    const { globals } = context;
-    const clearButtonLabel = resolveLocaleValue(globals.locale as string, clearButtonMessages);
-    const emptyMessage = resolveLocaleValue(globals.locale as string, emptyHistoryMessages);
-    const clearSuccessMessage = resolveLocaleValue(globals.locale as string, clearSuccessMessages);
-    const genericAlertMessage = resolveLocaleValue(globals.locale as string, genericAlertMessages);
-
-    const mockHistoryEntries = [
-      createMockHistoryEntry('1', 'Exalted Orb', 'exalted-orb', 'search', 'Crucible', 1),
-      createMockHistoryEntry('2', 'Divine Orb', 'divine-orb', 'search', 'Crucible', 2),
-      createMockHistoryEntry('3', 'Mirror of Kalandra', 'mirror-of-kalandra', 'search', 'Crucible', 3),
-      createMockHistoryEntry('4', 'Enlighten Support', 'enlighten-support', 'search', 'Crucible', 4),
-      createMockHistoryEntry('5', 'Empower Support', 'empower-support', 'search', 'Crucible', 6),
-      createMockHistoryEntry('6', 'Headhunter', 'headhunter', 'search', 'Crucible', 8),
-      createMockHistoryEntry('7', 'Mageblood', 'mageblood', 'search', 'Crucible', 10),
-      createMockHistoryEntry('8', 'Awakened Gems', 'awakened-gems', 'search', 'Crucible', 12),
-      createMockHistoryEntry('9', 'Forbidden Flame', 'forbidden-flame', 'search', 'Crucible', 18),
-      createMockHistoryEntry('10', 'Forbidden Flesh', 'forbidden-flesh', 'search', 'Crucible', 24),
-    ];
-
-    return (
-      <MockTradeHistoryProvider mockHistoryEntries={mockHistoryEntries}>
-        <div data-locale={globals.locale}>
-          <PageHistory
-            clearButtonLabel={clearButtonLabel}
-            emptyMessage={emptyMessage}
-            clearSuccessMessage={clearSuccessMessage}
-            genericAlertMessage={genericAlertMessage}
-          />
-        </div>
-      </MockTradeHistoryProvider>
-    );
-  },
+  args: emptyArgs,
+  render: renderWithEntries(() => [
+    createMockHistoryEntry('1', 'Exalted Orb', 'exalted-orb', 'search', 'Crucible', 1),
+    createMockHistoryEntry('2', 'Divine Orb', 'divine-orb', 'search', 'Crucible', 2),
+    createMockHistoryEntry('3', 'Mirror of Kalandra', 'mirror-of-kalandra', 'search', 'Crucible', 3),
+    createMockHistoryEntry('4', 'Enlighten Support', 'enlighten-support', 'search', 'Crucible', 4),
+    createMockHistoryEntry('5', 'Empower Support', 'empower-support', 'search', 'Crucible', 6),
+    createMockHistoryEntry('6', 'Headhunter', 'headhunter', 'search', 'Crucible', 8),
+    createMockHistoryEntry('7', 'Mageblood', 'mageblood', 'search', 'Crucible', 10),
+    createMockHistoryEntry('8', 'Awakened Gems', 'awakened-gems', 'search', 'Crucible', 12),
+    createMockHistoryEntry('9', 'Forbidden Flame', 'forbidden-flame', 'search', 'Crucible', 18),
+    createMockHistoryEntry('10', 'Forbidden Flesh', 'forbidden-flesh', 'search', 'Crucible', 24),
+  ]),
 };
 
 export const LongTitles: Story = {
   name: 'Long Titles',
-  args: {
-    clearButtonLabel: '',
-    emptyMessage: '',
-    clearSuccessMessage: '',
-    genericAlertMessage: '',
-  },
-  render: (_args, context) => {
-    const { globals } = context;
-    const clearButtonLabel = resolveLocaleValue(globals.locale as string, clearButtonMessages);
-    const emptyMessage = resolveLocaleValue(globals.locale as string, emptyHistoryMessages);
-    const clearSuccessMessage = resolveLocaleValue(globals.locale as string, clearSuccessMessages);
-    const genericAlertMessage = resolveLocaleValue(globals.locale as string, genericAlertMessages);
-
-    const mockHistoryEntries = [
-      createMockHistoryEntry(
-        '1',
-        'Rare Jewel with 7% Maximum Life, 14% Critical Strike Multiplier, and 12% Cold Resistance',
-        'rare-jewel-complex-search',
-        'search',
-        'Crucible',
-        1,
-      ),
-      createMockHistoryEntry(
-        '2',
-        'Unique Body Armour with High Energy Shield, Spell Suppression, and Life Regeneration',
-        'unique-body-armour-search',
-        'search',
-        'Crucible',
-        3,
-      ),
-      createMockHistoryEntry(
-        '3',
-        'This is an extremely long title that should be truncated with ellipsis when displayed in the history list',
-        'very-long-search-query',
-        'search',
-        'Crucible',
-        6,
-      ),
-    ];
-
-    return (
-      <MockTradeHistoryProvider mockHistoryEntries={mockHistoryEntries}>
-        <div data-locale={globals.locale}>
-          <PageHistory
-            clearButtonLabel={clearButtonLabel}
-            emptyMessage={emptyMessage}
-            clearSuccessMessage={clearSuccessMessage}
-            genericAlertMessage={genericAlertMessage}
-          />
-        </div>
-      </MockTradeHistoryProvider>
-    );
-  },
+  args: emptyArgs,
+  render: renderWithEntries(() => [
+    createMockHistoryEntry(
+      '1',
+      'Rare Jewel with 7% Maximum Life, 14% Critical Strike Multiplier, and 12% Cold Resistance',
+      'rare-jewel-complex-search',
+      'search',
+      'Crucible',
+      1,
+    ),
+    createMockHistoryEntry(
+      '2',
+      'Unique Body Armour with High Energy Shield, Spell Suppression, and Life Regeneration',
+      'unique-body-armour-search',
+      'search',
+      'Crucible',
+      3,
+    ),
+    createMockHistoryEntry(
+      '3',
+      'This is an extremely long title that should be truncated with ellipsis when displayed in the history list',
+      'very-long-search-query',
+      'search',
+      'Crucible',
+      6,
+    ),
+  ]),
 };
 
 export default meta;

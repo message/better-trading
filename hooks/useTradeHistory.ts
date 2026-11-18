@@ -1,8 +1,7 @@
-import { recommendTitle } from '@/utils/search-panel';
 import { getValue, setValue, deleteValue } from '@/utils/storage';
 import { compareTradeLocations } from '@/utils/trade-location';
 import { uniqueId } from '@/utils/unique-id';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import type { TradeLocationHistoryStruct, TradeLocationStruct } from '@/types/trade-location';
 
 // Constants
@@ -25,7 +24,8 @@ const useTradeHistory = () => {
   }, []);
 
   const maybeLogTradeLocation = useCallback(
-    async (newTradeLocation: TradeLocationStruct) => {
+    // `title` is taken by the caller when the location changes, before the search panel can change again
+    async (newTradeLocation: TradeLocationStruct, title: string) => {
       if (!newTradeLocation.version || !newTradeLocation.league || !newTradeLocation.type || !newTradeLocation.slug)
         return;
 
@@ -40,7 +40,7 @@ const useTradeHistory = () => {
         type: newTradeLocation.type,
         slug: newTradeLocation.slug,
         id: uniqueId(),
-        title: recommendTitle(),
+        title,
         createdAt: new Date().toISOString(),
       });
       historyEntries.splice(MAXIMUM_HISTORY_LENGTH);
@@ -52,11 +52,10 @@ const useTradeHistory = () => {
 
   const clearHistoryEntries = useCallback(async () => deleteValue(HISTORY_KEY), []);
 
-  return {
-    maybeLogTradeLocation,
-    fetchHistoryEntries,
-    clearHistoryEntries,
-  };
+  return useMemo(
+    () => ({ maybeLogTradeLocation, fetchHistoryEntries, clearHistoryEntries }),
+    [maybeLogTradeLocation, fetchHistoryEntries, clearHistoryEntries],
+  );
 };
 
 export { useTradeHistory };

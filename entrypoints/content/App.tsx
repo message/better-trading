@@ -12,6 +12,7 @@ import { FlashMessagesProvider, useFlashMessagesContext } from '@/contexts/Flash
 import { ItemResultsProvider } from '@/contexts/ItemResultsContext';
 import { TradeHistoryProvider } from '@/contexts/TradeHistoryContext';
 import { useMessages } from '@/hooks/useMessages';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { RootPage } from '@/types/root-page';
 import { currentChangelog } from '@/utils/changelog';
 import { getLocalValue, setLocalValue } from '@/utils/storage';
@@ -31,6 +32,7 @@ const Shell = () => {
   const { flashMessages, dismissFlash } = useFlashMessagesContext();
   const [currentPage, setCurrentPage] = useState<RootPage>(readStoredPage);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  usePageTitle();
 
   const appVersion = browser.runtime.getManifest().version;
 
@@ -40,7 +42,7 @@ const Shell = () => {
   };
 
   return (
-    <>
+    <ItemResultsProvider messages={messages.itemResults} onPinnedItemsChange={() => changePage(RootPage.PINNED_ITEMS)}>
       <ChangelogBanner changelog={currentChangelog} {...messages.changelogBanner(appVersion)} />
 
       <Header
@@ -69,19 +71,16 @@ const Shell = () => {
       )}
 
       <FlashMessages flashMessages={flashMessages} onDismiss={flash => dismissFlash(flash.id)} />
-    </>
+    </ItemResultsProvider>
   );
 };
 
-// ponytail: the item enhancer (useItemEnhancer) is not mounted yet, wiring it is #6
 const App = () => (
   <FlashMessagesProvider>
     <BookmarksProvider>
-      <ItemResultsProvider>
-        <TradeHistoryProvider>
-          <Shell />
-        </TradeHistoryProvider>
-      </ItemResultsProvider>
+      <TradeHistoryProvider>
+        <Shell />
+      </TradeHistoryProvider>
     </BookmarksProvider>
   </FlashMessagesProvider>
 );

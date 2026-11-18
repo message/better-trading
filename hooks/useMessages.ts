@@ -1,4 +1,6 @@
 import { i18n } from '#i18n';
+import { formatDistance } from 'date-fns';
+import { enUS } from 'date-fns/locale';
 import { useMemo } from 'react';
 import type { GeneratedI18nStructure } from '#i18n';
 
@@ -78,6 +80,7 @@ const buildMessages = () => ({
     emptyMessage: i18n.t('pagePinnedItemsEmpty'),
     unpinItemLabel: i18n.t('pagePinnedItemsUnpinItem'),
     scrollToItemLabel: i18n.t('pagePinnedItemsScrollToItem'),
+    genericAlertMessage: i18n.t('genericAlertFlash'),
   },
 
   pageHistory: {
@@ -85,6 +88,9 @@ const buildMessages = () => ({
     emptyMessage: i18n.t('pageHistoryEmpty'),
     clearSuccessMessage: i18n.t('pageHistoryClearSuccessFlash'),
     genericAlertMessage: i18n.t('genericAlertFlash'),
+    // ponytail: enUS matches the only shipped locale; pick the date-fns locale from i18n when locales/ grows
+    formatCreatedAt: (createdAt: string) =>
+      formatDistance(new Date(createdAt), new Date(), { addSuffix: true, includeSeconds: true, locale: enUS }),
   },
 
   pageBookmarks: {
@@ -136,6 +142,7 @@ const buildMessages = () => ({
     unpinLabel: i18n.t('itemResultsPinnableUnpin'),
     maximumSocketsWarning: (maximum: number) => i18n.t('itemResultsMaximumSocketsWarning', [maximum]),
     regroupSimilarsLabel: (count: number) => i18n.t('itemResultsRegroupSimilarsButton', count),
+    genericAlertMessage: i18n.t('genericAlertFlash'),
   },
 });
 

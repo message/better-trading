@@ -32,9 +32,9 @@ interface PageAboutProps {
 }
 
 const useEnhancers = () => {
-  const { disabledEnhancerSlugs, setDisabledEnhancerSlugs, getEnhancerSlugs } = useItemResults();
+  const { disabledEnhancerSlugs, setDisabledEnhancerSlugs, enhancerSlugs } = useItemResults();
 
-  const enhancers: Enhancer[] = getEnhancerSlugs().map(slug => ({
+  const enhancers: Enhancer[] = enhancerSlugs.map(slug => ({
     slug,
     isEnabled: !disabledEnhancerSlugs.includes(slug),
   }));
