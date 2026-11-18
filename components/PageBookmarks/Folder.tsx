@@ -3,6 +3,7 @@ import BookmarkFolderIcon from '../BookmarkFolderIcon';
 import Button from '../Button';
 import ContextualMenu from '../ContextualMenu';
 import LoadingContainer from '../LoadingContainer';
+import CheckIcon from '@/assets/icons/solid/check.svg?react';
 import ChevronDownIcon from '@/assets/icons/solid/chevron-down.svg?react';
 import SortIcon from '@/assets/icons/solid/sort.svg?react';
 import { useSortable } from '@/hooks/useSortable';
@@ -252,7 +253,11 @@ const Folder: React.FC<FolderProps> = ({
                   />
                 }>
                 <a href={getTradeUrl(trade, league)} className={styles.tradeLink}>
-                  {trade.completedAt && <span className={styles.tradeLinkCompleted}>✓</span>}
+                  {trade.completedAt && (
+                    <span className={styles.tradeLinkCompleted}>
+                      <CheckIcon />
+                    </span>
+                  )}
                   {trade.title}
                 </a>
               </SortableTrade>
