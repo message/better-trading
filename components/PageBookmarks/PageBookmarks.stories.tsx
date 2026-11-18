@@ -1,4 +1,5 @@
 import PageBookmarks from './index';
+import { seedChromeStorage } from '../../.storybook/chrome-storage-mock';
 import {
   copyTradeSuccessMessages,
   genericAlertMessages,
@@ -7,7 +8,6 @@ import {
 } from '../../.storybook/common-messages';
 import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
 import { BookmarksProvider } from '../../contexts/BookmarksContext';
-import { FlashMessagesProvider } from '../../contexts/FlashMessagesContext';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
@@ -25,12 +25,11 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   decorators: [
+    // Flash messages come from the global decorator in .storybook/preview.tsx
     Story => (
-      <FlashMessagesProvider>
-        <BookmarksProvider>
-          <Story />
-        </BookmarksProvider>
-      </FlashMessagesProvider>
+      <BookmarksProvider>
+        <Story />
+      </BookmarksProvider>
     ),
   ],
   args: {
@@ -73,6 +72,81 @@ const meta = {
 } satisfies Meta<typeof PageBookmarks>;
 
 type Story = StoryObj<typeof meta>;
+
+// Stored exactly as 1.9.1 does. The PoE 2 folder is hidden on this (PoE 1) page.
+seedChromeStorage({
+  'bookmark-folders': [
+    { id: 'f-chaos', title: 'Chaos recipe', version: '1', icon: 'chaos', archivedAt: null },
+    { id: 'f-jugg', title: 'Juggernaut gear', version: '1', icon: 'juggernaut', archivedAt: null },
+    { id: 'f-misc', title: 'Miscellaneous searches without an icon', version: '1', icon: null, archivedAt: null },
+    { id: 'f-old', title: 'Last league', version: '1', icon: 'map', archivedAt: 'Mon, 01 Sep 2025 10:00:00 GMT' },
+    { id: 'f-titan', title: 'Titan', version: '2', icon: 'poe2-titan', archivedAt: null },
+  ],
+  'bookmark-trades--f-jugg': [
+    { id: 't-1', title: 'Kaom boots', location: { version: '1', type: 'search', slug: 'abc123' }, completedAt: null },
+    {
+      id: 't-2',
+      title: 'Life chest',
+      location: { version: '1', type: 'search', slug: 'def456' },
+      completedAt: 'Mon, 01 Sep 2025 10:00:00 GMT',
+    },
+  ],
+});
+
+const withTitle = (locale: string, messages: Record<string, string>) => (title: string) =>
+  resolveLocaleValue(locale, messages).replace('{title}', title);
+
+const createFolderSuccessMessages = defineMessages({
+  'en-US': 'The folder "{title}" has been created.',
+  'fr-FR': 'Le dossier « {title} » a été créé.',
+  'es-ES': 'Se ha creado la carpeta "{title}".',
+  'de-DE': 'Der Ordner „{title}“ wurde erstellt.',
+  'pt-BR': 'A pasta "{title}" foi criada.',
+  'ru-RU': 'Папка «{title}» создана.',
+  'zh-CN': '文件夹“{title}”已创建。',
+  'ja-JP': 'フォルダ「{title}」を作成しました。',
+  'ko-KR': '"{title}" 폴더가 생성되었습니다.',
+  'th-TH': 'สร้างโฟลเดอร์ "{title}" แล้ว',
+});
+
+const updateFolderSuccessMessages = defineMessages({
+  'en-US': 'The folder "{title}" has been updated.',
+  'fr-FR': 'Le dossier « {title} » a été mis à jour.',
+  'es-ES': 'Se ha actualizado la carpeta "{title}".',
+  'de-DE': 'Der Ordner „{title}“ wurde aktualisiert.',
+  'pt-BR': 'A pasta "{title}" foi atualizada.',
+  'ru-RU': 'Папка «{title}» обновлена.',
+  'zh-CN': '文件夹“{title}”已更新。',
+  'ja-JP': 'フォルダ「{title}」を更新しました。',
+  'ko-KR': '"{title}" 폴더가 업데이트되었습니다.',
+  'th-TH': 'อัปเดตโฟลเดอร์ "{title}" แล้ว',
+});
+
+const deleteFolderSuccessMessages = defineMessages({
+  'en-US': 'The folder "{title}" has been deleted.',
+  'fr-FR': 'Le dossier « {title} » a été supprimé.',
+  'es-ES': 'Se ha eliminado la carpeta "{title}".',
+  'de-DE': 'Der Ordner „{title}“ wurde gelöscht.',
+  'pt-BR': 'A pasta "{title}" foi excluída.',
+  'ru-RU': 'Папка «{title}» удалена.',
+  'zh-CN': '文件夹“{title}”已删除。',
+  'ja-JP': 'フォルダ「{title}」を削除しました。',
+  'ko-KR': '"{title}" 폴더가 삭제되었습니다.',
+  'th-TH': 'ลบโฟลเดอร์ "{title}" แล้ว',
+});
+
+const importFolderSuccessMessages = defineMessages({
+  'en-US': 'The folder "{title}" has been imported.',
+  'fr-FR': 'Le dossier « {title} » a été importé.',
+  'es-ES': 'Se ha importado la carpeta "{title}".',
+  'de-DE': 'Der Ordner „{title}“ wurde importiert.',
+  'pt-BR': 'A pasta "{title}" foi importada.',
+  'ru-RU': 'Папка «{title}» импортирована.',
+  'zh-CN': '文件夹“{title}”已导入。',
+  'ja-JP': 'フォルダ「{title}」をインポートしました。',
+  'ko-KR': '"{title}" 폴더를 가져왔습니다.',
+  'th-TH': 'นำเข้าโฟลเดอร์ "{title}" แล้ว',
+});
 
 // Localized messages for all labels and strings
 const collapseAllMessages = defineMessages({
@@ -507,14 +581,12 @@ export const Default: Story = {
         uncompleteTradeLabel={resolveLocaleValue(locale, uncompleteTradeMessages)}
         editTradeLabel={resolveLocaleValue(locale, editTradeMessages)}
         deleteTradeLabel={resolveLocaleValue(locale, deleteTradeMessages)}
-        deleteFolderSuccessMessage={title => `Deleted ${title}`}
-        createFolderSuccessMessage={title => `Created ${title}`}
-        updateFolderSuccessMessage={title => `Updated ${title}`}
-        importFolderSuccessMessage={title => `Imported ${title}`}
+        deleteFolderSuccessMessage={withTitle(locale, deleteFolderSuccessMessages)}
+        createFolderSuccessMessage={withTitle(locale, createFolderSuccessMessages)}
+        updateFolderSuccessMessage={withTitle(locale, updateFolderSuccessMessages)}
+        importFolderSuccessMessage={withTitle(locale, importFolderSuccessMessages)}
         restoreBackupErrorMessage={resolveLocaleValue(locale, restoreBackupErrorMessages)}
-        copyTradeSuccessMessage={title =>
-          resolveLocaleValue(locale, copyTradeSuccessMessages).replace('{title}', title)
-        }
+        copyTradeSuccessMessage={withTitle(locale, copyTradeSuccessMessages)}
         genericAlertMessage={resolveLocaleValue(locale, genericAlertMessages)}
         modalCloseLabel={resolveLocaleValue(locale, modalCloseMessages)}
         logoAlt={resolveLocaleValue(locale, logoAltMessages)}

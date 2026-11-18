@@ -15,8 +15,10 @@ import styles from './styles.module.scss';
 import AlertMessage from '../AlertMessage';
 import Button from '../Button';
 import LoadingContainer from '../LoadingContainer';
+import BoxArchiveIcon from '@/assets/icons/solid/box-archive.svg?react';
 import CompressIcon from '@/assets/icons/solid/compress.svg?react';
 import FolderPlusIcon from '@/assets/icons/solid/folder-plus.svg?react';
+import RotateLeftIcon from '@/assets/icons/solid/rotate-left.svg?react';
 import SquarePlusIcon from '@/assets/icons/solid/square-plus.svg?react';
 import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 import { useBookmarks } from '@/hooks/useBookmarks';
@@ -126,9 +128,13 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
 
   const { refreshFolders, fetchTradesByFolderId, generateBackup } = bookmarks;
 
-  // Depend on the stable function, not on `bookmarks`: its value changes after every refresh and would loop
+  // The initial fetch is the LoadingContainer task; afterwards refetch on window focus so that changes made
+  // in another tab show up (same as 1.9.1). Depend on the stable function, not on `bookmarks`: it changes
+  // after every refresh.
   useEffect(() => {
-    refreshFolders();
+    const handleFocus = () => void refreshFolders();
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, [refreshFolders]);
 
   // Computed values
@@ -140,24 +146,32 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   const hasActiveFolders = activeFolders.length > 0;
   const foldersWarningIsVisible = !isShowingArchivedFolders && displayedFolders.length >= FOLDERS_WARNING_THRESHOLD;
 
+  // Leave the archive view once its last folder is restored or deleted, it would be empty with no way back
+  const leaveEmptyArchiveView = useCallback(
+    (removedFolder: BookmarksFolderStruct) =>
+      setIsShowingArchivedFolders(isShowing => isShowing && archivedFolders.some(({ id }) => id !== removedFolder.id)),
+    [archivedFolders],
+  );
+
   const handleDeleteFolder = useCallback(
     async (folder: BookmarksFolderStruct) => {
       try {
         await bookmarks.deleteFolder(folder);
+        leaveEmptyArchiveView(folder);
         addFlash(deleteFolderSuccessMessage(folder.title), 'success');
       } catch {
         addFlash(genericAlertMessage, 'alert');
       }
     },
-    [bookmarks, deleteFolderSuccessMessage, genericAlertMessage, addFlash],
+    [bookmarks, leaveEmptyArchiveView, deleteFolderSuccessMessage, genericAlertMessage, addFlash],
   );
 
   const handleToggleFolderArchive = useCallback(
     async (folder: BookmarksFolderStruct) => {
       await bookmarks.toggleFolderArchive(folder);
-      setIsShowingArchivedFolders(isShowingArchivedFolders && hasArchivedFolders);
+      leaveEmptyArchiveView(folder);
     },
-    [bookmarks, isShowingArchivedFolders, hasArchivedFolders],
+    [bookmarks, leaveEmptyArchiveView],
   );
 
   const handlePersistFolder = useCallback(
@@ -296,7 +310,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
             type="button"
             theme="gold"
             label={isShowingArchivedFolders ? showUnarchivedLabel : showArchivedLabel}
-            icon={isShowingArchivedFolders ? '↶' : '📦'}
+            icon={isShowingArchivedFolders ? RotateLeftIcon : BoxArchiveIcon}
             onClick={handleToggleArchiveDisplay}
           />
         )}
@@ -310,7 +324,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
             <div key={folder.id} className={styles.folderWrapper}>
               <Folder
                 folder={folder as BookmarksFolderStruct & { id: string }}
-                isExpanded={expandedFolderIds.includes(folder.id)}
+                isExpanded={!folder.archivedAt && expandedFolderIds.includes(folder.id)}
                 isArchived={Boolean(folder.archivedAt)}
                 league={league}
                 editFolderLabel={editFolderLabel}

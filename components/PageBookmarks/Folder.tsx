@@ -6,7 +6,7 @@ import LoadingContainer from '../LoadingContainer';
 import ChevronDownIcon from '@/assets/icons/solid/chevron-down.svg?react';
 import SortIcon from '@/assets/icons/solid/sort.svg?react';
 import classnames from 'classnames';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import type { BookmarksFolderStruct, BookmarksTradeStruct } from '@/types/bookmarks';
 import type React from 'react';
 
@@ -77,17 +77,10 @@ const Folder: React.FC<FolderProps> = ({
 }) => {
   const [trades, setTrades] = useState<BookmarksTradeStruct[]>([]);
 
+  // Run by the LoadingContainer below, which only mounts while the folder is expanded
   const loadTrades = useCallback(async () => {
-    if (!isExpanded) return;
-    const fetchedTrades = await onFetchTrades(folder.id);
-    setTrades(fetchedTrades);
-  }, [isExpanded, folder.id, onFetchTrades]);
-
-  useEffect(() => {
-    if (isExpanded) {
-      loadTrades().catch(error => console.error('Failed to load trades:', error));
-    }
-  }, [isExpanded, loadTrades]);
+    setTrades(await onFetchTrades(folder.id));
+  }, [folder.id, onFetchTrades]);
 
   return (
     <div className={classnames(styles.folder, isExpanded && styles.isExpanded, isArchived && styles.isArchived)}>
