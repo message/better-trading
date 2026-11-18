@@ -18,6 +18,8 @@ const FlashMessagesProvider = ({ children }: { children: ReactNode }) => {
   const [flashMessages, setFlashMessages] = useState<FlashMessage[]>([]);
   const timers = useRef(new Set<ReturnType<typeof setTimeout>>());
   const nextId = useRef(0);
+  // Ids already being dismissed: a click and the auto-dismiss timer must not both run the exit
+  const dismissing = useRef(new Set<string>());
 
   useEffect(() => {
     const pending = timers.current;
@@ -34,8 +36,13 @@ const FlashMessagesProvider = ({ children }: { children: ReactNode }) => {
 
   const dismissFlash = useCallback(
     (id: string) => {
+      if (dismissing.current.has(id)) return;
+      dismissing.current.add(id);
       setFlashMessages(current => current.map(flash => (flash.id === id ? { ...flash, exiting: true } : flash)));
-      schedule(() => setFlashMessages(current => current.filter(flash => flash.id !== id)), FLASH_EXIT_MS);
+      schedule(() => {
+        dismissing.current.delete(id);
+        setFlashMessages(current => current.filter(flash => flash.id !== id));
+      }, FLASH_EXIT_MS);
     },
     [schedule],
   );
