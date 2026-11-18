@@ -111,7 +111,5 @@ class RegroupSimilarsEnhancer {
   }
 }
 
-const regroupSimilarsEnhancer = new RegroupSimilarsEnhancer();
-
-export { regroupSimilarsEnhancer, RegroupSimilarsEnhancer };
+export { RegroupSimilarsEnhancer };
 export type { RegroupSimilarsOptions };
