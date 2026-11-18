@@ -26,6 +26,7 @@ import SquarePlusIcon from '@/assets/icons/solid/square-plus.svg?react';
 import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import { useBookmarksState } from '@/hooks/useBookmarksState';
+import { usePreviewOrder } from '@/hooks/useSortable';
 import { useTradeLocation } from '@/hooks/useTradeLocation';
 import { copyToClipboard } from '@/utils/copy-to-clipboard';
 import { recommendTitle } from '@/utils/search-panel';
@@ -412,8 +413,14 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
 
   // Reorders the displayed Folders among themselves: archived and other Game Version Folders keep their slots
   const foldersListId = useId();
+  const {
+    items: sortedFolders,
+    preview: previewFolder,
+    cancel: cancelFolderPreview,
+  } = usePreviewOrder(displayedFolders);
   const handleMoveFolder = (fromIndex: number, toIndex: number) => {
     const reorderedFolders = reorder({ list: displayedFolders, startIndex: fromIndex, finishIndex: toIndex });
+    cancelFolderPreview();
     bookmarks.reorderFolders(reorderedFolders).catch(() => addFlash(genericAlertMessage, 'alert'));
   };
 
@@ -457,7 +464,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
       </div>
 
       <div className={styles.foldersWrapper}>
-        {displayedFolders.map((folder, folderIndex) => {
+        {sortedFolders.map((folder, folderIndex) => {
           const folderId = folder.id;
           if (!folderId) return null;
           return (
@@ -465,7 +472,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
               <Folder
                 folder={folder as BookmarksFolderStruct & { id: string }}
                 index={folderIndex}
-                count={displayedFolders.length}
+                count={sortedFolders.length}
                 listId={foldersListId}
                 isExpanded={!folder.archivedAt && expandedFolderIds.includes(folderId)}
                 isArchived={Boolean(folder.archivedAt)}
@@ -485,6 +492,8 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
                 deleteTradeLabel={deleteTradeLabel}
                 reorderLabel={reorderLabel}
                 onMove={handleMoveFolder}
+                onPreview={previewFolder}
+                onCancel={cancelFolderPreview}
                 onReorderTrades={trades => handleReorderTrades(trades, folderId)}
                 onExpansionToggle={() => handleToggleFolderExpansion(folderId)}
                 onEdit={() => handleStageFolder(folder)}

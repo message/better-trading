@@ -1,31 +1,6 @@
-@use '../variables';
-
-// Item of a list sorted with `hooks/useSortable`: dims while dragged, draws a line where the dragged item will land.
-// $gap is the space to the neighbouring item, so the line sits in the middle of it.
-@mixin sortable-item($gap: 0px) {
-  position: relative;
-
+// Item of a list sorted with `hooks/useSortable`: dims while dragged.
+@mixin sortable-item {
   &.isDragging {
     opacity: 0.4;
-  }
-
-  &[data-drop-edge]::before {
-    display: block;
-    position: absolute;
-    z-index: 1;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background-color: variables.$beige;
-    content: '';
-    pointer-events: none;
-  }
-
-  &[data-drop-edge='top']::before {
-    top: calc(-1px - #{$gap} / 2);
-  }
-
-  &[data-drop-edge='bottom']::before {
-    bottom: calc(-1px - #{$gap} / 2);
   }
 }

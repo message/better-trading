@@ -5,7 +5,7 @@ import ContextualMenu from '../ContextualMenu';
 import LoadingContainer from '../LoadingContainer';
 import ChevronDownIcon from '@/assets/icons/solid/chevron-down.svg?react';
 import SortIcon from '@/assets/icons/solid/sort.svg?react';
-import { useSortable } from '@/hooks/useSortable';
+import { usePreviewOrder, useSortable } from '@/hooks/useSortable';
 import { reorder } from '@atlaskit/pragmatic-drag-and-drop/utils/reorder';
 import classnames from 'classnames';
 import { useState, useCallback, useEffect, useId, useRef } from 'react';
@@ -18,6 +18,8 @@ interface SortableTradeProps {
   count: number;
   reorderLabel: string;
   onMove: (fromIndex: number, toIndex: number) => void;
+  onPreview: (fromIndex: number, toIndex: number) => void;
+  onCancel: () => void;
   /** The Trade link */
   children: React.ReactNode;
   /** The Trade contextual menu, shown before the drag handle */
@@ -30,21 +32,22 @@ const SortableTrade: React.FC<SortableTradeProps> = ({
   count,
   reorderLabel,
   onMove,
+  onPreview,
+  onCancel,
   children,
   menu,
 }) => {
-  const { itemRef, handleProps, isDragging, dropEdge } = useSortable<HTMLLIElement, HTMLButtonElement>({
+  const { itemRef, handleProps, isDragging } = useSortable<HTMLLIElement, HTMLButtonElement>({
     listId,
     index,
     count,
     onMove,
+    onPreview,
+    onCancel,
   });
 
   return (
-    <li
-      ref={itemRef}
-      className={classnames(styles.trade, isDragging && styles.isDragging)}
-      data-drop-edge={dropEdge ?? undefined}>
+    <li ref={itemRef} className={classnames(styles.trade, isDragging && styles.isDragging)}>
       {children}
 
       <div className={styles.tradeActions}>
@@ -87,6 +90,8 @@ interface FolderProps {
   deleteTradeLabel: string;
   reorderLabel: string;
   onMove: (fromIndex: number, toIndex: number) => void;
+  onPreview: (fromIndex: number, toIndex: number) => void;
+  onCancel: () => void;
   onReorderTrades: (trades: BookmarksTradeStruct[]) => Promise<void>;
   onExpansionToggle: () => void;
   onEdit: () => void;
@@ -126,6 +131,8 @@ const Folder: React.FC<FolderProps> = ({
   deleteTradeLabel,
   reorderLabel,
   onMove,
+  onPreview,
+  onCancel,
   onReorderTrades,
   onExpansionToggle,
   onEdit,
@@ -161,12 +168,16 @@ const Folder: React.FC<FolderProps> = ({
     if (isExpanded) void loadTrades();
   }, [folder, isExpanded, loadTrades]);
 
-  const { itemRef, handleProps, isDragging, dropEdge } = useSortable<HTMLDivElement, HTMLButtonElement>({
+  const { itemRef, handleProps, isDragging } = useSortable<HTMLDivElement, HTMLButtonElement>({
     listId,
     index,
     count,
     onMove,
+    onPreview,
+    onCancel,
   });
+
+  const { items: displayedTrades, preview: previewTrade, cancel: cancelTradePreview } = usePreviewOrder(trades);
 
   // Show the new order right away; persisting it refreshes the Folders, which reloads the trades from storage
   const tradesListId = useId();
@@ -175,6 +186,7 @@ const Folder: React.FC<FolderProps> = ({
     latestFetchRef.current++;
     const reorderedTrades = reorder({ list: trades, startIndex: fromIndex, finishIndex: toIndex });
     setTrades(reorderedTrades);
+    cancelTradePreview();
     void onReorderTrades(reorderedTrades);
   };
 
@@ -186,8 +198,7 @@ const Folder: React.FC<FolderProps> = ({
         isExpanded && styles.isExpanded,
         isArchived && styles.isArchived,
         isDragging && styles.isDragging,
-      )}
-      data-drop-edge={dropEdge ?? undefined}>
+      )}>
       <div className={styles.header}>
         <div
           className={styles.expansionWrapper}
@@ -225,14 +236,16 @@ const Folder: React.FC<FolderProps> = ({
       {isExpanded && (
         <LoadingContainer task={loadTrades} size="small">
           <ul className={styles.trades}>
-            {trades.map((trade, tradeIndex) => (
+            {displayedTrades.map((trade, tradeIndex) => (
               <SortableTrade
                 key={trade.id}
                 listId={tradesListId}
                 index={tradeIndex}
-                count={trades.length}
+                count={displayedTrades.length}
                 reorderLabel={reorderLabel}
                 onMove={handleMoveTrade}
+                onPreview={previewTrade}
+                onCancel={cancelTradePreview}
                 menu={
                   <ContextualMenu
                     className={styles.tradeAction}
