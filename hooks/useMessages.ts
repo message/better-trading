@@ -58,11 +58,6 @@ const buildMessages = () => ({
     logoAlt: i18n.t('logoAlt'),
   }),
 
-  clipboardTextarea: {
-    buttonLabel: i18n.t('clipboardTextareaButton'),
-    buttonCopiedLabel: i18n.t('clipboardTextareaButtonCopied'),
-  },
-
   pageAbout: {
     enhancersTitle: i18n.t('pageAboutEnhancersTitle'),
     getEnhancerTitle,
@@ -112,6 +107,12 @@ const buildMessages = () => ({
     importPreviewLabel: (name: string, tradesCount: number) =>
       i18n.t('pageBookmarksFolderImportPreview', tradesCount, [name, String(tradesCount)]),
     invalidCodeMessage: i18n.t('pageBookmarksFolderImportInvalidCode'),
+    exportModalTitle: i18n.t('pageBookmarksFolderFolderExportModalTitle'),
+    exportCodeLabel: i18n.t('pageBookmarksFolderFolderExportExportCode'),
+    exportCodeHelper: i18n.t('pageBookmarksFolderFolderExportExportCodeHelper'),
+    exportCloseLabel: i18n.t('pageBookmarksFolderFolderExportClose'),
+    copyToClipboardLabel: i18n.t('clipboardTextareaButton'),
+    copiedToClipboardLabel: i18n.t('clipboardTextareaButtonCopied'),
     editFolderLabel: i18n.t('pageBookmarksFolderEditFolder'),
     archiveFolderLabel: i18n.t('pageBookmarksFolderArchiveFolder'),
     restoreFolderLabel: i18n.t('pageBookmarksFolderRestoreFolder'),
