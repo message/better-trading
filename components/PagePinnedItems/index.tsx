@@ -5,6 +5,7 @@ import XmarkIcon from '@/assets/icons/solid/xmark.svg?react';
 import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 import { useItemResults } from '@/hooks/useItemResults';
 import classnames from 'classnames';
+import { useCallback } from 'react';
 
 interface PagePinnedItemsProps {
   warningMessage: string;
@@ -22,9 +23,14 @@ const SCROLL_ANIMATION_DURATION_MS = 2000;
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 /** Shows a copy of an element taken from the trade results (it may still be displayed there) */
-const ClonedElement = ({ element }: { element: HTMLElement }) => (
-  <div ref={container => container?.replaceChildren(element.cloneNode(true))} />
-);
+const ClonedElement = ({ element }: { element: HTMLElement }) => {
+  // Stable per element, so re-renders (e.g. on every flash) do not re-clone
+  const fill = useCallback(
+    (container: HTMLDivElement | null) => container?.replaceChildren(element.cloneNode(true)),
+    [element],
+  );
+  return <div ref={fill} />;
+};
 
 /**
  * PagePinnedItems component - Displays and manages pinned items

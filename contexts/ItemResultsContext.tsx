@@ -57,8 +57,8 @@ const ItemResultsProvider = ({ children, messages, onPinnedItemsChange }: ItemRe
     callbacksRef.current = { addFlash, onPinnedItemsChange };
   }, [addFlash, onPinnedItemsChange]);
 
-  const [{ pinnable, enhancers }] = useState(() => {
-    const pinnableEnhancer: PinnableEnhancer = new PinnableEnhancer({
+  const [{ pinnableEnhancer, enhancers }] = useState(() => {
+    const pinnableEnhancer = new PinnableEnhancer({
       pinButtonText: messages.pinLabel,
       unpinButtonText: messages.unpinLabel,
       onAlert: () => callbacksRef.current.addFlash(messages.genericAlertMessage, 'alert'),
@@ -85,7 +85,7 @@ const ItemResultsProvider = ({ children, messages, onPinnedItemsChange }: ItemRe
       new RegroupSimilarsEnhancer({ toggleButtonText: messages.regroupSimilarsLabel }),
     ];
 
-    return { pinnable: pinnableEnhancer, enhancers: allEnhancers };
+    return { pinnableEnhancer, enhancers: allEnhancers };
   });
 
   useItemEnhancer(enhancers, disabledEnhancerSlugs);
@@ -100,8 +100,8 @@ const ItemResultsProvider = ({ children, messages, onPinnedItemsChange }: ItemRe
     setDisabledEnhancerSlugs,
     enhancerSlugs: enhancers.flatMap(enhancer => (enhancer.slug ? [enhancer.slug] : [])),
     pinnedItems,
-    clearPinnedItems: () => pinnable.clear(),
-    unpinItemById: itemId => pinnable.unpinItemById(itemId),
+    clearPinnedItems: () => pinnableEnhancer.clear(),
+    unpinItemById: itemId => pinnableEnhancer.unpinItemById(itemId),
   };
 
   return <ItemResultsContext.Provider value={value}>{children}</ItemResultsContext.Provider>;
