@@ -1,6 +1,9 @@
 @use '../../styles/variables';
+@use '../../styles/mixins/sortable' as mixins;
 
 .folder {
+  // Folders sit 10px apart (two 5px .folderWrapper paddings)
+  @include mixins.sortable-item(10px);
   border: 1px solid variables.$blue-alt;
 
   &.isExpanded {
@@ -95,8 +98,8 @@
 }
 
 .trade {
+  @include mixins.sortable-item;
   display: flex;
-  position: relative;
   align-items: center;
   border-bottom: 1px solid rgba(variables.$blue-alt, 0.4);
   background-color: transparent;
@@ -158,6 +161,14 @@
 
 .folderActionsNewTrade {
   flex: 1 1 auto;
+}
+
+.handle {
+  cursor: grab;
+
+  &:focus-visible {
+    outline: 1px solid variables.$beige;
+  }
 }
 
 .handleIcon {

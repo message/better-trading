@@ -30,6 +30,7 @@ interface BookmarksContextValue {
     allFolders: BookmarksFolderStruct[],
     reorderedFolders: BookmarksFolderStruct[],
   ) => BookmarksFolderStruct[];
+  reorderFolders: (reorderedFolders: BookmarksFolderStruct[]) => Promise<void>;
   initializeFolderStruct: (version: TradeSiteVersion) => BookmarksFolderStruct;
   initializeTradeStructFrom: (location: BookmarksTradeLocation) => BookmarksTradeStruct;
   serializeFolder: (folder: BookmarksFolderStruct, trades: BookmarksTradeStruct[]) => string;
@@ -203,6 +204,21 @@ const BookmarksProvider = ({ children }: BookmarksProviderProps) => {
     [],
   );
 
+  // Shows the new order right away (keyboard moves read the new index on the next key press), then persists it.
+  // The refresh afterwards also rolls the order back when persisting fails.
+  const reorderFolders = useCallback(
+    async (reorderedFolders: BookmarksFolderStruct[]) => {
+      const allFolders = partiallyReorderFolders(folders, reorderedFolders);
+      setFolders(allFolders);
+      try {
+        await bookmarksStorage.persistFolders(allFolders);
+      } finally {
+        await refreshFolders();
+      }
+    },
+    [folders, partiallyReorderFolders, refreshFolders],
+  );
+
   const initializeFolderStruct = useCallback(
     (version: TradeSiteVersion): BookmarksFolderStruct => ({
       version,
@@ -256,6 +272,7 @@ const BookmarksProvider = ({ children }: BookmarksProviderProps) => {
       toggleTradeCompletion,
       toggleFolderArchive,
       partiallyReorderFolders,
+      reorderFolders,
       initializeFolderStruct,
       initializeTradeStructFrom,
       serializeFolder,
@@ -278,6 +295,7 @@ const BookmarksProvider = ({ children }: BookmarksProviderProps) => {
       toggleTradeCompletion,
       toggleFolderArchive,
       partiallyReorderFolders,
+      reorderFolders,
       initializeFolderStruct,
       initializeTradeStructFrom,
       serializeFolder,
