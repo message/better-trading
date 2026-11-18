@@ -41,7 +41,7 @@ const Shell = () => {
 
   return (
     <>
-      <ChangelogBanner version={appVersion} changelog={currentChangelog} {...messages.changelogBanner(appVersion)} />
+      <ChangelogBanner changelog={currentChangelog} {...messages.changelogBanner(appVersion)} />
 
       <Header
         {...messages.header}

@@ -25,7 +25,6 @@ interface ChangelogData {
 }
 
 interface ChangelogBannerProps {
-  version: string;
   changelog?: ChangelogData;
   // Localized strings
   noticeText: string;

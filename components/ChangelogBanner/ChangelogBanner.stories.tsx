@@ -10,16 +10,15 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
  * NOTE: This component uses localStorage for persistence. In Storybook, dismissing
  * the banner will persist across page reloads until localStorage is cleared.
  */
+// Version substituted into the notice templates below (not a component prop)
+const storyVersion = '2.0.0';
+
 const meta = {
   component: ChangelogBanner,
   title: 'Components/ChangelogBanner',
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
-    version: {
-      control: 'text',
-      description: 'Current version of the extension',
-    },
     changelog: {
       control: 'object',
       description: 'Changelog data object with slug and markdown content',
@@ -50,7 +49,6 @@ const meta = {
     },
   },
   args: {
-    version: '2.0.0',
     noticeText: '',
     modalButtonLabel: '',
     modalTitle: '',
@@ -139,9 +137,9 @@ export const Default: Story = {
     return (
       <ChangelogBanner
         {...args}
-        noticeText={noticeTemplate.replace('{version}', args.version)}
+        noticeText={noticeTemplate.replace('{version}', storyVersion)}
         modalButtonLabel={modalButtonLabel}
-        modalTitle={modalTitleTemplate.replace('{version}', args.version)}
+        modalTitle={modalTitleTemplate.replace('{version}', storyVersion)}
         dismissButtonLabel={dismissButtonLabel}
         modalCloseLabel={resolveLocaleValue(globals.locale as string, modalCloseMessages)}
         logoAlt={resolveLocaleValue(globals.locale as string, logoAltMessages)}
@@ -154,7 +152,6 @@ export const Default: Story = {
 export const NoChangelog: Story = {
   name: 'No Changelog (Hidden)',
   args: {
-    version: '2.0.0',
     changelog: undefined,
   },
   render: (args, { globals }) => {
@@ -170,9 +167,9 @@ export const NoChangelog: Story = {
         </p>
         <ChangelogBanner
           {...args}
-          noticeText={noticeTemplate.replace('{version}', args.version)}
+          noticeText={noticeTemplate.replace('{version}', storyVersion)}
           modalButtonLabel={modalButtonLabel}
-          modalTitle={modalTitleTemplate.replace('{version}', args.version)}
+          modalTitle={modalTitleTemplate.replace('{version}', storyVersion)}
           dismissButtonLabel={dismissButtonLabel}
           modalCloseLabel={resolveLocaleValue(globals.locale as string, modalCloseMessages)}
           logoAlt={resolveLocaleValue(globals.locale as string, logoAltMessages)}
@@ -186,7 +183,6 @@ export const NoChangelog: Story = {
 export const LongChangelog: Story = {
   name: 'Long Changelog Content',
   args: {
-    version: '2.0.0',
     changelog: {
       slug: '2.0.0-long',
       markdown: `
@@ -227,9 +223,9 @@ export const LongChangelog: Story = {
     return (
       <ChangelogBanner
         {...args}
-        noticeText={noticeTemplate.replace('{version}', args.version)}
+        noticeText={noticeTemplate.replace('{version}', storyVersion)}
         modalButtonLabel={modalButtonLabel}
-        modalTitle={modalTitleTemplate.replace('{version}', args.version)}
+        modalTitle={modalTitleTemplate.replace('{version}', storyVersion)}
         dismissButtonLabel={dismissButtonLabel}
         modalCloseLabel={resolveLocaleValue(globals.locale as string, modalCloseMessages)}
         logoAlt={resolveLocaleValue(globals.locale as string, logoAltMessages)}
