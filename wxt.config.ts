@@ -9,6 +9,8 @@ const config: UserConfig = {
     description: '__MSG_extensionDescription__',
     default_locale: 'en',
     permissions: ['activeTab', 'storage'],
+    // The background script fetches poe.ninja ratios for the content script (see entrypoints/background.ts)
+    host_permissions: ['https://poe.ninja/*'],
     // Images are used by the content script on the trade site (see utils/extension-url.ts)
     web_accessible_resources: [
       { resources: ['assets/images/*'], matches: ['https://*.pathofexile.com/*', 'https://poe.game.daum.net/*'] },

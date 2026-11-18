@@ -1,4 +1,6 @@
-import type { PoeNinjaCurrenciesRatios } from '@/hooks/usePoeNinja';
+import { fetchChaosRatios } from '@/services/poe-ninja';
+import { parseCurrentPath } from '@/utils/trade-location';
+import type { PoeNinjaCurrenciesRatios } from '@/services/poe-ninja';
 import type { ItemResultsParsedItem } from '@/types/item-results';
 
 const CHAOS_IMAGE_URL = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png';
@@ -10,11 +12,6 @@ const NORMALIZED_CURRENCY_SLUG = 'divine-orb';
 const NORMALIZED_CURRENCY_EQUIVALENCE_THRESHOLD = 0.5;
 const EQUAL_HTML = '<span class="bt-equivalent-pricings-equals">=</span>';
 
-interface EquivalentPricingsOptions {
-  tradeLocationVersion?: string;
-  fetchChaosRatios?: (league: string) => Promise<PoeNinjaCurrenciesRatios>;
-}
-
 /**
  * Service class for displaying equivalent currency pricings from poe.ninja
  *
@@ -25,20 +22,21 @@ class EquivalentPricingsEnhancer {
   slug = 'equivalent-pricings';
 
   private chaosRatios: PoeNinjaCurrenciesRatios | null = null;
-  private options: EquivalentPricingsOptions;
 
-  constructor(options: EquivalentPricingsOptions = {}) {
-    this.options = options;
-  }
+  /**
+   * Loads the ratios for the current league. PoE 2 and console realm leagues (`sony/Standard`) are not on poe.ninja,
+   * and a poe.ninja failure only skips pricings.
+   */
+  async prepare(): Promise<void> {
+    const { league, version } = parseCurrentPath(window.location.pathname);
+    this.chaosRatios = null;
+    if (version !== '1' || !league || league.includes('/')) return;
 
-  async prepare(league: string | null, tradeLocationVersion: string): Promise<void> {
-    const supportedVersion = tradeLocationVersion === '1';
-    if (!supportedVersion || !league || !this.options.fetchChaosRatios) {
-      this.chaosRatios = null;
-      return;
+    try {
+      this.chaosRatios = await fetchChaosRatios(league);
+    } catch (error) {
+      console.warn('[equivalent-pricings] poe.ninja ratios unavailable', error);
     }
-
-    this.chaosRatios = await this.options.fetchChaosRatios(league);
   }
 
   enhance(itemElement: HTMLDivElement, { price }: ItemResultsParsedItem): void {
@@ -137,4 +135,3 @@ class EquivalentPricingsEnhancer {
 const equivalentPricingsEnhancer = new EquivalentPricingsEnhancer();
 
 export { equivalentPricingsEnhancer, EquivalentPricingsEnhancer };
-export type { EquivalentPricingsOptions };

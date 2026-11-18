@@ -7,7 +7,7 @@ declare const chrome: typeof browser;
  * This function sends a message to the background script which handles
  * the actual fetch request to avoid CORS issues.
  *
- * @param resource - The API resource path (e.g., '/data/currencyoverview?league=Standard')
+ * @param resource - The API resource path (e.g., '/poe1/api/data/index-state')
  * @returns Promise resolving to the API response data
  * @throws Error if the request fails or returns null
  */
