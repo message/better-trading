@@ -1,0 +1,6 @@
+# Approve dependency build scripts so `pnpm install` succeeds non-interactively (fresh worktrees, CI)
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  spawn-sync: true
+  unrs-resolver: true
