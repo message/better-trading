@@ -760,19 +760,25 @@ const centerOf = (element: Element) => {
 };
 
 /**
- * Starts a native drag from the handle of `source` and holds it over the lower half of `target`. No drop follows, so
- * the story stays in the drag state until the pointer moves over it.
+ * Starts a native drag from the handle of `source` and holds it past the middle of `target`, seen from `source`. No
+ * drop follows, so the story stays in the drag state with the list previewing the new order.
  */
 const holdDragOver = async (source: HTMLElement, handle: HTMLElement, target: HTMLElement) => {
   const dataTransfer = new DataTransfer();
   // Pragmatic Drag and Drop only starts the drag when the pointer is over the handle
   fireEvent.dragStart(source, { ...centerOf(handle), dataTransfer });
   await new Promise(requestAnimationFrame);
-  const { left, width, bottom } = target.getBoundingClientRect();
-  const position = { clientX: left + width / 2, clientY: bottom - 3, dataTransfer };
+  const { left, width, top, bottom } = target.getBoundingClientRect();
+  const isTargetAfterSource = Boolean(source.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING);
+  const position = { clientX: left + width / 2, clientY: isTargetAfterSource ? bottom - 3 : top + 3, dataTransfer };
   fireEvent.dragEnter(target, position);
   fireEvent.dragOver(target, position);
-  await waitFor(() => expect(target).toHaveAttribute('data-drop-edge', 'bottom'));
+  // The list reorders live: `source` jumped to the other side of `target`
+  await waitFor(() =>
+    expect(source.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING).toBe(
+      isTargetAfterSource ? 0 : Node.DOCUMENT_POSITION_FOLLOWING,
+    ),
+  );
 };
 
 export const Default: Story = {
@@ -882,7 +888,7 @@ export const KeyboardReorder: Story = {
   },
 };
 
-/** "Chaos recipe" dragged by its handle: dimmed, with the drop line below "Juggernaut gear" */
+/** "Chaos recipe" dragged by its handle: dimmed, already moved above "Juggernaut gear" (live preview) */
 export const DraggingFolder: Story = {
   ...Default,
   name: 'Dragging a Folder',
@@ -894,7 +900,7 @@ export const DraggingFolder: Story = {
   },
 };
 
-/** "Kaom boots" dragged within its Folder: dimmed, with the drop line below "Life chest" */
+/** "Kaom boots" dragged within its Folder: dimmed, already moved below "Life chest" (live preview) */
 export const DraggingTrade: Story = {
   ...Default,
   name: 'Dragging a Trade',

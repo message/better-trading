@@ -3,8 +3,7 @@
 @use '../../styles/mixins/sortable' as mixins;
 
 .folder {
-  // Folders sit 10px apart (two 5px .folderWrapper paddings)
-  @include mixins.sortable-item(10px);
+  @include mixins.sortable-item;
   border: 1px solid variables.$blue-alt;
 
   &.isExpanded {
