@@ -18,6 +18,10 @@ Package manager is pnpm (Node `lts/jod`, see `.nvmrc`).
 - `pnpm compile` — `tsc --noEmit` type check
 - `pnpm lint` / `pnpm lint:fix`, `pnpm format` / `pnpm format:check`
 
+**Non-TTY shells (agents, scripts):** run `wxt`, `pnpm` and `git commit` (its hook calls pnpm) as
+`CI=true timeout 20 <cmd> < /dev/null`. Without `CI=true`, Vite 7 watches stdin: a closed stdin makes `wxt build`
+exit 0 mid-build with an empty `.output/`, and a never-closing one makes `wxt prepare` (the `postinstall`) hang.
+
 There is no test runner configured (no vitest/jest scripts). The husky pre-commit hook runs `lint-staged`
 (prettier + eslint --fix) and then `pnpm compile`, so type errors block commits.
 
