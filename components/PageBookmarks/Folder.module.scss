@@ -1,4 +1,5 @@
 @use '../../styles/variables';
+@use '../../styles/mixins/gradient-hover';
 @use '../../styles/mixins/sortable' as mixins;
 
 .folder {
@@ -103,13 +104,10 @@
   border-bottom: 1px solid rgba(variables.$blue-alt, 0.4);
   background-color: transparent;
   transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: rgba(variables.$blue, 0.3);
-  }
 }
 
 .tradeLink {
+  @include gradient-hover.gradient-hover(variables.$gold-alt);
   flex: 1 1 auto;
   padding: 6px 7px;
   font-family: variables.$primary-font;
@@ -120,14 +118,12 @@
   &:hover,
   &:focus {
     text-decoration: none;
-    color: variables.$gold;
   }
 }
 
 .tradeLinkCompleted {
-  margin-right: 3px;
+  margin-right: 6px;
   font-size: 9px;
-  color: variables.$green;
 }
 
 .tradeActions {
