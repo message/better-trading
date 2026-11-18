@@ -24,7 +24,6 @@ import FolderPlusIcon from '@/assets/icons/solid/folder-plus.svg?react';
 import RotateLeftIcon from '@/assets/icons/solid/rotate-left.svg?react';
 import SquarePlusIcon from '@/assets/icons/solid/square-plus.svg?react';
 import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
-import { useTradeHistoryContext } from '@/contexts/TradeHistoryContext';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import { useBookmarksState } from '@/hooks/useBookmarksState';
 import { useTradeLocation } from '@/hooks/useTradeLocation';
@@ -37,16 +36,15 @@ import {
   autoScrollWindowForElements,
 } from '@atlaskit/pragmatic-drag-and-drop-auto-scroll/element';
 import { useState, useCallback, useEffect, useId } from 'react';
-import type { TradeSource } from './TradeEdition';
 import type { BookmarksFolderStruct, BookmarksTradeStruct } from '@/types/bookmarks';
 import type React from 'react';
 
 const FOLDERS_WARNING_THRESHOLD = 10;
 
-/** A Trade being created (`trade` null) or edited in the Folder `folderId` */
+/** A Trade being created or edited in the Folder `folderId` */
 interface StagedTrade {
   folderId: string;
-  trade: BookmarksTradeStruct | null;
+  trade: BookmarksTradeStruct;
 }
 
 /** A Trade awaiting deletion confirmation */
@@ -98,8 +96,6 @@ interface PageBookmarksProps {
   reorderLabel: string;
   tradeModalTitle: string;
   tradeTitleLabel: string;
-  tradeSourceLabel: string;
-  currentSearchLabel: string;
   tradeDeletionModalTitle: string;
   tradeDeletionConfirmation: (title: string) => string;
   tradeDeletionDeleteLabel: string;
@@ -159,8 +155,6 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   reorderLabel,
   tradeModalTitle,
   tradeTitleLabel,
-  tradeSourceLabel,
-  currentSearchLabel,
   tradeDeletionModalTitle,
   tradeDeletionConfirmation,
   tradeDeletionDeleteLabel,
@@ -183,7 +177,6 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   const { addFlash } = useFlashMessagesContext();
   const { expandedFolderIds, toggleFolderExpansion, collapseAllFolders } = useBookmarksState();
   const { version, league, type, slug } = useTradeLocation();
-  const { historyEntries, refreshHistoryEntries } = useTradeHistoryContext();
 
   const [stagedFolder, setStagedFolder] = useState<BookmarksFolderStruct | null>(null);
   const [isImportingFolder, setIsImportingFolder] = useState(false);
@@ -220,23 +213,6 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
 
   // Leave the archive view once it runs empty (restore, delete or a change in another tab): its toggle is hidden then
   if (isShowingArchivedFolders && !hasArchivedFolders) setIsShowingArchivedFolders(false);
-
-  // A new Trade comes from the current search or from a Trade History entry of this Game Version
-  const tradeSources: TradeSource[] = [
-    ...(type && slug
-      ? [{ label: currentSearchLabel, title: recommendTitle(), location: { version, type, slug } }]
-      : []),
-    ...historyEntries
-      .filter(entry => entry.version === version)
-      .map(entry => ({
-        label: entry.title || entry.slug,
-        title: entry.title,
-        location: { version: entry.version, type: entry.type, slug: entry.slug },
-      })),
-  ];
-
-  // Nothing to save a new Trade from (no current search, no History): close instead of showing an empty form
-  if (stagedTrade && !stagedTrade.trade && tradeSources.length === 0) setStagedTrade(null);
 
   const handleDeleteFolder = useCallback(
     async (folder: BookmarksFolderStruct) => {
@@ -382,10 +358,13 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
     [league, copyTradeSuccessMessage, genericAlertMessage, addFlash],
   );
 
-  const handleCreateTrade = async (folderId: string) => {
-    // The History page may not have loaded the entries yet; they are read when the modal renders
-    await refreshHistoryEntries().catch(() => undefined);
-    setStagedTrade({ folderId, trade: null });
+  // A new Trade is always the current search, as in 1.9.1; nothing to save outside a search
+  const handleCreateTrade = (folderId: string) => {
+    if (!type || !slug) return;
+    setStagedTrade({
+      folderId,
+      trade: { title: recommendTitle(), location: { version, type, slug }, completedAt: null },
+    });
   };
 
   const handlePersistTrade = async (trade: BookmarksTradeStruct) => {
@@ -578,12 +557,10 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
       {stagedTrade && (
         <TradeEdition
           trade={stagedTrade.trade}
-          sources={tradeSources}
           modalTitle={tradeModalTitle}
           modalCloseLabel={modalCloseLabel}
           logoAlt={logoAlt}
           titleLabel={tradeTitleLabel}
-          sourceLabel={tradeSourceLabel}
           saveLabel={saveLabel}
           onCancel={() => setStagedTrade(null)}
           onSubmit={handlePersistTrade}

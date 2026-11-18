@@ -105,8 +105,6 @@ pageBookmarksFolderFolderExportExportCodeHelper: This code can be used to restor
 pageBookmarksFolderFolderExportClose: Close
 pageBookmarksFolderTradeEditionModalTitle: Bookmark trade
 pageBookmarksFolderTradeEditionTitleLabel: Title
-pageBookmarksFolderTradeEditionSourceLabel: Search
-pageBookmarksFolderTradeEditionCurrentSearch: Current search
 pageBookmarksFolderTradeEditionSave: Save
 pageBookmarksFolderEditionModalTitle: Bookmark folder
 pageBookmarksFolderEditionTitleLabel: Title
