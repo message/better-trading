@@ -80,7 +80,6 @@ const ItemResultsProvider = ({ children, messages, onPinnedItemsChange }: ItemRe
           }),
       },
       pinnableEnhancer,
-      // ponytail: a no-op until poe.ninja ratios are wired in (#7)
       equivalentPricingsEnhancer,
       new RegroupSimilarsEnhancer({ toggleButtonText: messages.regroupSimilarsLabel }),
     ];

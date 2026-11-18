@@ -5,9 +5,15 @@ interface PoeNinjaMessage {
 
 type MessageRequest = PoeNinjaMessage;
 
+const POE_NINJA_ORIGIN = 'https://poe.ninja';
+
 const handlePoeNinjaRequest = async (resource: string): Promise<unknown> => {
   try {
-    const response = await fetch(`https://poe.ninja/api${resource}`);
+    // Only poe.ninja: the manifest grants nothing else, and a crafted resource must not reach another host
+    const url = new URL(resource, POE_NINJA_ORIGIN);
+    if (url.origin !== POE_NINJA_ORIGIN) throw new Error(`Not a poe.ninja resource: ${resource}`);
+
+    const response = await fetch(url);
 
     if (!response.ok) {
       console.error(`[poe-ninja] Failed to fetch resource: ${resource}`, response.status);
