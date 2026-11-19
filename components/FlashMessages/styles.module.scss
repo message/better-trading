@@ -2,7 +2,7 @@
 
 .flashMessages {
   display: grid;
-  position: absolute;
+  position: fixed; // not absolute: the container scrolls (overflow-y: auto), absolute would scroll with it
   z-index: 100000;
   right: 30px;
   bottom: 20px;
