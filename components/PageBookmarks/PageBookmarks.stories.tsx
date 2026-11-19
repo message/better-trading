@@ -52,6 +52,7 @@ const meta = {
     showUnarchivedLabel: '',
     createFolderLabel: '',
     importFolderLabel: '',
+    importPobLabel: '',
     foldersWarningMessage: '',
     backupTitle: '',
     generateBackupLabel: '',
@@ -64,6 +65,9 @@ const meta = {
     importCodeLabel: '',
     importPreviewLabel: () => '',
     invalidCodeMessage: '',
+    importPobModalTitle: '',
+    importPobCodeLabel: '',
+    invalidPobCodeMessage: '',
     exportModalTitle: '',
     exportCodeLabel: '',
     exportCodeHelper: '',
@@ -338,6 +342,58 @@ const invalidCodeMessages = defineMessages({
   'ja-JP': '無効なインポートコード',
   'ko-KR': '잘못된 가져오기 코드',
   'th-TH': 'รหัสนำเข้าไม่ถูกต้อง',
+});
+
+const importPobMessages = defineMessages({
+  'en-US': 'Import PoB',
+  'fr-FR': 'Importer PoB',
+  'es-ES': 'Importar PoB',
+  'de-DE': 'PoB importieren',
+  'pt-BR': 'Importar PoB',
+  'ru-RU': 'Импорт из PoB',
+  'zh-CN': '导入 PoB',
+  'ja-JP': 'PoBをインポート',
+  'ko-KR': 'PoB 가져오기',
+  'th-TH': 'นำเข้า PoB',
+});
+
+const importPobModalTitleMessages = defineMessages({
+  'en-US': 'Import Path of Building build',
+  'fr-FR': 'Importer un build Path of Building',
+  'es-ES': 'Importar build de Path of Building',
+  'de-DE': 'Path-of-Building-Build importieren',
+  'pt-BR': 'Importar build do Path of Building',
+  'ru-RU': 'Импорт билда из Path of Building',
+  'zh-CN': '导入 Path of Building 构筑',
+  'ja-JP': 'Path of Buildingのビルドをインポート',
+  'ko-KR': 'Path of Building 빌드 가져오기',
+  'th-TH': 'นำเข้าบิลด์ Path of Building',
+});
+
+const importPobCodeLabelMessages = defineMessages({
+  'en-US': 'Path of Building code',
+  'fr-FR': 'Code Path of Building',
+  'es-ES': 'Código de Path of Building',
+  'de-DE': 'Path-of-Building-Code',
+  'pt-BR': 'Código do Path of Building',
+  'ru-RU': 'Код Path of Building',
+  'zh-CN': 'Path of Building 代码',
+  'ja-JP': 'Path of Buildingのコード',
+  'ko-KR': 'Path of Building 코드',
+  'th-TH': 'รหัส Path of Building',
+});
+
+const invalidPobCodeMessages = defineMessages({
+  'en-US': 'This is not a Path of Building build code, try another one.',
+  'fr-FR': "Ce n'est pas un code de build Path of Building, essayez-en un autre.",
+  'es-ES': 'Esto no es un código de build de Path of Building, prueba con otro.',
+  'de-DE': 'Das ist kein Path-of-Building-Buildcode, versuche einen anderen.',
+  'pt-BR': 'Este não é um código de build do Path of Building, tente outro.',
+  'ru-RU': 'Это не код билда Path of Building, попробуйте другой.',
+  'zh-CN': '这不是 Path of Building 构筑代码，请换一个。',
+  'ja-JP': 'Path of Buildingのビルドコードではありません。別のコードをお試しください。',
+  'ko-KR': 'Path of Building 빌드 코드가 아닙니다. 다른 코드를 시도하세요.',
+  'th-TH': 'นี่ไม่ใช่รหัสบิลด์ Path of Building ลองรหัสอื่น',
 });
 
 const exportModalTitleMessages = defineMessages({
@@ -798,6 +854,7 @@ export const Default: Story = {
         showUnarchivedLabel={resolveLocaleValue(locale, showUnarchivedMessages)}
         createFolderLabel={resolveLocaleValue(locale, createFolderMessages)}
         importFolderLabel={resolveLocaleValue(locale, importFolderMessages)}
+        importPobLabel={resolveLocaleValue(locale, importPobMessages)}
         foldersWarningMessage={resolveLocaleValue(locale, foldersWarningMessages)}
         backupTitle={resolveLocaleValue(locale, backupTitleMessages)}
         generateBackupLabel={resolveLocaleValue(locale, generateBackupMessages)}
@@ -810,6 +867,9 @@ export const Default: Story = {
         importCodeLabel={resolveLocaleValue(locale, importCodeLabelMessages)}
         importPreviewLabel={(name, count) => `${name} (${count} trades)`}
         invalidCodeMessage={resolveLocaleValue(locale, invalidCodeMessages)}
+        importPobModalTitle={resolveLocaleValue(locale, importPobModalTitleMessages)}
+        importPobCodeLabel={resolveLocaleValue(locale, importPobCodeLabelMessages)}
+        invalidPobCodeMessage={resolveLocaleValue(locale, invalidPobCodeMessages)}
         exportModalTitle={resolveLocaleValue(locale, exportModalTitleMessages)}
         exportCodeLabel={resolveLocaleValue(locale, exportCodeLabelMessages)}
         exportCodeHelper={resolveLocaleValue(locale, exportCodeHelperMessages)}

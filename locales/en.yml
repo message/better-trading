@@ -57,6 +57,7 @@ pageHistoryClearSuccessFlash: The search history has been cleared.
 
 pageBookmarksCreateFolder: New folder
 pageBookmarksImportFolder: Import folder
+pageBookmarksImportPob: Import PoB
 pageBookmarksCollapseAll: Collapse folders
 pageBookmarksShowArchivedFolders: Show archive
 pageBookmarksShowUnarchivedFolders: Return to active folders
@@ -118,3 +119,6 @@ pageBookmarksFolderImportPreview:
   n: $1 ($2 bookmarks)
 pageBookmarksFolderImportInvalidCode: The entered code seems invalid, try another one.
 pageBookmarksFolderImportSave: Save
+pageBookmarksPobImportModalTitle: Import Path of Building build
+pageBookmarksPobImportCodeLabel: Path of Building code
+pageBookmarksPobImportInvalidCode: This is not a Path of Building build code, try another one.

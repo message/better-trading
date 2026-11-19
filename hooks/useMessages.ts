@@ -94,6 +94,7 @@ const buildMessages = () => ({
     showUnarchivedLabel: i18n.t('pageBookmarksShowUnarchivedFolders'),
     createFolderLabel: i18n.t('pageBookmarksCreateFolder'),
     importFolderLabel: i18n.t('pageBookmarksImportFolder'),
+    importPobLabel: i18n.t('pageBookmarksImportPob'),
     foldersWarningMessage: i18n.t('pageBookmarksFoldersWarning'),
     backupTitle: i18n.t('pageBookmarksBackupTitle'),
     generateBackupLabel: i18n.t('pageBookmarksBackupGenerateButton'),
@@ -107,6 +108,9 @@ const buildMessages = () => ({
     importPreviewLabel: (name: string, tradesCount: number) =>
       i18n.t('pageBookmarksFolderImportPreview', tradesCount, [name, String(tradesCount)]),
     invalidCodeMessage: i18n.t('pageBookmarksFolderImportInvalidCode'),
+    importPobModalTitle: i18n.t('pageBookmarksPobImportModalTitle'),
+    importPobCodeLabel: i18n.t('pageBookmarksPobImportCodeLabel'),
+    invalidPobCodeMessage: i18n.t('pageBookmarksPobImportInvalidCode'),
     exportModalTitle: i18n.t('pageBookmarksFolderFolderExportModalTitle'),
     exportCodeLabel: i18n.t('pageBookmarksFolderFolderExportExportCode'),
     exportCodeHelper: i18n.t('pageBookmarksFolderFolderExportExportCodeHelper'),

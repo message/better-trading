@@ -22,4 +22,12 @@ const fetchPoeNinjaResource = async (resource: string): Promise<unknown> =>
     });
   });
 
-export { fetchPoeNinjaResource };
+/** Converts a Path of Building Build Code to an Export String in the background script; null when it is not a build */
+const convertPobBuildCode = async (buildCode: string): Promise<string | null> =>
+  new Promise(resolve => {
+    chrome.runtime.sendMessage({ query: 'pob-import', buildCode }, (exportString: string | null) =>
+      resolve(exportString ?? null),
+    );
+  });
+
+export { convertPobBuildCode, fetchPoeNinjaResource };

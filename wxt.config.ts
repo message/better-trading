@@ -1,3 +1,4 @@
+import { pobStatsPath } from './scripts/pob-stats';
 import { defineConfig } from 'wxt';
 import type { UserConfig } from 'wxt';
 
@@ -21,6 +22,15 @@ const config: UserConfig = {
   // outDir: './dist',
   webExt: {
     chromiumArgs: ['https://www.pathofexile.com/trade'],
+  },
+  hooks: {
+    'prepare:publicPaths': (_, paths) => {
+      paths.push('pob-stats.ndjson');
+    },
+    // Stat data for the PoB import, fetched at a pinned commit instead of living in git (see scripts/pob-stats.ts)
+    'build:publicAssets': async (_, files) => {
+      files.push({ absoluteSrc: await pobStatsPath(), relativeDest: 'pob-stats.ndjson' });
+    },
   },
 };
 

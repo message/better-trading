@@ -20,6 +20,7 @@ import Button from '../Button';
 import LoadingContainer from '../LoadingContainer';
 import BoxArchiveIcon from '@/assets/icons/solid/box-archive.svg?react';
 import CompressIcon from '@/assets/icons/solid/compress.svg?react';
+import FileImportIcon from '@/assets/icons/solid/file-import.svg?react';
 import FolderPlusIcon from '@/assets/icons/solid/folder-plus.svg?react';
 import RotateLeftIcon from '@/assets/icons/solid/rotate-left.svg?react';
 import SquarePlusIcon from '@/assets/icons/solid/square-plus.svg?react';
@@ -29,6 +30,7 @@ import { useBookmarksState } from '@/hooks/useBookmarksState';
 import { usePreviewOrder } from '@/hooks/useSortable';
 import { useTradeLocation } from '@/hooks/useTradeLocation';
 import { copyToClipboard } from '@/utils/copy-to-clipboard';
+import { convertPobBuildCode } from '@/utils/extension-background';
 import { recommendTitle } from '@/utils/search-panel';
 import { getTradeUrl } from '@/utils/trade-location';
 import { reorder } from '@atlaskit/pragmatic-drag-and-drop/utils/reorder';
@@ -61,6 +63,7 @@ interface PageBookmarksProps {
   showUnarchivedLabel: string;
   createFolderLabel: string;
   importFolderLabel: string;
+  importPobLabel: string;
   foldersWarningMessage: string;
   backupTitle: string;
   generateBackupLabel: string;
@@ -73,6 +76,9 @@ interface PageBookmarksProps {
   importCodeLabel: string;
   importPreviewLabel: (name: string, tradesCount: number) => string;
   invalidCodeMessage: string;
+  importPobModalTitle: string;
+  importPobCodeLabel: string;
+  invalidPobCodeMessage: string;
   exportModalTitle: string;
   exportCodeLabel: string;
   exportCodeHelper: string;
@@ -122,6 +128,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   showUnarchivedLabel,
   createFolderLabel,
   importFolderLabel,
+  importPobLabel,
   foldersWarningMessage,
   backupTitle,
   generateBackupLabel,
@@ -134,6 +141,9 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   importCodeLabel,
   importPreviewLabel,
   invalidCodeMessage,
+  importPobModalTitle,
+  importPobCodeLabel,
+  invalidPobCodeMessage,
   exportModalTitle,
   exportCodeLabel,
   exportCodeHelper,
@@ -180,7 +190,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   const { version, league, type, slug } = useTradeLocation();
 
   const [stagedFolder, setStagedFolder] = useState<BookmarksFolderStruct | null>(null);
-  const [isImportingFolder, setIsImportingFolder] = useState(false);
+  const [importing, setImporting] = useState<'folder' | 'pob' | null>(null);
   const [exportString, setExportString] = useState<string | null>(null);
   const [isShowingArchivedFolders, setIsShowingArchivedFolders] = useState(false);
   const [stagedTrade, setStagedTrade] = useState<StagedTrade | null>(null);
@@ -274,7 +284,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
       } catch {
         addFlash(genericAlertMessage, 'alert');
       } finally {
-        setIsImportingFolder(false);
+        setImporting(null);
       }
     },
     [bookmarks, toggleFolderExpansion, importFolderSuccessMessage, genericAlertMessage, addFlash],
@@ -333,12 +343,25 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
   };
 
   const handleImportFolder = () => {
-    setIsImportingFolder(true);
+    setImporting('folder');
+  };
+
+  const handleImportPob = () => {
+    setImporting('pob');
   };
 
   const handleCancelImportFolder = () => {
-    setIsImportingFolder(false);
+    setImporting(null);
   };
+
+  const { deserializeFolder } = bookmarks;
+  const handleDeserializePob = useCallback(
+    async (buildCode: string) => {
+      const folderExportString = buildCode.trim() && (await convertPobBuildCode(buildCode));
+      return folderExportString ? deserializeFolder(folderExportString) : null;
+    },
+    [deserializeFolder],
+  );
 
   const handleFetchTrades = useCallback(
     async (folderId: string) => await fetchTradesByFolderId(folderId),
@@ -533,6 +556,18 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
             icon={SquarePlusIcon}
             onClick={handleImportFolder}
           />
+
+          {/* Path of Building builds are PoE 1 only */}
+          {version === '1' && (
+            <Button
+              type="button"
+              className={styles.createFolderButton}
+              theme="gold"
+              label={importPobLabel}
+              icon={FileImportIcon}
+              onClick={handleImportPob}
+            />
+          )}
         </div>
       )}
 
@@ -604,18 +639,19 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
         />
       )}
 
-      {isImportingFolder && (
+      {importing && (
         <FolderImport
-          modalTitle={importModalTitle}
+          key={importing}
+          modalTitle={importing === 'pob' ? importPobModalTitle : importModalTitle}
           modalCloseLabel={modalCloseLabel}
           logoAlt={logoAlt}
-          importCodeLabel={importCodeLabel}
+          importCodeLabel={importing === 'pob' ? importPobCodeLabel : importCodeLabel}
           previewLabel={importPreviewLabel}
-          invalidCodeMessage={invalidCodeMessage}
+          invalidCodeMessage={importing === 'pob' ? invalidPobCodeMessage : invalidCodeMessage}
           saveLabel={saveLabel}
           onCancel={handleCancelImportFolder}
           onSubmit={handlePersistImportedFolder}
-          onDeserialize={bookmarks.deserializeFolder}
+          onDeserialize={importing === 'pob' ? handleDeserializePob : bookmarks.deserializeFolder}
         />
       )}
     </LoadingContainer>

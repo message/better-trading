@@ -6,7 +6,7 @@ import FormContainer from '../FormContainer';
 import FormInput from '../FormInput';
 import Modal from '../Modal';
 import FloppyDiskIcon from '@/assets/icons/solid/floppy-disk.svg?react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { BookmarksFolderStruct, BookmarksTradeStruct } from '@/types/bookmarks';
 import type React from 'react';
 
@@ -20,7 +20,12 @@ interface FolderImportProps {
   saveLabel: string;
   onCancel: () => void;
   onSubmit: (data: { folder: BookmarksFolderStruct; trades: BookmarksTradeStruct[] }) => Promise<void>;
-  onDeserialize: (input: string) => [BookmarksFolderStruct, BookmarksTradeStruct[]] | null;
+  onDeserialize: (
+    input: string,
+  ) =>
+    | [BookmarksFolderStruct, BookmarksTradeStruct[]]
+    | null
+    | Promise<[BookmarksFolderStruct, BookmarksTradeStruct[]] | null>;
 }
 
 const FolderImport: React.FC<FolderImportProps> = ({
@@ -41,8 +46,13 @@ const FolderImport: React.FC<FolderImportProps> = ({
 
   const canSubmit = Boolean(stagedFolder);
 
-  const handleInput = (input: string) => {
-    const result = onDeserialize(input);
+  // An async deserialization may finish after a newer input's: only the latest input's result counts
+  const latestInput = useRef('');
+
+  const handleInput = async (input: string) => {
+    latestInput.current = input;
+    const result = await onDeserialize(input);
+    if (latestInput.current !== input) return;
 
     if (result) {
       const [folder, trades] = result;
