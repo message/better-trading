@@ -98,6 +98,6 @@ export const createMockPinnedItem = (id: string, name: string, price: string, mi
   detailsElement: createElementFromHtml(
     `<div class="middle"><div class="itemPopupContainer"><div class="itemHeader">${name}</div></div></div>`,
   ),
-  renderedItemElement: createElementFromHtml('<div class="itemRendered"></div>'),
+  renderedItemElement: createElementFromHtml('<div class="newItemContainer"></div>'),
   pricingElement: createElementFromHtml(`<div class="price"><span>${price}</span></div>`),
 });

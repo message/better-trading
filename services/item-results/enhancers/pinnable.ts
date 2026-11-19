@@ -92,7 +92,7 @@ class PinnableEnhancer {
 
   private createPinnedItem(id: string, result: HTMLElement): ItemResultsPinnedItem | null {
     const detailsElement = result.querySelector('.middle') as HTMLElement;
-    const renderedItemElement = result.querySelector('.itemRendered') as HTMLElement;
+    const renderedItemElement = result.querySelector('.newItemContainer') as HTMLElement;
     const pricingElement = result.querySelector('.details .price') as HTMLElement;
 
     if (!detailsElement || !renderedItemElement || !pricingElement) return null;
@@ -101,9 +101,30 @@ class PinnableEnhancer {
       id,
       detailsElement: detailsElement.cloneNode(true) as HTMLElement,
       renderedItemElement: renderedItemElement.cloneNode(true) as HTMLElement,
-      pricingElement: pricingElement.cloneNode(true) as HTMLElement,
+      pricingElement: this.clonePricing(pricingElement),
       pinnedAt: new Date().toISOString(),
     };
+  }
+
+  /**
+   * The trade site only styles the gold fee icon inside `.results .row .details`, so the clone would lose it.
+   * Its sprite URL carries a versioned key, so copy the resolved sprite styles instead of hardcoding them.
+   */
+  private clonePricing(pricingElement: HTMLElement): HTMLElement {
+    const clone = pricingElement.cloneNode(true) as HTMLElement;
+    const sourceIcons = pricingElement.querySelectorAll<HTMLElement>('.gold-icon');
+    const clonedIcons = clone.querySelectorAll<HTMLElement>('.gold-icon');
+
+    sourceIcons.forEach((sourceIcon, index) => {
+      const style = window.getComputedStyle(sourceIcon);
+      const clonedIcon = clonedIcons[index];
+
+      ['background-image', 'background-position', 'background-size', 'width', 'height'].forEach(property =>
+        clonedIcon.style.setProperty(property, style.getPropertyValue(property)),
+      );
+    });
+
+    return clone;
   }
 
   private updatePinnedCSS(): void {

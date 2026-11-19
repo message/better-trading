@@ -2,24 +2,46 @@
 
 .pinnedItems {
   display: grid;
+  // minmax(0, …) keeps the column at the sidebar width instead of growing to the cloned popups' min-content
+  grid-template-columns: minmax(0, 1fr);
   grid-gap: 10px;
 }
 
 .itemWrapper {
   background-color: #000;
 
+  // The trade site sizes the popup for its results column (fixed width, min-width: 400px), wider than the sidebar
+  :global(.item-popup) {
+    width: auto;
+    min-width: 0;
+  }
+
+  :global(.item-popup__header) {
+    min-width: 0;
+  }
+
   :global(.itemPopupContainer) {
     margin: 0;
     background-color: #000;
   }
 
+  // The trade site only lays these out as a row inside its results list. Fields never wrap inside: a long label
+  // (or locale) moves the whole field to the next line, so every line stays aligned
   :global(.itemPopupAdditional) {
-    padding: 3px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px 16px;
+    padding: 3px;
     background-color: #000;
 
     :global(.s) {
-      width: 33.33%;
-      text-align: center;
+      white-space: nowrap;
+    }
+
+    // Hidden placeholders keep the site's columns aligned; here they would only push the visible ones off-center
+    :global(.invisible) {
+      display: none;
     }
 
     :global(.lc) {
@@ -66,10 +88,21 @@
 
   :global(.price) {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     justify-content: center;
+    gap: 4px 14px;
     padding: 5px 10px 10px;
     background-color: #000;
     color: #a38d6d;
+
+    // Price, fee and equivalent each sit on one line with their icons vertically centered
+    > span,
+    > span > span {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
 
     img {
       height: 25px;

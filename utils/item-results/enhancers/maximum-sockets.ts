@@ -38,7 +38,7 @@ const enhance = (
 
   if (tradeLocationVersion !== '1') return;
 
-  const itemFrameElement = itemElement.querySelector<HTMLDivElement>('.itemRendered');
+  const itemFrameElement = itemElement.querySelector<HTMLDivElement>('.newItemContainer');
 
   if (!itemFrameElement || !ilvl || socketsCount === 0 || type !== ItemResultsType.ARMOR) return;
 
