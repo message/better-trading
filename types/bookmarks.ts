@@ -31,7 +31,9 @@ export type BookmarksFolderIcon =
   | BookmarksFolderPoE1AscendancyIcon
   | BookmarksFolderPoE1ItemIcon
   | BookmarksFolderPoE2AscendancyIcon
-  | BookmarksFolderPoE2ItemIcon;
+  | BookmarksFolderPoE2ItemIcon
+  // Legacy: Raider was replaced by Warden; kept so old saved folders type-check, rendered as Warden
+  | 'raider';
 
 export enum BookmarksFolderAscendancyDuelistIcon {
   SLAYER = 'slayer',
@@ -59,7 +61,6 @@ export enum BookmarksFolderAscendancyWitchIcon {
 
 export enum BookmarksFolderAscendancyRangerIcon {
   DEADEYE = 'deadeye',
-  RAIDER = 'raider',
   PATHFINDER = 'pathfinder',
   WARDEN = 'warden',
 }
