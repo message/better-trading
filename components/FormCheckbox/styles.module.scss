@@ -16,6 +16,8 @@ $checkbox-transition-duration: 0.2s;
 }
 
 .indicator {
+  flex-shrink: 0;
+  box-sizing: content-box; // trade site sets border-box globally; sizes below assume content-box
   position: relative;
   width: $checkbox-size;
   height: $checkbox-size;
@@ -23,6 +25,7 @@ $checkbox-transition-duration: 0.2s;
   margin-right: $checkbox-spacing;
 
   &::before {
+    box-sizing: content-box;
     display: block;
     content: '';
     position: absolute;
