@@ -26,8 +26,6 @@ interface Mod {
   enchant: boolean;
   /** Tagged {mutated}: differs on a Foulborn unique from the regular unique */
   mutated: boolean;
-  /** Tagged {variant:N} for a variant the item has selected */
-  variant: boolean;
 }
 
 interface Item {
@@ -136,7 +134,6 @@ const parseMods = (lines: string[], selected: Set<number>): Mod[] => {
             implicit: i < implicits,
             enchant: i < implicits && tags.includes('{crafted}'),
             mutated: tags.includes('{mutated}'),
-            variant: !!variants,
           },
         ];
       })

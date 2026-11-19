@@ -22,8 +22,12 @@ Package manager is pnpm (Node `lts/jod`, see `.nvmrc`).
 `CI=true timeout 20 <cmd> < /dev/null`. Without `CI=true`, Vite 7 watches stdin: a closed stdin makes `wxt build`
 exit 0 mid-build with an empty `.output/`, and a never-closing one makes `wxt prepare` (the `postinstall`) hang.
 
-There is no test runner configured (no vitest/jest scripts). The husky pre-commit hook runs `lint-staged`
-(prettier + eslint --fix) and then `pnpm compile`, so type errors block commits.
+- `pnpm test` / `pnpm test:watch` — vitest (`vitest.config.ts`, WXT's vitest plugin). Tests sit next to the code
+  as `*.test.ts`; today they cover `services/pob/` (ported from the pob2bt CLI) with Build Code fixtures in
+  `services/pob/fixtures/`. Work test-first there: add a failing test for the behavior, then change the code.
+
+The husky pre-commit hook runs `lint-staged` (prettier + eslint --fix) and then `pnpm compile`, so type errors block
+commits. It does not run the tests.
 
 ## Architecture
 

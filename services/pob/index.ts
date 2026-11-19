@@ -51,8 +51,6 @@ const ICONS = new Set([
   'luminary',
 ]);
 
-// ponytail: a fixed list; other uniques with variants are only versions of the same item
-const VARIANT_UNIQUES = new Set(["Watcher's Eye", 'Impossible Escape', 'Thread of Hope']);
 const PAIRED_UNIQUES = new Set(['Forbidden Flame', 'Forbidden Flesh']);
 
 /** Shaper, Elder and Conqueror influences are pseudo stats; the Eldritch ones are misc filters */
@@ -183,7 +181,7 @@ const passiveCount = (text: string, base: string): StatValue => {
   return count <= (FEWEST_PASSIVES[base.split(' ')[0]!] ?? 0) ? { max: count } : { min: count };
 };
 
-/** Matches the mod lines of an item, joining the two-line stats (cluster jewel enchants) */
+/** Matches the mod lines of an item, joining the stats that span lines */
 const matchedMods = function* (
   mods: Mod[],
   reportUnmatched: Report,
@@ -192,11 +190,16 @@ const matchedMods = function* (
     const { text, implicit, enchant } = mods[i]!;
     let match = matchMod(text);
     let line = text;
-    // Some stats span two lines (cluster jewel enchants)
-    const next = mods[i + 1];
-    if (!match && next?.implicit === implicit && (match = matchMod((line = `${text}\n${next.text}`)))) i++;
-    if (match) yield { match, implicit, enchant, text: line };
-    else reportUnmatched(text);
+    // Some stats span two lines (cluster jewel enchants) or three (Impossible Escape)
+    for (let next = mods[i + 1]; !match && next?.implicit === implicit && line.split('\n').length < 3; ) {
+      match = matchMod((line = `${line}\n${next.text}`));
+      next = mods[i + line.split('\n').length];
+    }
+    if (!match) reportUnmatched(text);
+    else {
+      i += line.split('\n').length - 1;
+      yield { match, implicit, enchant, text: line };
+    }
   }
 };
 
@@ -342,13 +345,11 @@ const searchQuery = ({ slot, item }: BuildItem, reportUnmatched: Report) => {
     // Forbidden Flame and Flesh are searched by their node alone: a find on either jewel of the pair counts
     if (!PAIRED_UNIQUES.has(name)) query.name = name;
     if (item.name !== name) query.filters = { misc_filters: { filters: { mutated: { option: 'true' } } } };
-    // A unique is identified by its name, plus the mods that set it apart: Mutated Mods and those of a selected variant
-    // ponytail: an item saved without variant tags (Watcher's Eye from a trade import) keeps its "while affected by" lines
-    const tagged = item.mods.some(mod => mod.variant);
-    const variantMod = (mod: Mod) => mod.variant || (!tagged && /while affected by/.test(mod.text));
-    const identity = item.mods.filter(
-      mod => mod.mutated || PAIRED_UNIQUES.has(name) || (VARIANT_UNIQUES.has(name) && variantMod(mod)),
-    );
+    const timeless = matchTimeless(item.mods.map(mod => mod.text));
+    // A unique is identified by its name, plus the mods that set it apart: Mutated Mods, and every mod of a unique
+    // jewel, as many roll random mods or variants (Watcher's Eye, Megalomaniac). A Timeless one goes by its seed alone
+    const jewel = !!item.base?.endsWith('Jewel') && !timeless;
+    const identity = item.mods.filter(mod => mod.mutated || jewel);
     const stats = statGroups(identity, reportUnmatched, true);
     // A flask's enchant is not part of its identity but makes a find worth more: the exact value, switched off
     const enchants = slot.startsWith('Flask')
@@ -366,7 +367,6 @@ const searchQuery = ({ slot, item }: BuildItem, reportUnmatched: Report) => {
       : [];
     if (enchants.length) stats.push({ type: 'and', filters: enchants });
     // Any conqueror of the jewel may carry the seed, so the player switches off those they don't want
-    const timeless = matchTimeless(item.mods.map(mod => mod.text));
     if (timeless) {
       const value = { min: timeless.seed, max: timeless.seed };
       stats.push({ type: 'count', value: { min: 1 }, filters: timeless.ids.map(id => ({ id, value })) });
@@ -453,6 +453,8 @@ const titleOf = ({ slot, item }: BuildItem) => {
   const skill = item.clusterSkill
     ?.replace(/^affliction_/, '')
     .split('_')
+    // Some POB ids end in an underscore ("affliction_attack_damage_while_dual_wielding_")
+    .filter(Boolean)
     .map(word => word[0]!.toUpperCase() + word.slice(1))
     .join(' ');
   return `${item.base.replace(/ Jewel$/, '')} — ${name}${skill ? ` (${skill})` : ''}`;
