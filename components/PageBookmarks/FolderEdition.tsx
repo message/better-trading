@@ -72,7 +72,12 @@ const FolderEdition: React.FC<FolderEditionProps> = ({
   onCancel,
   onSubmit,
 }) => {
-  const [folder, setFolder] = useState<BookmarksFolderStruct>(initialFolder);
+  const [folder, setFolder] = useState<BookmarksFolderStruct>(
+    // Legacy 'raider' folders are shown (and saved) as Warden, its replacement
+    initialFolder.icon === 'raider'
+      ? { ...initialFolder, icon: BookmarksFolderAscendancyRangerIcon.WARDEN }
+      : initialFolder,
+  );
 
   const iconAscendancyOptions = version === '2' ? POE2_ASCENDANCY_ICONS : POE1_ASCENDANCY_ICONS;
   const iconItemOptions = Object.values(version === '2' ? BookmarksFolderPoE2ItemIcon : BookmarksFolderPoE1ItemIcon);
