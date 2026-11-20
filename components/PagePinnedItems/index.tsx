@@ -1,6 +1,4 @@
 import styles from './styles.module.scss';
-import AlertMessage from '../AlertMessage';
-import Button from '../Button';
 import ThumbtackIcon from '@/assets/icons/solid/thumbtack.svg?react';
 import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 import { useItemResults } from '@/hooks/useItemResults';
@@ -81,7 +79,7 @@ const PagePinnedItems = ({
       {sortedPinnedItems.length > 0 ? (
         <>
           <div className={styles.toolbar}>
-            <span>{formatPinnedCount(sortedPinnedItems.length)}</span>
+            <span className={styles.count}>{formatPinnedCount(sortedPinnedItems.length)}</span>
             <button type="button" className={styles.clearButton} onClick={clearPinnedItems}>
               {clearLabel}
             </button>
@@ -98,25 +96,18 @@ const PagePinnedItems = ({
               <ClonedElement element={pinnedItem.pricingElement} />
 
               <div className={styles.itemActions}>
-                <Button
+                <button type="button" className={styles.itemAction} onClick={() => scrollToItem(pinnedItem.id)}>
+                  {scrollToItemLabel}
+                </button>
+                <button
                   type="button"
-                  theme="blue"
-                  label={scrollToItemLabel}
-                  onClick={() => scrollToItem(pinnedItem.id)}
-                  className={styles.itemScroll}
-                />
-
-                <Button
-                  type="button"
-                  theme="blue"
-                  label={unpinItemLabel}
-                  onClick={() => unpinItemById(pinnedItem.id)}
-                />
+                  className={classnames(styles.itemAction, styles.unpin)}
+                  onClick={() => unpinItemById(pinnedItem.id)}>
+                  {unpinItemLabel}
+                </button>
               </div>
             </div>
           ))}
-
-          <AlertMessage message={warningMessage} type="warning" />
         </>
       ) : (
         <div className={styles.empty}>

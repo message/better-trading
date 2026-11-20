@@ -46,14 +46,14 @@ pageAboutCreditsTitle: Credits
 pageAboutCreditsDescription: 'Better Trading was originally created by <strong>InfaMc</strong> (<a href="https://github.com/pboutin">@pboutin</a>) and is currently maintained by <strong>brosmike</strong> (<a href="https://github.com/dbjorge">@dbjorge</a>).'
 
 pagePinnedItemsWarning: Pins last until you change the search or reload the page.
-pagePinnedItemsClear: Clear all
+pagePinnedItemsClear: Unpin all
 pagePinnedItemsCount:
   1: 1 pinned
   n: $1 pinned
 pagePinnedItemsEmptyTitle: No pinned items
 pagePinnedItemsEmptyHint: Look for {pin} in the action buttons at the bottom right of each result. Pinned items stay here so you can compare them.
 pagePinnedItemsUnpinItem: Unpin
-pagePinnedItemsScrollToItem: Scroll to the item result
+pagePinnedItemsScrollToItem: Show in results
 
 pageHistoryClear: Clear history
 pageHistoryEmpty: The search history is currently empty.

@@ -17,18 +17,17 @@
   font-size: 14px;
 }
 
+.count {
+  color: variables.$white;
+}
+
 .clearButton {
   padding: 0;
   border: 0;
   background: none;
-  color: variables.$gray-alt;
+  color: #e08080;
   font: inherit;
   cursor: pointer;
-
-  &:hover,
-  &:focus-visible {
-    color: variables.$white;
-  }
 }
 
 .empty {
@@ -65,8 +64,8 @@
   // Mirrors the trade site's .btn-default, so it reads as the Pin button next to Whisper
   kbd {
     padding: 1px 5px;
-    border: 1px solid #444;
-    background-color: #222;
+    border: 1px solid #444444;
+    background-color: #222222;
     color: #e9cf9f;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 12px;
@@ -79,7 +78,7 @@
 }
 
 .itemWrapper {
-  background-color: #000;
+  background-color: #000000;
 
   // The trade site sizes the popup for its results column (fixed width, min-width: 400px), wider than the sidebar
   :global(.item-popup) {
@@ -108,7 +107,7 @@
 
   :global(.itemPopupContainer) {
     margin: 0;
-    background-color: #000;
+    background-color: #000000;
   }
 
   // The trade site only lays these out as a row inside its results list. Fields never wrap inside: a long label
@@ -119,7 +118,7 @@
     justify-content: center;
     gap: 2px 16px;
     padding: 3px;
-    background-color: #000;
+    background-color: #000000;
 
     :global(.s) {
       white-space: nowrap;
@@ -142,30 +141,57 @@
       }
 
       :global(.colourDefault) {
-        color: #fff;
+        color: #ffffff;
       }
 
       :global(.colourAugmented) {
-        color: #88f;
+        color: #8888ff;
       }
     }
   }
 
+  // Quiet footer instead of two heavy buttons: the item is the content, these are secondary
   .itemActions {
     display: flex;
-    padding: 10px;
-    background-color: #000;
+    border-top: 1px solid #333333;
+    background-color: #000000;
   }
 
-  .itemScroll {
+  .itemAction {
     flex: 1 1 auto;
+    padding: 9px 10px;
+    border: 0;
+    background: none;
+    color: variables.$white;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+      background-color: #111111;
+    }
+
+    // Both actions share one footer; a hairline keeps them reading as two targets
+    // Not `& + &`: nested under .itemWrapper it would expand to `.itemWrapper .itemAction + .itemWrapper .itemAction`
+    + .itemAction {
+      flex: 0 0 auto;
+      border-left: 1px solid #333333;
+    }
+  }
+
+  .unpin {
+    color: #e08080;
   }
 
   .renderedItemWrapper {
     display: flex;
     justify-content: center;
     width: 100%;
-    background-color: #000;
+    background-color: #000000;
   }
 
   :global(.newItemContainer .sockets) {
@@ -179,7 +205,7 @@
     justify-content: center;
     gap: 4px 14px;
     padding: 5px 10px 10px;
-    background-color: #000;
+    background-color: #000000;
     color: #a38d6d;
 
     // Price, fee and equivalent each sit on one line with their icons vertically centered

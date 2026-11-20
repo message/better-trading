@@ -66,7 +66,7 @@ const unpinItemMessages = defineMessages({
 });
 
 const clearMessages = defineMessages({
-  'en-US': 'Clear All',
+  'en-US': 'Unpin All',
   'fr-FR': 'Tout effacer',
   'es-ES': 'Limpiar todo',
   'de-DE': 'Alle löschen',
