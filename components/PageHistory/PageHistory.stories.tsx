@@ -1,11 +1,9 @@
 import PageHistory from './index';
 import { defineMessages, resolveLocaleValue } from '../../.storybook/locale-utils';
 import { MockTradeHistoryProvider, createMockHistoryEntry } from '../../.storybook/mock-providers';
-import { formatDistance } from 'date-fns';
-import { de, enUS, es, fr, ja, ko, ptBR, ru, th, zhCN } from 'date-fns/locale';
+import { formatRelativeTime } from '@/utils/format-relative-time';
 import type { TradeLocationHistoryStruct } from '@/types/trade-location';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { Locale } from 'date-fns';
 
 /**
  * PageHistory displays a list of previously visited trade searches,
@@ -98,19 +96,6 @@ const genericAlertMessages = defineMessages({
   'th-TH': 'เกิดข้อผิดพลาด กรุณาลองอีกครั้ง',
 });
 
-const dateLocales: Record<string, Locale> = {
-  'en-US': enUS,
-  'fr-FR': fr,
-  'es-ES': es,
-  'de-DE': de,
-  'pt-BR': ptBR,
-  'ru-RU': ru,
-  'zh-CN': zhCN,
-  'ja-JP': ja,
-  'ko-KR': ko,
-  'th-TH': th,
-};
-
 const emptyArgs = {
   clearButtonLabel: '',
   emptyMessage: '',
@@ -124,7 +109,6 @@ const renderWithEntries =
   (buildEntries: () => TradeLocationHistoryStruct[]): Story['render'] =>
   (_args, { globals }) => {
     const locale = globals.locale as string;
-    const dateLocale = resolveLocaleValue(locale, dateLocales);
 
     return (
       <MockTradeHistoryProvider mockHistoryEntries={buildEntries()}>
@@ -134,13 +118,7 @@ const renderWithEntries =
             emptyMessage={resolveLocaleValue(locale, emptyHistoryMessages)}
             clearSuccessMessage={resolveLocaleValue(locale, clearSuccessMessages)}
             genericAlertMessage={resolveLocaleValue(locale, genericAlertMessages)}
-            formatCreatedAt={createdAt =>
-              formatDistance(new Date(createdAt), new Date(), {
-                addSuffix: true,
-                includeSeconds: true,
-                locale: dateLocale,
-              })
-            }
+            formatCreatedAt={createdAt => formatRelativeTime(createdAt, locale)}
           />
         </div>
       </MockTradeHistoryProvider>

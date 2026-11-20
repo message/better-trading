@@ -1,0 +1,5 @@
+@use '../../styles/variables';
+
+.content {
+  padding: 0 variables.$extension-x-padding variables.$extension-y-padding;
+}

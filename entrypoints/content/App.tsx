@@ -1,3 +1,4 @@
+import styles from './styles.module.scss';
 import ChangelogBanner from '@/components/ChangelogBanner';
 import ExpandButton from '@/components/ExpandButton';
 import FlashMessages from '@/components/FlashMessages';
@@ -53,22 +54,24 @@ const Shell = () => {
       />
       <ExpandButton {...messages.expandButton} />
 
-      {isAboutOpen ? (
-        <PageAbout
-          {...messages.pageAbout}
-          appVersion={appVersion}
-          githubUrl={GITHUB_URL}
-          currentChangelog={currentChangelog}
-        />
-      ) : (
-        <>
-          <RootPageMenu {...messages.rootPageMenu} currentPage={currentPage} onChange={changePage} />
+      <div className={styles.content}>
+        {isAboutOpen ? (
+          <PageAbout
+            {...messages.pageAbout}
+            appVersion={appVersion}
+            githubUrl={GITHUB_URL}
+            currentChangelog={currentChangelog}
+          />
+        ) : (
+          <>
+            <RootPageMenu {...messages.rootPageMenu} currentPage={currentPage} onChange={changePage} />
 
-          {currentPage === RootPage.BOOKMARKS && <PageBookmarks {...messages.pageBookmarks} />}
-          {currentPage === RootPage.HISTORY && <PageHistory {...messages.pageHistory} />}
-          {currentPage === RootPage.PINNED_ITEMS && <PagePinnedItems {...messages.pagePinnedItems} />}
-        </>
-      )}
+            {currentPage === RootPage.BOOKMARKS && <PageBookmarks {...messages.pageBookmarks} />}
+            {currentPage === RootPage.HISTORY && <PageHistory {...messages.pageHistory} />}
+            {currentPage === RootPage.PINNED_ITEMS && <PagePinnedItems {...messages.pagePinnedItems} />}
+          </>
+        )}
+      </div>
 
       <FlashMessages flashMessages={flashMessages} onDismiss={flash => dismissFlash(flash.id)} />
     </ItemResultsProvider>

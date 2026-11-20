@@ -1,6 +1,5 @@
+import { formatRelativeTime } from '@/utils/format-relative-time';
 import { i18n } from '#i18n';
-import { formatDistance } from 'date-fns';
-import { enUS } from 'date-fns/locale';
 import { useMemo } from 'react';
 import type { GeneratedI18nStructure } from '#i18n';
 
@@ -72,7 +71,10 @@ const buildMessages = () => ({
   pagePinnedItems: {
     warningMessage: i18n.t('pagePinnedItemsWarning'),
     clearLabel: i18n.t('pagePinnedItemsClear'),
-    emptyMessage: i18n.t('pagePinnedItemsEmpty'),
+    formatPinnedCount: (count: number) => i18n.t('pagePinnedItemsCount', count),
+    emptyTitle: i18n.t('pagePinnedItemsEmptyTitle'),
+    emptyHint: i18n.t('pagePinnedItemsEmptyHint'),
+    pinButtonLabel: i18n.t('itemResultsPinnablePin'),
     unpinItemLabel: i18n.t('pagePinnedItemsUnpinItem'),
     scrollToItemLabel: i18n.t('pagePinnedItemsScrollToItem'),
     genericAlertMessage: i18n.t('genericAlertFlash'),
@@ -83,9 +85,8 @@ const buildMessages = () => ({
     emptyMessage: i18n.t('pageHistoryEmpty'),
     clearSuccessMessage: i18n.t('pageHistoryClearSuccessFlash'),
     genericAlertMessage: i18n.t('genericAlertFlash'),
-    // ponytail: enUS matches the only shipped locale; pick the date-fns locale from i18n when locales/ grows
-    formatCreatedAt: (createdAt: string) =>
-      formatDistance(new Date(createdAt), new Date(), { addSuffix: true, includeSeconds: true, locale: enUS }),
+    // ponytail: 'en' matches the only shipped locale; pass the i18n UI language when locales/ grows
+    formatCreatedAt: (createdAt: string) => formatRelativeTime(createdAt, 'en'),
   },
 
   pageBookmarks: {

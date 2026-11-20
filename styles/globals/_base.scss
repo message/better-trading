@@ -23,7 +23,6 @@ body.bt-body {
     bottom: 0;
     overflow-y: auto;
     width: variables.$extension-width;
-    padding: variables.$extension-y-padding variables.$extension-x-padding;
     background-color: rgba(#0a0a0a, 0.8);
     transition: right 0.2s ease;
   }

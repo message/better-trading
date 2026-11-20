@@ -5,8 +5,17 @@
   @include mixins.gradient-hover(variables.$gold-alt);
 
   display: block;
-  padding: 3px 5px;
+  padding: 7px 8px 0;
   color: variables.$white;
+
+  // Divider that fades out towards the edges
+  &::after {
+    content: '';
+    display: block;
+    height: 1px;
+    margin-top: 7px;
+    background: linear-gradient(90deg, transparent, rgba(#d48c14, 0.7), transparent);
+  }
 
   &:hover,
   &:focus {
@@ -28,7 +37,17 @@
   font-size: 12px;
 }
 
+.details > * {
+  flex-shrink: 0;
+}
+
 .slug {
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 8px;
   font-size: 10px;
   color: rgba(variables.$white, 0.6);
 }

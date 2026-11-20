@@ -7,6 +7,77 @@
   grid-gap: 10px;
 }
 
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 4px;
+  color: variables.$gray-alt;
+  font-size: 14px;
+}
+
+.clearButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: variables.$gray-alt;
+  font: inherit;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    color: variables.$white;
+  }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 48px 20px 24px;
+  color: variables.$gray-alt;
+  text-align: center;
+
+  p {
+    max-width: 280px;
+    margin: 0;
+  }
+}
+
+.emptyIcon {
+  width: 34px;
+  height: 34px;
+  color: variables.$white;
+  transform: rotate(30deg);
+}
+
+.emptyTitle {
+  color: variables.$white;
+  font-size: 17px;
+}
+
+.emptyHint {
+  font-size: 14px;
+  line-height: 1.4;
+
+  // Mirrors the trade site's .btn-default, so it reads as the Pin button next to Whisper
+  kbd {
+    padding: 1px 5px;
+    border: 1px solid #444;
+    background-color: #222;
+    color: #e9cf9f;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+
+.emptyNote {
+  margin-top: 6px !important;
+}
+
 .itemWrapper {
   background-color: #000;
 
@@ -16,8 +87,23 @@
     min-width: 0;
   }
 
+  // Single-line headers (normal/magic) have a fixed height: a long name wrapping in the narrow sidebar would spill
+  // over the stats, so the header grows and its frame images stretch with it
   :global(.item-popup__header) {
     min-width: 0;
+  }
+
+  :global(.item-popup__header:not(.item-popup__header--double)) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    min-height: 34px;
+    background-size: auto 100%;
+
+    :global(.item-popup__header-line) {
+      line-height: 22px;
+    }
   }
 
   :global(.itemPopupContainer) {

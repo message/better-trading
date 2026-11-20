@@ -33,7 +33,7 @@ const Modal: React.FC<ModalProps> = ({ title, closeLabel, logoAlt, onClose, chil
       shouldCloseOnEsc={true}>
       <header className={styles.header}>
         <h1 className={styles.headerTitle}>
-          <img className={styles.headerTitleLogo} src={getExtensionUrl('/assets/images/logo.png')} alt={logoAlt} />
+          <img className={styles.headerTitleLogo} src={getExtensionUrl('/assets/images/logo.svg')} alt={logoAlt} />
           {title}
         </h1>
 

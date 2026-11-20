@@ -1,7 +1,7 @@
 import styles from './styles.module.scss';
 import AlertMessage from '../AlertMessage';
 import Button from '../Button';
-import XmarkIcon from '@/assets/icons/solid/xmark.svg?react';
+import ThumbtackIcon from '@/assets/icons/solid/thumbtack.svg?react';
 import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 import { useItemResults } from '@/hooks/useItemResults';
 import classnames from 'classnames';
@@ -10,7 +10,12 @@ import { useCallback } from 'react';
 interface PagePinnedItemsProps {
   warningMessage: string;
   clearLabel: string;
-  emptyMessage: string;
+  /** e.g. "2 pinned" */
+  formatPinnedCount: (count: number) => string;
+  emptyTitle: string;
+  /** "{pin}" marks where the pin button's label goes, shown as a button lookalike */
+  emptyHint: string;
+  pinButtonLabel: string;
   unpinItemLabel: string;
   scrollToItemLabel: string;
   genericAlertMessage: string;
@@ -39,7 +44,10 @@ const ClonedElement = ({ element }: { element: HTMLElement }) => {
 const PagePinnedItems = ({
   warningMessage,
   clearLabel,
-  emptyMessage,
+  formatPinnedCount,
+  emptyTitle,
+  emptyHint,
+  pinButtonLabel,
   unpinItemLabel,
   scrollToItemLabel,
   genericAlertMessage,
@@ -72,6 +80,13 @@ const PagePinnedItems = ({
     <div className={classnames(styles.pinnedItems, className)}>
       {sortedPinnedItems.length > 0 ? (
         <>
+          <div className={styles.toolbar}>
+            <span>{formatPinnedCount(sortedPinnedItems.length)}</span>
+            <button type="button" className={styles.clearButton} onClick={clearPinnedItems}>
+              {clearLabel}
+            </button>
+          </div>
+
           {sortedPinnedItems.map(pinnedItem => (
             <div key={pinnedItem.id} className={styles.itemWrapper}>
               <ClonedElement element={pinnedItem.detailsElement} />
@@ -101,13 +116,20 @@ const PagePinnedItems = ({
             </div>
           ))}
 
-          <Button type="button" theme="gold" label={clearLabel} onClick={clearPinnedItems} icon={XmarkIcon} />
+          <AlertMessage message={warningMessage} type="warning" />
         </>
       ) : (
-        <AlertMessage message={emptyMessage} type="warning" />
+        <div className={styles.empty}>
+          <ThumbtackIcon className={styles.emptyIcon} aria-hidden />
+          <div className={styles.emptyTitle}>{emptyTitle}</div>
+          <p className={styles.emptyHint}>
+            {emptyHint
+              .split('{pin}')
+              .flatMap((part, index) => (index === 0 ? [part] : [<kbd key={index}>{pinButtonLabel}</kbd>, part]))}
+          </p>
+          <p className={styles.emptyNote}>{warningMessage}</p>
+        </div>
       )}
-
-      <AlertMessage message={warningMessage} type="warning" />
     </div>
   );
 };

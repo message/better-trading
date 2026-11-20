@@ -54,7 +54,7 @@ const Header: FC<HeaderProps> = ({
     collapseSidePanel();
   }, []);
 
-  const logoUrl = getExtensionUrl('/assets/images/logo.png');
+  const logoUrl = getExtensionUrl('/assets/images/logo.svg');
 
   return (
     <div className={styles.container}>

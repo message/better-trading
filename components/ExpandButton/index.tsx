@@ -31,7 +31,7 @@ const ExpandButton: FC<ExpandButtonProps> = ({ logoAlt, expandLabel, className }
     expandSidePanel();
   }, []);
 
-  const logoUrl = getExtensionUrl('/assets/images/logo.png');
+  const logoUrl = getExtensionUrl('/assets/images/logo.svg');
   const buttonClassName = classnames(styles.expandButton, className, {
     [styles.isVisible]: isVisible,
   });
