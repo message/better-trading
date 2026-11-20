@@ -83,6 +83,10 @@ languages WILL be added, so never assume English-only layout or hardcode strings
 **Port, don't copy.** When migrating something from `old-extension/`, review the old solution first: keep it if it
 worked well, redesign it if there is a clearly better approach. Parity is about behavior, not about code structure.
 
+**Look at the page before judging it.** When the user talks about an object on a page (an element, a layout, a
+style, a rendered item, a visual bug), assess it live with the Chrome MCP (e.g. `mcp__chrome-9222__*`:
+`take_snapshot`, `take_screenshot`, `get_css_styles`, `evaluate_script`) instead of guessing from the source code.
+
 ## Agent skills
 
 ### Issue tracker
