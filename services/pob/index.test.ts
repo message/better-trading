@@ -8,6 +8,8 @@ import { deflateSync } from 'node:zlib';
 
 const FIXTURES = {
   'elemental-hit-slayer-3.30.txt': { title: 'Elemental Hit Slayer', icon: 'slayer' },
+  'eviscirate-elementalist-3.30.txt': { title: 'Eviscerate Elementalist', icon: 'elementalist' },
+  'flicker-strike-slayer-3.30.txt': { title: 'Flicker Strike Slayer', icon: 'slayer' },
   'frost-blades-champion-3.30.txt': { title: 'Frost Blades Champion', icon: 'champion' },
   'ice-trap-assasin-3.30.txt': { title: 'Ice Trap Assassin', icon: 'assassin' },
   'kinetic-blast-warden-3.30.txt': { title: 'Kinetic Blast Warden', icon: 'warden' },
@@ -120,6 +122,12 @@ describe('Search Query', () => {
     });
   });
 
+  it('searches a Skin of the Lords by its random keystone', async () => {
+    const { stats } = await tradeOf('elemental-hit-slayer-3.30.txt', 'Unique Body Armour — Foulborn Skin of the Lords');
+    // Avatar of Fire
+    expect(stats[0].filters).toContainEqual({ id: 'explicit.stat_346029096' });
+  });
+
   it('scales a Mutated Mod by the Min Factor, keeping a minimum of 1', async () => {
     const { stats } = await tradeOf('ice-trap-assasin-3.30.txt', "Unique Ring — Foulborn Romira's Banquet");
     expect(stats).toHaveLength(1);
@@ -170,6 +178,60 @@ Implicits: 0
     // The Energy Shield, Life and Mana lines every Watcher's Eye has, then its three aura mods
     expect(stats).toHaveLength(1);
     expect(stats[0].filters).toHaveLength(6);
+  });
+
+  it('searches a Forbidden Shako by its random support gems, not the Attributes every one has', async () => {
+    const { stats } = await tradeOf('flicker-strike-slayer-3.30.txt', 'Unique Helmet — Forbidden Shako');
+    // Endurance Charge on Melee Stun level 7 and Ice Bite level 33, without +26 to all Attributes
+    expect(stats).toEqual([
+      {
+        type: 'and',
+        filters: [
+          { id: 'explicit.indexable_support_88', value: { min: 5 } },
+          { id: 'explicit.indexable_support_73', value: { min: 26 } },
+        ],
+      },
+    ]);
+  });
+
+  it('searches an Impresence by the mods of its variant, not the ones every Impresence has', async () => {
+    const { stats } = await tradeOf('eviscirate-elementalist-3.30.txt', 'Unique Amulet — Impresence');
+    // The fire variant: life, fire resistance and the two curse auras, without its added fire damage, attributes,
+    // life regeneration and Maddening Presence
+    expect(stats).toEqual([
+      {
+        type: 'and',
+        filters: [
+          { id: 'explicit.stat_3299347043', value: { min: 42 } },
+          { id: 'explicit.stat_3372524247', value: { min: 17 } },
+          { id: 'explicit.stat_3416664215' },
+          { id: 'explicit.stat_1195140808' },
+        ],
+      },
+    ]);
+  });
+
+  it('keeps a fixed mod of a unique jewel, whose roll may set its price', async () => {
+    const { stats } = await tradeOf('righteous-fire-chieftain-3.30.txt', 'Unique Jewel — Voices');
+    // Adds # Jewel Socket Passive Skills: on every Voices, 1 to 7
+    expect(stats[0].filters).toContainEqual({ id: 'explicit.stat_247746531', value: { min: 2 } });
+  });
+
+  it('searches a unique sold in several bases by its base too', async () => {
+    const { name, type } = await tradeOf('elemental-hit-slayer-3.30.txt', 'Unique Jewel — Combat Focus');
+    expect({ name, type }).toEqual({ name: 'Combat Focus', type: 'Viridian Jewel' });
+  });
+
+  it('searches an Agnerod by the item level bracket that sets its Vinktar Square mods', async () => {
+    const { query } = (
+      await singleItem(`Rarity: UNIQUE
+Agnerod East
+Imperial Staff
+Item Level: 81
+Implicits: 0
++20% Chance to Block Attack Damage while wielding a Staff`)
+    ).trades[0]!;
+    expect(query.filters).toEqual({ misc_filters: { filters: { ilvl: { min: 80 } } } });
   });
 
   it('searches a unique whose variants are only versions by its name only', async () => {
@@ -456,6 +518,31 @@ describe('Impossible Escape', () => {
     expect(query.stats).toEqual([
       { type: 'and', filters: [{ id: 'explicit.stat_2422708892', value: { option: 39085 } }] },
     ]);
+  });
+});
+
+describe('Mod lines that read unlike the stat data', () => {
+  it('joins a two-line stat whose lines POB keeps apart', async () => {
+    // Thread of Hope: "-12% to all Elemental Resistances" sits between the stat's first line and "Passage"
+    const { stats } = await tradeOf('flicker-strike-slayer-3.30.txt', 'Unique Jewel — Thread of Hope');
+    expect(stats[0].filters).toContainEqual({ id: 'explicit.stat_1725885727' });
+  });
+
+  it('matches a "You have" line to its stat still written "Players have"', async () => {
+    const { stats } = await tradeOf('flicker-strike-slayer-3.30.txt', 'Unique Belt — Screams of the Desiccated');
+    // Echoing Shrine Buff, the mod Screams of the Desiccated rolls at random
+    expect(stats).toEqual([{ type: 'and', filters: [{ id: 'explicit.stat_1941745370' }] }]);
+  });
+
+  it('matches a granted skill POB writes with a trailing "Skill"', async () => {
+    // Pandemonium Palm: "Grants Level 30 Aspect of the Cat Skill" is the stat "Grants Level # Aspect of the Cat"
+    const { stats } = await tradeOf('flicker-strike-slayer-3.30.txt', 'Gloves — Pandemonium Palm');
+    expect(stats).toContainEqual(
+      expect.objectContaining({
+        filters: expect.arrayContaining([{ id: 'explicit.effect_771254875', value: { min: 24 } }]),
+      }),
+    );
+    expect((await toExportString(await fixture('flicker-strike-slayer-3.30.txt'))).unmatched).toEqual([]);
   });
 });
 

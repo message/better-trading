@@ -40,6 +40,73 @@ exports[`elemental-hit-slayer-3.30.txt > has one Trade per distinct Build Item 1
 ]
 `;
 
+exports[`eviscirate-elementalist-3.30.txt > has one Trade per distinct Build Item 1`] = `
+[
+  "Unique Weapon — Foulborn Razor of the Seventh Sun",
+  "Weapon 1 Swap — Frosted Cleaver of the Lynx",
+  "Unique Weapon — Foulborn The Surrender",
+  "Weapon 2 Swap — Cleaver",
+  "Helmet — Armageddon Brow",
+  "Body Armour — Tempest Carapace",
+  "Unique Gloves — Thunderfist",
+  "Boots — Soul Sole",
+  "Unique Amulet — Impresence",
+  "Unique Ring — Polaric Devastation",
+  "Unique Ring — Berek's Respite",
+  "Unique Belt — Dyadian Dawn",
+  "Flask 1 — Enduring Eternal Mana Flask of Quenching",
+  "Flask 2 — Horticultural Prismatic Tincture of Dissolution",
+  "Unique Flask — Wine of the Prophet",
+  "Flask 4 — Analyst's Quicksilver Flask of the Kakapo",
+  "Unique Flask — Cinderswallow Urn",
+  "Arm — Resplendent Sceptre",
+  "Body — Greater Gemling Torso",
+  "Head — General's Head",
+  "Leg — Greater Armoured Leg",
+  "Jewel — Plague Shard",
+  "Large Cluster — Spirit Desire (Attack Damage While Holding A Shield)",
+  "Medium Cluster — Bramble Heart (Fire Damage Over Time Multiplier)",
+  "Unique Jewel — The Light of Meaning",
+  "Unique Jewel — Impossible Escape",
+  "Jewel — Viper Heart",
+  "Unique Jewel — Elegant Hubris",
+  "Unique Jewel — Foulborn The Blue Dream",
+  "Jewels — combined",
+]
+`;
+
+exports[`flicker-strike-slayer-3.30.txt > has one Trade per distinct Build Item 1`] = `
+[
+  "Unique Weapon — The Covetous Dark",
+  "Unique Weapon 1 Swap — The Poet's Pen",
+  "Unique Weapon — Svalinn",
+  "Unique Helmet — Forbidden Shako",
+  "Unique Body Armour — Replica Farrul's Fur",
+  "Gloves — Pandemonium Palm",
+  "Unique Boots — Foulborn Darkray Vectors",
+  "Unique Amulet — Yoke of Suffering",
+  "Unique Ring — Le Heup of All",
+  "Unique Ring — Kalandra's Touch",
+  "Unique Ring — The Taming",
+  "Unique Belt — Screams of the Desiccated",
+  "Flask 1 — Potent Prismatic Tincture of Overpowering",
+  "Flask 2 — Kieserite Hallowed Life Flask of Alleviation",
+  "Unique Flask — The Writhing Jar",
+  "Arm — Lunar Bow",
+  "Body — Gladiator's Heart",
+  "Head — Coven Queen's Crown",
+  "Leg — Greater Skeleton Wheel",
+  "Large Cluster — Viper Star (Attack Damage While Holding A Shield)",
+  "Unique Jewel — Stormshroud",
+  "Unique Jewel — Forbidden Flame / Flesh",
+  "Unique Jewel — Elegant Hubris",
+  "Unique Jewel — Sublime Vision",
+  "Unique Jewel — Thread of Hope",
+  "Unique Jewel — Foulborn Unnatural Instinct",
+  "Unique Jewel — Impossible Escape",
+]
+`;
+
 exports[`frost-blades-champion-3.30.txt > has one Trade per distinct Build Item 1`] = `
 [
   "Unique Weapon — Replica Dreamfeather",

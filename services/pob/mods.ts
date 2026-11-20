@@ -22,10 +22,20 @@ interface Stat {
   trade: { ids: Record<string, string[]>; inverted?: boolean };
 }
 
+/** What APT knows about a unique beyond its name, from the `{ unique }` lines of pob-stats.ndjson */
+interface UniqueInfo {
+  unique: string;
+  /** Trade stat numbers (`stat_123`) every copy has; any other explicit mod is rolled at random */
+  fixed?: string[];
+  /** Comes in several bases that are worth different amounts (Precursor's Emblem rings) */
+  multiBase?: true;
+}
+
 const TYPES = ['explicit', 'implicit', 'fractured', 'enchant', 'crafted'];
 const NUMBER = /[+-]?\d+(?:\.\d+)?/g;
 
 const byText = new Map<string, { stats: Stat[]; matcher: Matcher }>();
+const uniques = new Map<string, UniqueInfo>();
 // Timeless jewel seed stats, one per conqueror; a jewel's conquerors share the "Passives ... Conquered by" line
 const conquerorIds = new Map<string, string[]>();
 const seedTexts = new Map<string, string>();
@@ -35,7 +45,11 @@ const loadStats = (ndjson: string) => {
   if (byText.size) return;
   for (const line of ndjson.split('\n')) {
     if (!line) continue;
-    const entry = JSON.parse(line) as Stat & { stats?: Stat[] };
+    const entry = JSON.parse(line) as (Stat & { stats?: Stat[] }) | UniqueInfo;
+    if ('unique' in entry) {
+      uniques.set(entry.unique, entry);
+      continue;
+    }
     // ponytail: shared texts merge all their stats (APT picks one by item class); the count group accepts any
     const stats = entry.stats ?? [entry];
     for (const stat of stats) {
@@ -57,6 +71,8 @@ const loadStats = (ndjson: string) => {
   }
 };
 
+const uniqueInfo = (name: string): UniqueInfo | undefined => uniques.get(name);
+
 /** Finds a Timeless jewel's seed in its mod lines: the stat of every conqueror and the seed they all share */
 const matchTimeless = (lines: string[]): { ids: string[]; seed: number } | undefined => {
   for (let i = 0; i + 1 < lines.length; i++) {
@@ -69,8 +85,8 @@ const matchTimeless = (lines: string[]): { ids: string[]; seed: number } | undef
 
 const bits = (n: number) => n.toString(2).replaceAll('0', '').length;
 
-/** Matches a POB mod (one line, or two joined by \n) to trade stats, or returns undefined */
-const matchMod = (line: string): ModMatch | undefined => {
+/** Matches a POB mod line as it reads in the stat data */
+const matchText = (line: string): ModMatch | undefined => {
   const numbers = [...line.matchAll(NUMBER)];
   // Replace every number with #, then fewer: some numbers are part of the stat text ("Level 20")
   const masks = [...Array(2 ** numbers.length).keys()].sort((a, b) => bits(b) - bits(a));
@@ -109,5 +125,25 @@ const matchMod = (line: string): ModMatch | undefined => {
   return undefined;
 };
 
-export type { ModMatch };
-export { loadStats, matchMod, matchTimeless };
+// How POB lines read where the stat data reads otherwise. Each rewrite is tried only when the line itself fails
+const REWRITES: [RegExp, string][] = [
+  // The game rewrote "Players have" mods (Screams of the Desiccated shrine buffs); the stat data still has the old text
+  // ponytail: drop once APT's stats.ndjson reads "You have"
+  [/^You have /, 'Players have '],
+  // "Grants Level 30 Aspect of the Cat Skill" is the stat "Grants Level # Aspect of the Cat". The few granted skills
+  // whose stat ends in "Skill" (Anger, Hatred) match as they are, before this
+  [/^(Grants Level \d+ .+) Skill$/, '$1'],
+];
+
+/** Matches a POB mod (one line, or two joined by \n) to trade stats, or returns undefined */
+const matchMod = (line: string): ModMatch | undefined => {
+  const match = matchText(line);
+  if (match) return match;
+  for (const [pattern, replacement] of REWRITES) {
+    if (pattern.test(line)) return matchText(line.replace(pattern, replacement));
+  }
+  return undefined;
+};
+
+export type { ModMatch, UniqueInfo };
+export { loadStats, matchMod, matchTimeless, uniqueInfo };

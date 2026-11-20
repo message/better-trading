@@ -1,6 +1,6 @@
 // Ported from pob2bt (src/index.ts): Build Code to a BT Export String. Skill Gem Trades (`--gems`) are left out
 import { decodeBuild } from './build';
-import { matchMod, matchTimeless } from './mods';
+import { matchMod, matchTimeless, uniqueInfo } from './mods';
 import { Base64 } from 'js-base64';
 import type { BuildItem, Influence, Item, Mod } from './build';
 import type { ModMatch } from './mods';
@@ -52,6 +52,8 @@ const ICONS = new Set([
 ]);
 
 const PAIRED_UNIQUES = new Set(['Forbidden Flame', 'Forbidden Flesh']);
+// Agnerod staves get their Vinktar Square mods by item level from these brackets (poewiki: The Vinktar Square)
+const AGNEROD_LEVELS = [82, 80, 78, 75];
 
 /** Shaper, Elder and Conqueror influences are pseudo stats; the Eldritch ones are misc filters */
 const INFLUENCE_STATS: Partial<Record<Influence, string>> = {
@@ -186,7 +188,10 @@ const matchedMods = function* (
   mods: Mod[],
   reportUnmatched: Report,
 ): Generator<{ match: ModMatch; implicit: boolean; enchant: boolean; text: string }> {
+  // Lines already joined to an earlier one that was not right before them
+  const joined = new Set<number>();
   for (let i = 0; i < mods.length; i++) {
+    if (joined.has(i)) continue;
     const { text, implicit, enchant } = mods[i]!;
     let match = matchMod(text);
     let line = text;
@@ -195,11 +200,14 @@ const matchedMods = function* (
       match = matchMod((line = `${line}\n${next.text}`));
       next = mods[i + line.split('\n').length];
     }
-    if (!match) reportUnmatched(text);
-    else {
-      i += line.split('\n').length - 1;
-      yield { match, implicit, enchant, text: line };
+    if (match) i += line.split('\n').length - 1;
+    // POB may put another mod between a stat's two lines (Thread of Hope's "Passage")
+    for (let j = i + 2; !match && mods[j]?.implicit === implicit; j++) {
+      match = joined.has(j) ? undefined : matchMod((line = `${text}\n${mods[j]!.text}`));
+      if (match) joined.add(j);
     }
+    if (!match) reportUnmatched(text);
+    else yield { match, implicit, enchant, text: line };
   }
 };
 
@@ -344,12 +352,23 @@ const searchQuery = ({ slot, item }: BuildItem, reportUnmatched: Report) => {
     const name = item.name.replace(/^Foulborn /, '');
     // Forbidden Flame and Flesh are searched by their node alone: a find on either jewel of the pair counts
     if (!PAIRED_UNIQUES.has(name)) query.name = name;
-    if (item.name !== name) query.filters = { misc_filters: { filters: { mutated: { option: 'true' } } } };
+    const info = uniqueInfo(name);
+    if (info?.multiBase && item.base) query.type = item.base;
+    const misc: Record<string, unknown> = {};
+    if (item.name !== name) misc.mutated = { option: 'true' };
+    const agnerod = name.startsWith('Agnerod') && AGNEROD_LEVELS.find(level => (item.itemLevel ?? 0) >= level);
+    if (agnerod) misc.ilvl = { min: agnerod };
+    if (Object.keys(misc).length) query.filters = { misc_filters: { filters: misc } };
     const timeless = matchTimeless(item.mods.map(mod => mod.text));
-    // A unique is identified by its name, plus the mods that set it apart: Mutated Mods, and every mod of a unique
-    // jewel, as many roll random mods or variants (Watcher's Eye, Megalomaniac). A Timeless one goes by its seed alone
-    const jewel = !!item.base?.endsWith('Jewel') && !timeless;
-    const identity = item.mods.filter(mod => mod.mutated || jewel);
+    // A unique is identified by its name, plus the mods that set it apart: Mutated Mods, the mods it rolls at random
+    // (those APT does not list as fixed: Skin of the Lords keystones, Forbidden Shako supports), and every mod of a
+    // unique jewel, as even a fixed one may roll what sets the price (Voices sockets). A Timeless one goes by its seed
+    const jewel = !!item.base?.endsWith('Jewel');
+    const fixed = info?.fixed && new Set(info.fixed);
+    const random = (mod: Mod) =>
+      !timeless &&
+      (jewel || (!!fixed && !mod.implicit && !matchMod(mod.text)?.ids.some(id => fixed.has(id.split('.')[1]!))));
+    const identity = item.mods.filter(mod => mod.mutated || random(mod));
     const stats = statGroups(identity, reportUnmatched, true);
     // A flask's enchant is not part of its identity but makes a find worth more: the exact value, switched off
     const enchants = slot.startsWith('Flask')
