@@ -29,6 +29,12 @@ exit 0 mid-build with an empty `.output/`, and a never-closing one makes `wxt pr
 The husky pre-commit hook runs `lint-staged` (prettier + eslint --fix) and then `pnpm compile`, so type errors block
 commits. It does not run the tests.
 
+**Releasing:** set `changelog` in `package.json` to a new slug and write `changelogs/<slug>.md` (shown in the
+in-app changelog banner; WXT takes the manifest version from `package.json`), commit, then
+`npm version patch|minor|major` (bumps `version`, commits, tags `vX.Y.Z`) and `git push --follow-tags`. The tag
+triggers `.github/workflows/build.yml`, which builds both browsers and creates a GitHub Release with the zips
+(incl. the sources zip AMO asks for). The job fails if the tag doesn't match `package.json` `version`.
+
 ## Architecture
 
 **Entrypoints** (`entrypoints/`):
