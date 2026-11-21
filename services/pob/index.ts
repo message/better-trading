@@ -196,7 +196,7 @@ const matchedMods = function* (
     let match = matchMod(text);
     let line = text;
     // Some stats span two lines (cluster jewel enchants) or three (Impossible Escape)
-    for (let next = mods[i + 1]; !match && next?.implicit === implicit && line.split('\n').length < 3; ) {
+    for (let next = mods[i + 1]; !match && next?.implicit === implicit && line.split('\n').length < 3;) {
       match = matchMod((line = `${line}\n${next.text}`));
       next = mods[i + line.split('\n').length];
     }

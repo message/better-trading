@@ -6,8 +6,8 @@ import type { ModMatch } from './mods';
 describe('matchMod', () => {
   it('matches an Allocates line of Forbidden Flame or Flesh to the stats of both jewels, so either side of the pair is found', () => {
     // A jewel's line names its counterpart; the node is the option of both stats
-    const [flame, flesh] = ['Flame', 'Flesh'].map(
-      name => matchMod(`Allocates Headsman if you have the matching modifier on Forbidden ${name}`)!,
+    const [flame, flesh] = ['Flame', 'Flesh'].map(name =>
+      matchMod(`Allocates Headsman if you have the matching modifier on Forbidden ${name}`)!,
     ) as [ModMatch, ModMatch];
     // The same order for both jewels, so their searches are equal
     expect(flame.ids).toEqual(['explicit.stat_1190333629|3184', 'explicit.stat_2460506030|3184']);
