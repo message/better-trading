@@ -1,6 +1,27 @@
 import { pobStatsPath } from './scripts/pob-stats';
+import { transformCode } from '@code-inspector/core';
 import { defineConfig } from 'wxt';
+import path from 'node:path';
+import type { Plugin } from 'vite';
 import type { UserConfig } from 'wxt';
+
+// Dev only: tags our JSX elements with `data-insp-path="file:line:col:tag"`, visible in DevTools Elements.
+// ponytail: only the attribute transform of code-inspector; its click-to-open overlay needs `customElements`,
+// which is null in content scripts.
+const jsxSourcePath = (): Plugin => ({
+  name: 'jsx-source-path',
+  enforce: 'pre',
+  transform: (code, id) =>
+    id.endsWith('.tsx') && !id.includes('/node_modules/')
+      ? transformCode({
+          content: code,
+          filePath: path.relative(import.meta.dirname, id),
+          fileType: 'jsx',
+          escapeTags: [],
+          pathType: 'relative',
+        })
+      : undefined,
+});
 
 // See https://wxt.dev/api/config.html
 const config: UserConfig = {
@@ -19,6 +40,7 @@ const config: UserConfig = {
   },
   // Icons are sized like font icons (1em) unless CSS says otherwise
   svgr: { svgrOptions: { icon: true } },
+  vite: ({ command }) => ({ plugins: command === 'serve' ? [jsxSourcePath()] : [] }),
   // outDir: './dist',
   webExt: {
     chromiumArgs: ['https://www.pathofexile.com/trade'],
