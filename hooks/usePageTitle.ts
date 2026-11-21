@@ -9,7 +9,7 @@ const WOOP_PREFIX_REGEX = /^\((\d+)\) /;
 // null means "no woop count prefix"
 const parseWoopCount = (title: string): number | null => {
   const match = WOOP_PREFIX_REGEX.exec(title);
-  return match ? parseInt(match[1], 10) : null;
+  return match ? parseInt(match[1]!, 10) : null;
 };
 
 const applyTitle = (title: string | null, woopCount: number | null) => {

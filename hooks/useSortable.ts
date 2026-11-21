@@ -70,8 +70,8 @@ const useSortableZone = ({ listId, listRef, onPreview }: SortableZoneOptions) =>
         return clientY - top > height / 2;
       };
       let toIndex = fromIndex;
-      while (toIndex < items.length - 1 && isPastMiddleOf(items[toIndex + 1])) toIndex++;
-      while (toIndex > 0 && !isPastMiddleOf(items[toIndex - 1])) toIndex--;
+      while (toIndex < items.length - 1 && isPastMiddleOf(items[toIndex + 1]!)) toIndex++;
+      while (toIndex > 0 && !isPastMiddleOf(items[toIndex - 1]!)) toIndex--;
       if (toIndex === fromIndex) return;
       // Drag events can outrun the re-render: remember the new position right away
       source.data.index = toIndex;

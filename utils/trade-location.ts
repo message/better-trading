@@ -5,7 +5,8 @@ import type { ExactTradeLocationStruct, TradeLocationStruct, TradeSiteVersion } 
 const BASE_URL = 'https://www.pathofexile.com';
 const TRADE_REALMS = ['xbox', 'sony', 'poe2'];
 
-const parseVersion = (tradePathPrefix: string): TradeSiteVersion => (tradePathPrefix === 'trade2' ? '2' : '1');
+const parseVersion = (tradePathPrefix: string | undefined): TradeSiteVersion =>
+  tradePathPrefix === 'trade2' ? '2' : '1';
 
 const decodePart = (part: string): string => {
   try {
@@ -17,15 +18,15 @@ const decodePart = (part: string): string => {
 
 const parseCurrentPath = (pathname: string): ExactTradeLocationStruct => {
   const pathParts = pathname.split('/').slice(1).map(decodePart);
-  let versionPart: string;
+  let versionPart: string | undefined;
   let type: string | undefined;
   let league: string | undefined;
   let slug: string | undefined;
   let live: string | undefined;
 
-  if (TRADE_REALMS.includes(pathParts[2])) {
-    let realm: string;
-    let leagueInRealm: string;
+  if (TRADE_REALMS.includes(pathParts[2] ?? '')) {
+    let realm: string | undefined;
+    let leagueInRealm: string | undefined;
     [versionPart, type, realm, leagueInRealm, slug, live] = pathParts;
     league = `${realm}/${leagueInRealm}`;
   } else {

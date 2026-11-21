@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import { WxtVitest } from 'wxt/testing';
+import { WxtVitest } from 'wxt/testing/vitest-plugin';
 import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({

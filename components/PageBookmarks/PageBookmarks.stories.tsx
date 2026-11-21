@@ -805,7 +805,7 @@ const findDraggable = async (canvasElement: HTMLElement, title: string) =>
 
 // A Folder's own handle comes before the handles of its Trades
 const getHandle = (draggableElement: HTMLElement, locale: string) =>
-  within(draggableElement).getAllByRole('button', { name: resolveLocaleValue(locale, reorderMessages) })[0];
+  within(draggableElement).getAllByRole('button', { name: resolveLocaleValue(locale, reorderMessages) })[0]!;
 
 const getFolderTitles = (canvasElement: HTMLElement) =>
   Array.from(canvasElement.querySelectorAll(`.${folderStyles.headerLabel}`), element => element.textContent);
@@ -956,7 +956,7 @@ export const DraggingFolder: Story = {
     const source = await findDraggable(canvasElement, 'Chaos recipe');
     const target = await findDraggable(canvasElement, 'Juggernaut gear');
     await holdDragOver(source, getHandle(source, globals.locale as string), target);
-    await waitFor(() => expect(source).toHaveClass(folderStyles.isDragging));
+    await waitFor(() => expect(source).toHaveClass(folderStyles.isDragging!));
   },
 };
 
@@ -969,7 +969,7 @@ export const DraggingTrade: Story = {
     const source = await findDraggable(canvasElement, 'Kaom boots');
     const target = await findDraggable(canvasElement, 'Life chest');
     await holdDragOver(source, getHandle(source, globals.locale as string), target);
-    await waitFor(() => expect(source).toHaveClass(folderStyles.isDragging));
+    await waitFor(() => expect(source).toHaveClass(folderStyles.isDragging!));
   },
 };
 

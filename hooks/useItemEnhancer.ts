@@ -29,7 +29,7 @@ const useItemEnhancer = (enhancers: ItemResultsEnhancerService[], disabledEnhanc
 
     const enhanceItems = async (itemElements: HTMLDivElement[]) => {
       // Bulk exchange results are left alone, as in 1.9.1
-      if (itemElements[0].classList.contains('exchange')) return;
+      if (itemElements[0]?.classList.contains('exchange')) return;
 
       const activeEnhancers = enabledEnhancers();
       for (const enhancer of activeEnhancers) await enhancer.prepare?.();

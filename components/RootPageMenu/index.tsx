@@ -65,9 +65,7 @@ const RootPageMenu = ({ currentPage, onChange, labels, ariaLabel, className }: R
           <button
             key={menuItem.page}
             type="button"
-            className={classnames(styles.menuItem, {
-              [styles.isActive]: menuItem.isActive,
-            })}
+            className={classnames(styles.menuItem, menuItem.isActive && styles.isActive)}
             onClick={() => handleMenuItemClick(menuItem.page)}
             onKeyDown={event => handleKeyDown(event, menuItem.page)}>
             <IconComponent className={styles.menuItemIcon} />

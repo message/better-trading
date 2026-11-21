@@ -94,7 +94,7 @@ const BookmarksProvider = ({ children }: BookmarksProviderProps) => {
       //
 
       matchingTrades.sort((a, b) => (a.title < b.title ? -1 : a.title > b.title ? 1 : 0));
-      return matchingTrades[0];
+      return matchingTrades[0] ?? null;
     },
     [fetchFolders, fetchTradesByFolderId],
   );
@@ -188,12 +188,12 @@ const BookmarksProvider = ({ children }: BookmarksProviderProps) => {
       const reorderedSet = new Set(reorderedFolders);
       const result = [...allFolders];
       let reorderedIndex = 0;
-      for (let i = 0; i < allFolders.length; i++) {
-        if (reorderedSet.has(allFolders[i])) {
-          result[i] = reorderedFolders[reorderedIndex];
+      allFolders.forEach((folder, i) => {
+        if (reorderedSet.has(folder)) {
+          result[i] = reorderedFolders[reorderedIndex]!;
           reorderedIndex++;
         }
-      }
+      });
       if (reorderedIndex !== reorderedFolders.length) {
         throw new Error(
           'partiallyReorderFolders precondition violated: reorderedFolders was not a subset of allFolders',

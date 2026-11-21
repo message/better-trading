@@ -73,7 +73,7 @@ const buildMessages = () => ({
     clearLabel: i18n.t('pagePinnedItemsClear'),
     formatPinnedCount: (count: number) => i18n.t('pagePinnedItemsCount', count),
     emptyTitle: i18n.t('pagePinnedItemsEmptyTitle'),
-    emptyHint: i18n.t('pagePinnedItemsEmptyHint'),
+    emptyHint: i18n.t('pagePinnedItemsEmptyHint', { pin: '{pin}' }),
     pinButtonLabel: i18n.t('itemResultsPinnablePin'),
     unpinItemLabel: i18n.t('pagePinnedItemsUnpinItem'),
     scrollToItemLabel: i18n.t('pagePinnedItemsScrollToItem'),

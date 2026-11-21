@@ -56,7 +56,7 @@ const sellerAccountName = (itemElement: HTMLDivElement): string | null => {
 
   const [, accountName] = match;
 
-  return accountName;
+  return accountName ?? null;
 };
 
 const sellerCharacterName = (itemElement: HTMLDivElement): string | null => {
@@ -68,7 +68,7 @@ const sellerCharacterName = (itemElement: HTMLDivElement): string | null => {
 
   const [, characterName] = match;
 
-  return characterName;
+  return characterName ?? null;
 };
 
 /**

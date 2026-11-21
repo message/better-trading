@@ -32,9 +32,7 @@ const ExpandButton: FC<ExpandButtonProps> = ({ logoAlt, expandLabel, className }
   }, []);
 
   const logoUrl = getExtensionUrl('/assets/images/logo.svg');
-  const buttonClassName = classnames(styles.expandButton, className, {
-    [styles.isVisible]: isVisible,
-  });
+  const buttonClassName = classnames(styles.expandButton, className, isVisible && styles.isVisible);
 
   return (
     <button onClick={handleExpand} type="button" className={buttonClassName} aria-label={expandLabel}>

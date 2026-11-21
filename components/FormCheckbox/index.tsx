@@ -34,7 +34,7 @@ const FormCheckbox: React.FC<FormCheckboxProps> = ({ value, label, onChange, cla
       role="checkbox"
       aria-checked={value}
       aria-label={label}>
-      <div className={classNames(styles.indicator, { [styles.isActive]: value })} />
+      <div className={classNames(styles.indicator, value && styles.isActive)} />
 
       <span className={styles.label}>{label}</span>
     </div>

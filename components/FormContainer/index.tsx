@@ -26,7 +26,7 @@ const FormContainer: React.FC<FormContainerProps> = ({ children, onSubmit, canSu
   };
 
   return (
-    <form className={classNames(styles.formContainer, { [styles.isDisabled]: !canSubmit })} onSubmit={handleSubmit}>
+    <form className={classNames(styles.formContainer, !canSubmit && styles.isDisabled)} onSubmit={handleSubmit}>
       {children}
     </form>
   );

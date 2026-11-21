@@ -26,7 +26,7 @@ export function resolveLocaleValue<T>(
 ): T {
   const fallback = options.fallback ?? 'en-US';
   const input = locale || fallback;
-  const lang = input.split('-')[0];
+  const lang = input.split('-')[0]!;
 
   let resolved: T | undefined = map[input];
   let source: string | undefined = resolved ? input : undefined;

@@ -32,9 +32,7 @@ const FlashMessages = ({ flashMessages, onDismiss }: FlashMessagesProps) => {
           tabIndex={0}
           onClick={() => handleDismiss(flash)}
           onKeyDown={e => handleKeyDown(e, flash)}
-          className={classnames(styles.messageWrapper, {
-            [styles.isExiting]: flash.exiting,
-          })}>
+          className={classnames(styles.messageWrapper, flash.exiting && styles.isExiting)}>
           <AlertMessage message={flash.message} type={flash.type} className={styles.message} />
         </div>
       ))}

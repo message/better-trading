@@ -118,6 +118,7 @@ class PinnableEnhancer {
     sourceIcons.forEach((sourceIcon, index) => {
       const style = window.getComputedStyle(sourceIcon);
       const clonedIcon = clonedIcons[index];
+      if (!clonedIcon) return;
 
       ['background-image', 'background-position', 'background-size', 'width', 'height'].forEach(property =>
         clonedIcon.style.setProperty(property, style.getPropertyValue(property)),
