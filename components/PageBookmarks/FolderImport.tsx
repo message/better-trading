@@ -5,7 +5,7 @@ import Button from '../Button';
 import FormContainer from '../FormContainer';
 import FormInput from '../FormInput';
 import Modal from '../Modal';
-import FloppyDiskIcon from '@/assets/icons/solid/floppy-disk.svg?react';
+import SaveIcon from '@/assets/icons/filled/save.svg?react';
 import { useRef, useState } from 'react';
 import type { BookmarksFolderStruct, BookmarksTradeStruct } from '@/types/bookmarks';
 import type React from 'react';
@@ -86,7 +86,7 @@ const FolderImport: React.FC<FolderImportProps> = ({
 
         {!stagedFolder && isInvalid && <AlertMessage message={invalidCodeMessage} type="alert" />}
 
-        <Button type="submit" theme="gold" label={saveLabel} icon={FloppyDiskIcon} />
+        <Button type="submit" theme="gold" label={saveLabel} icon={SaveIcon} />
       </FormContainer>
     </Modal>
   );

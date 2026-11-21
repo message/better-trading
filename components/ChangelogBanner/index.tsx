@@ -10,8 +10,8 @@ import styles from './styles.module.scss';
 import Button from '../Button';
 import MarkdownChangelog from '../MarkdownChangelog';
 import Modal from '../Modal';
-import CircleInfoIcon from '@/assets/icons/solid/circle-info.svg?react';
-import XmarkIcon from '@/assets/icons/solid/xmark.svg?react';
+import CloseIcon from '@/assets/icons/filled/close.svg?react';
+import InfoIcon from '@/assets/icons/filled/info.svg?react';
 import { getLocalValue, setLocalValue } from '@/utils/storage';
 import { useState, useEffect } from 'react';
 import type React from 'react';
@@ -83,7 +83,7 @@ const ChangelogBanner: React.FC<ChangelogBannerProps> = ({
       <div className={styles.changelogBanner}>
         {noticeText}
 
-        <Button type="button" theme="blue" label={modalButtonLabel} onClick={openChangelog} icon={CircleInfoIcon} />
+        <Button type="button" theme="blue" label={modalButtonLabel} onClick={openChangelog} icon={InfoIcon} />
       </div>
 
       {changelog && (
@@ -101,7 +101,7 @@ const ChangelogBanner: React.FC<ChangelogBannerProps> = ({
             theme="gold"
             label={dismissButtonLabel}
             onClick={dismiss}
-            icon={XmarkIcon}
+            icon={CloseIcon}
           />
         </Modal>
       )}

@@ -1,5 +1,5 @@
 import styles from './styles.module.scss';
-import ThumbtackIcon from '@/assets/icons/solid/thumbtack.svg?react';
+import PinIcon from '@/assets/icons/filled/pin.svg?react';
 import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 import { useItemResults } from '@/hooks/useItemResults';
 import classnames from 'classnames';
@@ -111,7 +111,7 @@ const PagePinnedItems = ({
         </>
       ) : (
         <div className={styles.empty}>
-          <ThumbtackIcon className={styles.emptyIcon} aria-hidden />
+          <PinIcon className={styles.emptyIcon} aria-hidden />
           <div className={styles.emptyTitle}>{emptyTitle}</div>
           <p className={styles.emptyHint}>
             {emptyHint

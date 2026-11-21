@@ -6,9 +6,9 @@
 //  - Provide navigation buttons (info/close)
 
 import styles from './styles.module.scss';
-import AngleRightIcon from '@/assets/icons/solid/angle-right.svg?react';
-import CircleInfoIcon from '@/assets/icons/solid/circle-info.svg?react';
-import XmarkIcon from '@/assets/icons/solid/xmark.svg?react';
+import AngleRightIcon from '@/assets/icons/filled/angle-right.svg?react';
+import CloseIcon from '@/assets/icons/filled/close.svg?react';
+import InfoIcon from '@/assets/icons/filled/info.svg?react';
 import { getExtensionUrl } from '@/utils/extension-url';
 import { collapseSidePanel, initializeSidePanelCollapse } from '@/utils/side-panel-collapse';
 import { useEffect, useCallback } from 'react';
@@ -72,7 +72,7 @@ const Header: FC<HeaderProps> = ({
         type="button"
         className={styles.headerButton}
         aria-label={isOnRootRoute ? showAboutLabel : showMainLabel}>
-        {isOnRootRoute ? <CircleInfoIcon /> : <XmarkIcon />}
+        {isOnRootRoute ? <InfoIcon /> : <CloseIcon />}
       </button>
     </div>
   );

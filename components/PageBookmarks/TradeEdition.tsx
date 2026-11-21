@@ -2,7 +2,7 @@ import Button from '../Button';
 import FormContainer from '../FormContainer';
 import FormInput from '../FormInput';
 import Modal from '../Modal';
-import FloppyDiskIcon from '@/assets/icons/solid/floppy-disk.svg?react';
+import SaveIcon from '@/assets/icons/filled/save.svg?react';
 import { useState } from 'react';
 import type { BookmarksTradeStruct } from '@/types/bookmarks';
 import type React from 'react';
@@ -41,7 +41,7 @@ const TradeEdition: React.FC<TradeEditionProps> = ({
           onChange={title => setTrade({ ...trade, title })}
         />
 
-        <Button type="submit" theme="gold" label={saveLabel} icon={FloppyDiskIcon} />
+        <Button type="submit" theme="gold" label={saveLabel} icon={SaveIcon} />
       </FormContainer>
     </Modal>
   );

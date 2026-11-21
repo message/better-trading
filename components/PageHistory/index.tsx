@@ -3,7 +3,7 @@ import styles from './styles.module.scss';
 import AlertMessage from '../AlertMessage';
 import Button from '../Button';
 import LoadingContainer from '../LoadingContainer';
-import XmarkIcon from '@/assets/icons/solid/xmark.svg?react';
+import CloseIcon from '@/assets/icons/filled/close.svg?react';
 import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 import { useTradeHistoryContext } from '@/contexts/TradeHistoryContext';
 import { useEffect } from 'react';
@@ -59,7 +59,7 @@ const PageHistory: React.FC<PageHistoryProps> = ({
             theme="gold"
             label={clearButtonLabel}
             onClick={handleClearHistory}
-            icon={XmarkIcon}
+            icon={CloseIcon}
             className={styles.clearButton}
           />
         </>

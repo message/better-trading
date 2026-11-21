@@ -1,5 +1,5 @@
 import styles from './styles.module.scss';
-import AngleLeftIcon from '@/assets/icons/solid/angle-left.svg?react';
+import AngleLeftIcon from '@/assets/icons/filled/angle-left.svg?react';
 import { getExtensionUrl } from '@/utils/extension-url';
 import {
   expandSidePanel,

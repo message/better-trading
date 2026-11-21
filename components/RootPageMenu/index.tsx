@@ -1,7 +1,7 @@
 import styles from './styles.module.scss';
-import ClockIcon from '../../assets/icons/solid/clock-rotate-left.svg?react';
-import FolderOpenIcon from '../../assets/icons/solid/folder-open.svg?react';
-import ThumbTackIcon from '../../assets/icons/solid/thumbtack.svg?react';
+import BookmarkIcon from '../../assets/icons/filled/bookmark.svg?react';
+import HistoryIcon from '../../assets/icons/filled/history.svg?react';
+import PinIcon from '../../assets/icons/filled/pin.svg?react';
 import { RootPage } from '@/types/root-page';
 import classnames from 'classnames';
 
@@ -28,19 +28,19 @@ const RootPageMenu = ({ currentPage, onChange, labels, ariaLabel, className }: R
   const menuItems: MenuItem[] = [
     {
       page: RootPage.BOOKMARKS,
-      icon: FolderOpenIcon,
+      icon: BookmarkIcon,
       label: labels.bookmarks,
       isActive: RootPage.BOOKMARKS === currentPage,
     },
     {
       page: RootPage.PINNED_ITEMS,
-      icon: ThumbTackIcon,
+      icon: PinIcon,
       label: labels.pinnedItems,
       isActive: RootPage.PINNED_ITEMS === currentPage,
     },
     {
       page: RootPage.HISTORY,
-      icon: ClockIcon,
+      icon: HistoryIcon,
       label: labels.history,
       isActive: RootPage.HISTORY === currentPage,
     },

@@ -1,7 +1,7 @@
 import styles from './Backup.module.scss';
 import Button from '../Button';
+import RestoreFileIcon from '@/assets/icons/filled/restore-file.svg?react';
 import FileExportIcon from '@/assets/icons/solid/file-export.svg?react';
-import FileImportIcon from '@/assets/icons/solid/file-import.svg?react';
 import type React from 'react';
 
 interface BackupProps {
@@ -59,7 +59,7 @@ const Backup: React.FC<BackupProps> = ({
         onFileChange={handleFileChange}
         theme="blue"
         fileAccept="text/plain"
-        icon={FileImportIcon}
+        icon={RestoreFileIcon}
         label={restoreButtonLabel}
       />
     </div>

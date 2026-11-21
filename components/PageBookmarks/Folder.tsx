@@ -3,9 +3,9 @@ import BookmarkFolderIcon from '../BookmarkFolderIcon';
 import Button from '../Button';
 import ContextualMenu from '../ContextualMenu';
 import LoadingContainer from '../LoadingContainer';
+import AngleDownIcon from '@/assets/icons/filled/angle-down.svg?react';
+import DragVerticalIcon from '@/assets/icons/filled/drag-vertical.svg?react';
 import CheckIcon from '@/assets/icons/solid/check.svg?react';
-import ChevronDownIcon from '@/assets/icons/solid/chevron-down.svg?react';
-import SortIcon from '@/assets/icons/solid/sort.svg?react';
 import { usePreviewOrder, useSortable } from '@/hooks/useSortable';
 import { reorder } from '@atlaskit/pragmatic-drag-and-drop/utils/reorder';
 import classnames from 'classnames';
@@ -60,7 +60,7 @@ const SortableTrade: React.FC<SortableTradeProps> = ({
           className={classnames(styles.tradeAction, styles.handle)}
           title={reorderLabel}
           aria-label={reorderLabel}>
-          <SortIcon className={styles.handleIcon} />
+          <DragVerticalIcon className={styles.handleIcon} />
         </button>
       </div>
     </li>
@@ -209,7 +209,7 @@ const Folder: React.FC<FolderProps> = ({
           tabIndex={0}>
           {folder.icon && <BookmarkFolderIcon icon={folder.icon} className={styles.headerIcon} />}
           <div className={styles.headerLabel}>{folder.title}</div>
-          {!isArchived && <ChevronDownIcon className={styles.expansionIndicator} />}
+          {!isArchived && <AngleDownIcon className={styles.expansionIndicator} />}
         </div>
 
         <div className={styles.headerActions}>
@@ -229,7 +229,7 @@ const Folder: React.FC<FolderProps> = ({
             className={classnames(styles.headerAction, styles.handle)}
             title={reorderLabel}
             aria-label={reorderLabel}>
-            <SortIcon className={styles.handleIcon} />
+            <DragVerticalIcon className={styles.handleIcon} />
           </button>
         </div>
       </div>

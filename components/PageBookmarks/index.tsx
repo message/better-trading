@@ -18,11 +18,11 @@ import TradeEdition from './TradeEdition';
 import AlertMessage from '../AlertMessage';
 import Button from '../Button';
 import LoadingContainer from '../LoadingContainer';
-import BoxArchiveIcon from '@/assets/icons/solid/box-archive.svg?react';
-import CompressIcon from '@/assets/icons/solid/compress.svg?react';
-import FileImportIcon from '@/assets/icons/solid/file-import.svg?react';
+import ArchiveIcon from '@/assets/icons/filled/archive.svg?react';
+import CollapseAllIcon from '@/assets/icons/filled/collapse-all-b.svg?react';
+import ImportPobIcon from '@/assets/icons/filled/import-pob.svg?react';
+import ReturnToActiveFoldersIcon from '@/assets/icons/filled/return-to-active-folders.svg?react';
 import FolderPlusIcon from '@/assets/icons/solid/folder-plus.svg?react';
-import RotateLeftIcon from '@/assets/icons/solid/rotate-left.svg?react';
 import SquarePlusIcon from '@/assets/icons/solid/square-plus.svg?react';
 import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 import { useBookmarks } from '@/hooks/useBookmarks';
@@ -470,7 +470,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
             type="button"
             theme="gold"
             label={collapseAllLabel}
-            icon={CompressIcon}
+            icon={CollapseAllIcon}
             onClick={handleCollapseAllFolders}
           />
         )}
@@ -480,7 +480,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
             type="button"
             theme="gold"
             label={isShowingArchivedFolders ? showUnarchivedLabel : showArchivedLabel}
-            icon={isShowingArchivedFolders ? RotateLeftIcon : BoxArchiveIcon}
+            icon={isShowingArchivedFolders ? ReturnToActiveFoldersIcon : ArchiveIcon}
             onClick={handleToggleArchiveDisplay}
           />
         )}
@@ -564,7 +564,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
               className={styles.createFolderButton}
               theme="gold"
               label={importPobLabel}
-              icon={FileImportIcon}
+              icon={ImportPobIcon}
               onClick={handleImportPob}
             />
           )}
