@@ -17,6 +17,11 @@
     background: linear-gradient(90deg, transparent, rgba(#d48c14, 0.7), transparent);
   }
 
+  // No divider after the last entry (the clear Button follows, so :last-child/:last-of-type don't fit)
+  &:not(:has(~ .entryLink))::after {
+    display: none;
+  }
+
   &:hover,
   &:focus {
     text-decoration: none;
