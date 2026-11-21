@@ -107,6 +107,7 @@ const emptyArgs = {
 // Args are ignored: every string comes from the locale toolbar, like the shell does from locales/
 const renderWithEntries =
   (buildEntries: () => TradeLocationHistoryStruct[]): Story['render'] =>
+  // eslint-disable-next-line react/display-name -- a story render function returned by a factory, not a component, so it needs no display name
   (_args, { globals }) => {
     const locale = globals.locale as string;
 

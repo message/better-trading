@@ -8,6 +8,7 @@ import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import { configs as storybookConfigs } from 'eslint-plugin-storybook';
 import { browser, es2020, node } from 'globals';
+import { version as reactVersion } from 'react';
 import { configs as tsConfigs, parser as tsParser } from 'typescript-eslint';
 import type { Linter } from 'eslint';
 
@@ -20,11 +21,11 @@ const config: Linter.Config[] = [
   importXFlatConfig.recommended,
   importXFlatConfig.typescript,
   reactHooks.configs.flat.recommended,
-  {
-    files: ['**/*.{ts,tsx}'],
-    ...reactPlugin.configs.flat.recommended,
-    ...reactPlugin.configs.flat['jsx-runtime'],
-  }, // Custom config
+  // Keep these two as separate entries. Spread into one object, jsx-runtime's `rules` (two rules turned off)
+  // replaced recommended's whole `rules` object, which silently disabled every react/* rule (jsx-key and others)
+  { files: ['**/*.{ts,tsx}'], ...reactPlugin.configs.flat.recommended },
+  { files: ['**/*.{ts,tsx}'], ...reactPlugin.configs.flat['jsx-runtime'] },
+  // Custom config
   {
     ignores: [
       '**/.wxt/**',
@@ -55,7 +56,10 @@ const config: Linter.Config[] = [
     },
     settings: {
       react: {
-        version: 'detect',
+        // Not 'detect': eslint-plugin-react 7 detects the version through context.getFilename(), which ESLint 10
+        // removed, so linting crashes. Reading it from the installed react keeps it current without hardcoding;
+        // switch back to 'detect' once eslint-plugin-react supports ESLint 10
+        version: reactVersion,
       },
     },
     rules: {
