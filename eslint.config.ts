@@ -7,7 +7,7 @@ import { flatConfigs as importXFlatConfig } from 'eslint-plugin-import-x';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import reactPlugin from 'eslint-plugin-react';
-import storybook from 'eslint-plugin-storybook';
+import { configs as storybookConfigs } from 'eslint-plugin-storybook';
 import { browser, es2020, node } from 'globals';
 import { configs as tsConfigs, parser as tsParser } from 'typescript-eslint';
 import type { FixupConfigArray } from '@eslint/compat';
@@ -107,7 +107,7 @@ const config: Linter.Config[] = [
       reportUnusedDisableDirectives: 'error',
     },
   },
-  ...storybook.configs['flat/recommended'],
+  ...storybookConfigs['flat/recommended'],
 ];
 
 export default config;
