@@ -1,21 +1,15 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 
-import { fixupConfigRules } from '@eslint/compat';
-import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import { flatConfigs as importXFlatConfig } from 'eslint-plugin-import-x';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import reactPlugin from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
 import { configs as storybookConfigs } from 'eslint-plugin-storybook';
 import { browser, es2020, node } from 'globals';
 import { configs as tsConfigs, parser as tsParser } from 'typescript-eslint';
-import type { FixupConfigArray } from '@eslint/compat';
 import type { Linter } from 'eslint';
-
-const reactHooksConfig = fixupConfigRules(
-  new FlatCompat().extends('plugin:react-hooks/recommended') as FixupConfigArray,
-);
 
 const config: Linter.Config[] = [
   // Shared configs
@@ -25,7 +19,7 @@ const config: Linter.Config[] = [
   eslintPluginPrettierRecommended,
   importXFlatConfig.recommended,
   importXFlatConfig.typescript,
-  ...reactHooksConfig,
+  reactHooks.configs.flat.recommended,
   {
     files: ['**/*.{ts,tsx}'],
     ...reactPlugin.configs.flat.recommended,
@@ -102,6 +96,9 @@ const config: Linter.Config[] = [
       'import-x/consistent-type-specifier-style': 'error',
       'import-x/exports-last': 'error',
       'import-x/first': 'error',
+      // ponytail: React Compiler rules from react-hooks 7 flag existing, working code; warn until it is refactored
+      'react-hooks/set-state-in-effect': 'warn',
+      'react-hooks/refs': 'warn',
     },
     linterOptions: {
       reportUnusedDisableDirectives: 'error',
