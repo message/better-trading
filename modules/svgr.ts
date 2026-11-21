@@ -12,7 +12,9 @@ import 'wxt';
 import svgr from 'vite-plugin-svgr';
 import { defineWxtModule } from 'wxt/modules';
 import type { InlineConfig } from 'vite';
-import type { VitePluginSvgrOptions } from 'vite-plugin-svgr';
+
+// vite-plugin-svgr 5 no longer exports its options type
+type VitePluginSvgrOptions = NonNullable<Parameters<typeof svgr>[0]>;
 
 interface SvgrModuleOptions extends VitePluginSvgrOptions {
   /**
