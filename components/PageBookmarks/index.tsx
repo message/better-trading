@@ -33,12 +33,13 @@ import { copyToClipboard } from '@/utils/copy-to-clipboard';
 import { convertPobBuildCode } from '@/utils/extension-background';
 import { recommendTitle } from '@/utils/search-panel';
 import { getTradeUrl } from '@/utils/trade-location';
+import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { reorder } from '@atlaskit/pragmatic-drag-and-drop/utils/reorder';
 import {
   autoScrollForElements,
   autoScrollWindowForElements,
 } from '@atlaskit/pragmatic-drag-and-drop-auto-scroll/element';
-import { useState, useCallback, useEffect, useId } from 'react';
+import { useState, useCallback, useEffect, useId, useRef } from 'react';
 import type { BookmarksFolderStruct, BookmarksTradeStruct } from '@/types/bookmarks';
 import type React from 'react';
 
@@ -441,6 +442,34 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
     preview: previewFolder,
     cancel: cancelFolderPreview,
   } = usePreviewOrder(displayedFolders);
+
+  // The whole panel is a drop target too. Above the list the dragged Folder goes to the top, below it to the bottom
+  // (the pointer need not cross a Folder), and a drop anywhere in the panel keeps the previewed order. Only a drop
+  // outside the panel or Esc, which both end with no drop target, bring the original order back. Storybook has no panel.
+  const foldersWrapperRef = useRef<HTMLDivElement>(null);
+  const latestFoldersRef = useRef({ count: sortedFolders.length, previewFolder });
+  latestFoldersRef.current = { count: sortedFolders.length, previewFolder };
+  useEffect(() => {
+    const panel = document.getElementById('better-trading-container') ?? document.body;
+    return dropTargetForElements({
+      element: panel,
+      canDrop: ({ source }) => source.data.listId === foldersListId,
+      onDrag: ({ source, location }) => {
+        const wrapper = foldersWrapperRef.current;
+        if (!wrapper) return;
+        const { top, bottom } = wrapper.getBoundingClientRect();
+        const { clientY } = location.current.input;
+        const { count, previewFolder: preview } = latestFoldersRef.current;
+        const toIndex = clientY < top ? 0 : clientY > bottom ? count - 1 : null;
+        const fromIndex = source.data.index as number;
+        if (toIndex === null || toIndex === fromIndex) return;
+        // Drag events can outrun the re-render: remember the new position right away
+        source.data.index = toIndex;
+        preview(fromIndex, toIndex);
+      },
+    });
+  }, [foldersListId]);
+
   const handleMoveFolder = (fromIndex: number, toIndex: number) => {
     const reorderedFolders = reorder({ list: displayedFolders, startIndex: fromIndex, finishIndex: toIndex });
     cancelFolderPreview();
@@ -486,7 +515,7 @@ const PageBookmarks: React.FC<PageBookmarksProps> = ({
         )}
       </div>
 
-      <div className={styles.foldersWrapper}>
+      <div ref={foldersWrapperRef} className={styles.foldersWrapper}>
         {sortedFolders.map((folder, folderIndex) => {
           const folderId = folder.id;
           if (!folderId) return null;

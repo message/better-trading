@@ -16,7 +16,7 @@ interface SortableOptions {
   onMove: (fromIndex: number, toIndex: number) => void;
   /** While dragging: show the list with the item moved, without persisting (see `usePreviewOrder`) */
   onPreview: (fromIndex: number, toIndex: number) => void;
-  /** The drag was cancelled (Esc, dropped outside the list): show the original order again */
+  /** The drag was cancelled (Esc, dropped outside every drop target): show the original order again */
   onCancel: () => void;
 }
 
