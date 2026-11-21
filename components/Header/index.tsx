@@ -11,7 +11,7 @@ import CloseIcon from '@/assets/icons/filled/close.svg?react';
 import InfoIcon from '@/assets/icons/filled/info.svg?react';
 import { getExtensionUrl } from '@/utils/extension-url';
 import { collapseSidePanel, initializeSidePanelCollapse } from '@/utils/side-panel-collapse';
-import { useEffect, useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import type { FC } from 'react';
 
 interface HeaderProps {
@@ -58,22 +58,24 @@ const Header: FC<HeaderProps> = ({
 
   return (
     <div className={styles.container}>
-      <button onClick={handleCollapse} type="button" className={styles.headerButton} aria-label={collapseLabel}>
-        <AngleRightIcon />
-      </button>
+      <div>
+        <button onClick={handleCollapse} type="button" className={styles.headerButton} aria-label={collapseLabel}>
+          <AngleRightIcon />
+        </button>
 
-      <button onClick={onBrandClick} className={styles.brand} type="button">
-        <img className={styles.logo} src={logoUrl} alt={logoAlt} />
-        <div className={styles.title}>{title}</div>
-      </button>
+        <button onClick={onBrandClick} className={styles.brand} type="button">
+          <img className={styles.logo} src={logoUrl} alt={logoAlt} />
+          <div className={styles.title}>{title}</div>
+        </button>
 
-      <button
-        onClick={onToggleClick}
-        type="button"
-        className={styles.headerButton}
-        aria-label={isOnRootRoute ? showAboutLabel : showMainLabel}>
-        {isOnRootRoute ? <InfoIcon /> : <CloseIcon />}
-      </button>
+        <button
+          onClick={onToggleClick}
+          type="button"
+          className={styles.headerButton}
+          aria-label={isOnRootRoute ? showAboutLabel : showMainLabel}>
+          {isOnRootRoute ? <InfoIcon /> : <CloseIcon />}
+        </button>
+      </div>
     </div>
   );
 };

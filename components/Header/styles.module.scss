@@ -1,15 +1,28 @@
 @use '@/styles/variables';
 @use 'sass:color';
+@use '@/styles/mixins/gradient-hover' as mixins;
 
 .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   position: sticky;
-  z-index: 1;
-  top: 0;
-  padding: 10px;
   backdrop-filter: blur(6px);
+  z-index: 100;
+  top: 0;
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+
+  // Divider that fades out towards the edges
+  //&::after {
+  //	content: '';
+  //	display: block;
+  //	height: 1px;
+  //	background: linear-gradient(90deg, transparent, rgba(#d48c14, 0.7), transparent);
+  //	width: 100%;
+  //}
 }
 
 .brand {
