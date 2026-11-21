@@ -6,7 +6,7 @@ import LoadingContainer from '../LoadingContainer';
 import AngleDownIcon from '@/assets/icons/filled/angle-down.svg?react';
 import DragVerticalIcon from '@/assets/icons/filled/drag-vertical.svg?react';
 import CheckIcon from '@/assets/icons/solid/check.svg?react';
-import { usePreviewOrder, useSortable } from '@/hooks/useSortable';
+import { usePreviewOrder, useSortable, useSortableZone } from '@/hooks/useSortable';
 import { reorder } from '@atlaskit/pragmatic-drag-and-drop/utils/reorder';
 import classnames from 'classnames';
 import { useState, useCallback, useEffect, useId, useRef } from 'react';
@@ -182,6 +182,12 @@ const Folder: React.FC<FolderProps> = ({
 
   // Show the new order right away; persisting it refreshes the Folders, which reloads the trades from storage
   const tradesListId = useId();
+  const tradesListRef = useRef<HTMLUListElement>(null);
+  useSortableZone({
+    listId: tradesListId,
+    listRef: tradesListRef,
+    onPreview: previewTrade,
+  });
   const handleMoveTrade = (fromIndex: number, toIndex: number) => {
     // A fetch already in flight read the old order: let it resolve without overwriting the new one
     latestFetchRef.current++;
@@ -236,7 +242,7 @@ const Folder: React.FC<FolderProps> = ({
 
       {isExpanded && (
         <LoadingContainer task={loadTrades} size="small">
-          <ul className={styles.trades}>
+          <ul ref={tradesListRef} className={styles.trades}>
             {displayedTrades.map((trade, tradeIndex) => (
               <SortableTrade
                 key={trade.id}

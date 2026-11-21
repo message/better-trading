@@ -2,6 +2,7 @@ import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-d
 import { combine } from '@atlaskit/pragmatic-drag-and-drop/utils/combine';
 import { reorder } from '@atlaskit/pragmatic-drag-and-drop/utils/reorder';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import type { ElementDragPayload } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import type React from 'react';
 
 interface SortableOptions {
@@ -30,6 +31,65 @@ const usePreviewOrder = <T>(original: T[]) => {
     setPreviewed(current => reorder({ list: current ?? original, startIndex: fromIndex, finishIndex: toIndex }));
   const cancel = () => setPreviewed(null);
   return { items: previewed ?? original, preview, cancel };
+};
+
+// One document-wide drop target serves every sortable list: it exists while at least one zone is registered
+type ZoneHandler = (clientY: number, source: ElementDragPayload) => void;
+const zones = new Map<string, ZoneHandler>();
+let stopZones: (() => void) | undefined;
+
+interface SortableZoneOptions {
+  /** The list the zone belongs to, as passed to `useSortable` */
+  listId: string;
+  /** The element whose children are the items of the list, in the order they are displayed */
+  listRef: React.RefObject<HTMLElement | null>;
+  /** See `SortableOptions.onPreview` */
+  onPreview: (fromIndex: number, toIndex: number) => void;
+}
+
+/**
+ * Makes the whole document a drop zone for a list: dropping an item anywhere (not only over the list) keeps the order
+ * previewed so far, and wherever the pointer is on the screen, the item takes the place matching its vertical position
+ * (past the middle of the items it crossed), so it also follows the pointer beside, above or below the list.
+ * Esc and a drop outside the window still cancel, as they end with no drop target.
+ */
+const useSortableZone = ({ listId, listRef, onPreview }: SortableZoneOptions) => {
+  const latestRef = useRef(onPreview);
+  useLayoutEffect(() => {
+    latestRef.current = onPreview;
+  });
+
+  useEffect(() => {
+    zones.set(listId, (clientY, source) => {
+      const items = Array.from(listRef.current?.children ?? []);
+      const fromIndex = source.data.index as number;
+      // The DOM lags behind a move another drop target just made: the next drag event catches up
+      if (!items[fromIndex]?.contains(source.element)) return;
+      const isPastMiddleOf = (item: Element) => {
+        const { top, height } = item.getBoundingClientRect();
+        return clientY - top > height / 2;
+      };
+      let toIndex = fromIndex;
+      while (toIndex < items.length - 1 && isPastMiddleOf(items[toIndex + 1])) toIndex++;
+      while (toIndex > 0 && !isPastMiddleOf(items[toIndex - 1])) toIndex--;
+      if (toIndex === fromIndex) return;
+      // Drag events can outrun the re-render: remember the new position right away
+      source.data.index = toIndex;
+      latestRef.current(fromIndex, toIndex);
+    });
+    if (zones.size === 1) {
+      stopZones = dropTargetForElements({
+        element: document.documentElement,
+        canDrop: ({ source }) => zones.has(source.data.listId as string),
+        onDrag: ({ source, location }) =>
+          zones.get(source.data.listId as string)?.(location.current.input.clientY, source),
+      });
+    }
+    return () => {
+      zones.delete(listId);
+      if (zones.size === 0) stopZones?.();
+    };
+  }, [listId, listRef]);
 };
 
 /**
@@ -126,4 +186,4 @@ const useSortable = <TItem extends HTMLElement, THandle extends HTMLElement>({
   return { itemRef, handleProps, isDragging };
 };
 
-export { usePreviewOrder, useSortable };
+export { usePreviewOrder, useSortable, useSortableZone };
