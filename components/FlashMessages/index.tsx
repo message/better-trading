@@ -1,5 +1,5 @@
 import styles from './styles.module.scss';
-import AlertMessage from '../AlertMessage';
+import AlertMessage from '@/components/AlertMessage';
 import classnames from 'classnames';
 import type { FlashMessage } from '@/types/flash-message';
 import type React from 'react';

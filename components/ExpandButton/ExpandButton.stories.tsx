@@ -1,7 +1,7 @@
 import ExpandButton from './index';
-import { logoAltMessages, headerExpandMessages } from '../../.storybook/common-messages';
-import { resolveLocaleValue } from '../../.storybook/locale-utils';
 import { collapseSidePanel, expandSidePanel } from '@/utils/side-panel-collapse';
+import { logoAltMessages, headerExpandMessages } from '@/.storybook/common-messages';
+import { resolveLocaleValue } from '@/.storybook/locale-utils';
 import { useEffect } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 

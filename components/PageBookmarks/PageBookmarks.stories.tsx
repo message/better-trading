@@ -1,6 +1,9 @@
 import PageBookmarks from './index';
 import folderStyles from './Folder.module.scss';
-import { seedChromeStorage } from '../../.storybook/chrome-storage-mock';
+import { BookmarksProvider } from '@/contexts/BookmarksContext';
+import { bookmarksStorage } from '@/services/bookmarks/storage';
+import { setLocalValue } from '@/utils/storage';
+import { seedChromeStorage } from '@/.storybook/chrome-storage-mock';
 import {
   copyTradeSuccessMessages,
   createFolderSuccessMessages,
@@ -11,11 +14,8 @@ import {
   modalCloseMessages,
   titleMessage,
   updateFolderSuccessMessages,
-} from '../../.storybook/common-messages';
-import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
-import { BookmarksProvider } from '../../contexts/BookmarksContext';
-import { bookmarksStorage } from '@/services/bookmarks/storage';
-import { setLocalValue } from '@/utils/storage';
+} from '@/.storybook/common-messages';
+import { resolveLocaleValue, defineMessages } from '@/.storybook/locale-utils';
 import { expect, fireEvent, userEvent, waitFor, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 

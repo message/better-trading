@@ -1,6 +1,6 @@
 import PageAbout from './index.tsx';
-import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
-import { MockItemResultsProvider } from '../../.storybook/mock-providers';
+import { resolveLocaleValue, defineMessages } from '@/.storybook/locale-utils';
+import { MockItemResultsProvider } from '@/.storybook/mock-providers';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

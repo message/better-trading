@@ -70,7 +70,9 @@ migration before adding new stubs.
 
 ESLint enforces (see `eslint.config.ts`): arrow-function expressions only (`func-style`), `import type` for
 type-only imports, a specific `import-x/order` (index → sibling → parent → `@/` internal → external → builtin →
-type), and `export` statements last in the file. Prettier: single quotes, no parens on single-arg arrows,
+type), and `export` statements last in the file. No parent-relative
+imports (`../`) in TS or SCSS `@use`: use the `@/` alias (e.g. `@/components/Button`, `@/.storybook/locale-utils`,
+`@use '@/styles/variables'`); only same-directory `./` imports stay relative. Prettier: single quotes, no parens on single-arg arrows,
 120 columns, trailing commas. Styles are SCSS modules; global trade-site tweaks live in `styles/globals/`.
 SVG icons in `assets/icons/` are imported as React components through `vite-plugin-svgr` (`modules/svgr.ts`).
 

@@ -1,11 +1,11 @@
 import styles from './styles.module.scss';
-import Button from '../Button';
-import FormCheckbox from '../FormCheckbox';
-import MarkdownChangelog from '../MarkdownChangelog';
 import GithubIcon from '@/assets/icons/brands/github.svg?react';
+import Button from '@/components/Button';
+import FormCheckbox from '@/components/FormCheckbox';
+import MarkdownChangelog from '@/components/MarkdownChangelog';
 import { useItemResults } from '@/hooks/useItemResults';
 import classnames from 'classnames';
-import type { ChangelogData } from '../ChangelogBanner';
+import type { ChangelogData } from '@/components/ChangelogBanner';
 
 interface Enhancer {
   slug: string;

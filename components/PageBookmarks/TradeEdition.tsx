@@ -1,8 +1,8 @@
-import Button from '../Button';
-import FormContainer from '../FormContainer';
-import FormInput from '../FormInput';
-import Modal from '../Modal';
 import SaveIcon from '@/assets/icons/filled/save.svg?react';
+import Button from '@/components/Button';
+import FormContainer from '@/components/FormContainer';
+import FormInput from '@/components/FormInput';
+import Modal from '@/components/Modal';
 import { useState } from 'react';
 import type { BookmarksTradeStruct } from '@/types/bookmarks';
 import type React from 'react';

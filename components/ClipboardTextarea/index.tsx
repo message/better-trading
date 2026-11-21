@@ -1,7 +1,7 @@
 import styles from './styles.module.scss';
-import { copyToClipboard } from '../../utils/copy-to-clipboard';
-import Button from '../Button';
 import ClipboardIcon from '@/assets/icons/solid/clipboard.svg?react';
+import Button from '@/components/Button';
+import { copyToClipboard } from '@/utils/copy-to-clipboard';
 import classNames from 'classnames';
 import { useState, useCallback } from 'react';
 import type React from 'react';

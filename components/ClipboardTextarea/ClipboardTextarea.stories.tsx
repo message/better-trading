@@ -1,5 +1,5 @@
 import { ClipboardTextarea } from './index';
-import { defineMessages, resolveLocaleValue } from '../../.storybook/locale-utils';
+import { defineMessages, resolveLocaleValue } from '@/.storybook/locale-utils';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof ClipboardTextarea> = {

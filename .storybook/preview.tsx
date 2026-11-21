@@ -1,9 +1,9 @@
 import type { Preview } from '@storybook/react-vite';
 import React from 'react';
-import '../styles/app.scss';
+import '@/styles/app.scss';
 import { docsTheme } from './theme'; // added
-import FlashMessages from '../components/FlashMessages';
-import { FlashMessagesProvider, useFlashMessagesContext } from '../contexts/FlashMessagesContext';
+import FlashMessages from '@/components/FlashMessages';
+import { FlashMessagesProvider, useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 
 // The preview object configures global Storybook parameters & globals.
 const preview: Preview = {

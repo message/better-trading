@@ -1,6 +1,6 @@
-@use '../../styles/variables';
-@use '../../styles/mixins/fade-in';
-@use '../../styles/mixins/gradient-hover';
+@use '@/styles/variables';
+@use '@/styles/mixins/fade-in';
+@use '@/styles/mixins/gradient-hover';
 
 .contextualMenu {
   display: flex;

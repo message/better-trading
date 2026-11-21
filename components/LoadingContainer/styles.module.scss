@@ -1,5 +1,5 @@
-@use '../../styles/variables';
-@use '../../styles/mixins/fade-in' as mixins;
+@use '@/styles/variables';
+@use '@/styles/mixins/fade-in' as mixins;
 
 @keyframes delayed-fade-in-keyframes {
   0% {

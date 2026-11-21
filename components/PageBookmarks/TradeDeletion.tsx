@@ -1,7 +1,7 @@
 import styles from './TradeDeletion.module.scss';
-import Button from '../Button';
-import Modal from '../Modal';
 import TrashIcon from '@/assets/icons/solid/trash.svg?react';
+import Button from '@/components/Button';
+import Modal from '@/components/Modal';
 import type React from 'react';
 
 interface TradeDeletionProps {

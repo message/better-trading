@@ -1,7 +1,7 @@
 import RootPageMenu from './index.tsx';
-import { rootPageMenuLabelMessages } from '../../.storybook/common-messages';
-import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
 import { RootPage } from '@/types/root-page';
+import { rootPageMenuLabelMessages } from '@/.storybook/common-messages';
+import { resolveLocaleValue, defineMessages } from '@/.storybook/locale-utils';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 

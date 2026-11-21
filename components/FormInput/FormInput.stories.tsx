@@ -1,5 +1,5 @@
 import FormInput from './index';
-import { defineMessages, resolveLocaleValue } from '../../.storybook/locale-utils';
+import { defineMessages, resolveLocaleValue } from '@/.storybook/locale-utils';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 

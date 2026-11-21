@@ -1,11 +1,11 @@
 import styles from './Folder.module.scss';
-import BookmarkFolderIcon from '../BookmarkFolderIcon';
-import Button from '../Button';
-import ContextualMenu from '../ContextualMenu';
-import LoadingContainer from '../LoadingContainer';
 import AngleDownIcon from '@/assets/icons/filled/angle-down.svg?react';
 import DragVerticalIcon from '@/assets/icons/filled/drag-vertical.svg?react';
 import CheckIcon from '@/assets/icons/solid/check.svg?react';
+import BookmarkFolderIcon from '@/components/BookmarkFolderIcon';
+import Button from '@/components/Button';
+import ContextualMenu from '@/components/ContextualMenu';
+import LoadingContainer from '@/components/LoadingContainer';
 import { usePreviewOrder, useSortable, useSortableZone } from '@/hooks/useSortable';
 import { reorder } from '@atlaskit/pragmatic-drag-and-drop/utils/reorder';
 import classnames from 'classnames';

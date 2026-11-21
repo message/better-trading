@@ -69,6 +69,10 @@ const config: Linter.Config[] = [
       'react/prop-types': 'off',
       'prefer-const': 'error',
       'no-var': 'error',
+      'no-restricted-imports': [
+        'error',
+        { patterns: [{ group: ['../*'], message: 'Use the `@/` alias instead of parent-relative imports.' }] },
+      ],
       'func-style': ['error', 'expression', { allowArrowFunctions: true }],
       'arrow-body-style': ['error', 'as-needed'],
       '@typescript-eslint/consistent-type-imports': 'error',

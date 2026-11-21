@@ -1,7 +1,7 @@
 import PageHistory from './index';
-import { defineMessages, resolveLocaleValue } from '../../.storybook/locale-utils';
-import { MockTradeHistoryProvider, createMockHistoryEntry } from '../../.storybook/mock-providers';
 import { formatRelativeTime } from '@/utils/format-relative-time';
+import { defineMessages, resolveLocaleValue } from '@/.storybook/locale-utils';
+import { MockTradeHistoryProvider, createMockHistoryEntry } from '@/.storybook/mock-providers';
 import type { TradeLocationHistoryStruct } from '@/types/trade-location';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 

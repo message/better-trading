@@ -1,5 +1,5 @@
-@use '../../styles/variables';
-@use '../../styles/mixins/gradient-hover' as mixins;
+@use '@/styles/variables';
+@use '@/styles/mixins/gradient-hover' as mixins;
 
 .entryLink {
   @include mixins.gradient-hover(variables.$gold-alt);

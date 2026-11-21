@@ -1,5 +1,5 @@
 import Button from './index.tsx';
-import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
+import { resolveLocaleValue, defineMessages } from '@/.storybook/locale-utils';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type React from 'react';
 

@@ -1,7 +1,7 @@
 import styles from './Backup.module.scss';
-import Button from '../Button';
 import RestoreFileIcon from '@/assets/icons/filled/restore-file.svg?react';
 import FileExportIcon from '@/assets/icons/solid/file-export.svg?react';
+import Button from '@/components/Button';
 import type React from 'react';
 
 interface BackupProps {

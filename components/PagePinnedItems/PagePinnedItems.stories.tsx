@@ -1,7 +1,7 @@
 import PagePinnedItems from './index.tsx';
-import { genericAlertMessages } from '../../.storybook/common-messages';
-import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
-import { MockItemResultsProvider, createMockPinnedItem } from '../../.storybook/mock-providers';
+import { genericAlertMessages } from '@/.storybook/common-messages';
+import { resolveLocaleValue, defineMessages } from '@/.storybook/locale-utils';
+import { MockItemResultsProvider, createMockPinnedItem } from '@/.storybook/mock-providers';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

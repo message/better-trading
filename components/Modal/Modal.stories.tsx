@@ -1,7 +1,7 @@
 import Modal from './index';
-import { logoAltMessages, modalCloseMessages } from '../../.storybook/common-messages';
-import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
-import Button from '../Button';
+import Button from '@/components/Button';
+import { logoAltMessages, modalCloseMessages } from '@/.storybook/common-messages';
+import { resolveLocaleValue, defineMessages } from '@/.storybook/locale-utils';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 

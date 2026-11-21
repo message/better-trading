@@ -1,8 +1,8 @@
 import styles from './FolderExport.module.scss';
-import Button from '../Button';
-import { ClipboardTextarea } from '../ClipboardTextarea';
-import FormField from '../FormField';
-import Modal from '../Modal';
+import Button from '@/components/Button';
+import { ClipboardTextarea } from '@/components/ClipboardTextarea';
+import FormField from '@/components/FormField';
+import Modal from '@/components/Modal';
 import type React from 'react';
 
 interface FolderExportProps {

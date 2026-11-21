@@ -7,11 +7,11 @@
 //  - Only show if there's a new changelog that hasn't been dismissed
 
 import styles from './styles.module.scss';
-import Button from '../Button';
-import MarkdownChangelog from '../MarkdownChangelog';
-import Modal from '../Modal';
 import CloseIcon from '@/assets/icons/filled/close.svg?react';
 import InfoIcon from '@/assets/icons/filled/info.svg?react';
+import Button from '@/components/Button';
+import MarkdownChangelog from '@/components/MarkdownChangelog';
+import Modal from '@/components/Modal';
 import { getLocalValue, setLocalValue } from '@/utils/storage';
 import { useState, useEffect } from 'react';
 import type React from 'react';

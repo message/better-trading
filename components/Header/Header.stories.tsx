@@ -4,8 +4,8 @@ import {
   headerCollapseMessages,
   headerShowAboutMessages,
   headerShowMainMessages,
-} from '../../.storybook/common-messages';
-import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
+} from '@/.storybook/common-messages';
+import { resolveLocaleValue, defineMessages } from '@/.storybook/locale-utils';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

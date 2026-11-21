@@ -1,7 +1,7 @@
 import styles from './styles.module.scss';
-import BookmarkIcon from '../../assets/icons/filled/bookmark.svg?react';
-import HistoryIcon from '../../assets/icons/filled/history.svg?react';
-import PinIcon from '../../assets/icons/filled/pin.svg?react';
+import BookmarkIcon from '@/assets/icons/filled/bookmark.svg?react';
+import HistoryIcon from '@/assets/icons/filled/history.svg?react';
+import PinIcon from '@/assets/icons/filled/pin.svg?react';
 import { RootPage } from '@/types/root-page';
 import classnames from 'classnames';
 

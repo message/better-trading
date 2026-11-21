@@ -1,6 +1,6 @@
-@use '../../styles/variables';
-@use '../../styles/mixins/gradient-hover';
-@use '../../styles/mixins/sortable' as mixins;
+@use '@/styles/variables';
+@use '@/styles/mixins/gradient-hover';
+@use '@/styles/mixins/sortable' as mixins;
 
 .folder {
   @include mixins.sortable-item;

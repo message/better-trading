@@ -1,9 +1,9 @@
 import EntryLink from './EntryLink';
 import styles from './styles.module.scss';
-import AlertMessage from '../AlertMessage';
-import Button from '../Button';
-import LoadingContainer from '../LoadingContainer';
 import CloseIcon from '@/assets/icons/filled/close.svg?react';
+import AlertMessage from '@/components/AlertMessage';
+import Button from '@/components/Button';
+import LoadingContainer from '@/components/LoadingContainer';
 import { useFlashMessagesContext } from '@/contexts/FlashMessagesContext';
 import { useTradeHistoryContext } from '@/contexts/TradeHistoryContext';
 import { useEffect } from 'react';

@@ -1,6 +1,6 @@
 // Test helpers for the PoB import, ported from pob2bt (test/decode.ts). Importing this loads the stat data
 import { loadStats } from './mods';
-import { pobStatsPath } from '../../scripts/pob-stats';
+import { pobStatsPath } from '@/scripts/pob-stats';
 import { Base64 } from 'js-base64';
 import { readFile } from 'node:fs/promises';
 

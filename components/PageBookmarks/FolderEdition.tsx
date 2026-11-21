@@ -1,11 +1,11 @@
 import styles from './FolderEdition.module.scss';
-import BookmarkFolderIcon from '../BookmarkFolderIcon';
-import Button from '../Button';
-import FormContainer from '../FormContainer';
-import FormField from '../FormField';
-import FormInput from '../FormInput';
-import Modal from '../Modal';
 import SaveIcon from '@/assets/icons/filled/save.svg?react';
+import BookmarkFolderIcon from '@/components/BookmarkFolderIcon';
+import Button from '@/components/Button';
+import FormContainer from '@/components/FormContainer';
+import FormField from '@/components/FormField';
+import FormInput from '@/components/FormInput';
+import Modal from '@/components/Modal';
 import {
   BookmarksFolderAscendancyDuelistIcon,
   BookmarksFolderAscendancyShadowIcon,

@@ -1,6 +1,6 @@
 import ChangelogBanner from './index.tsx';
-import { logoAltMessages, modalCloseMessages } from '../../.storybook/common-messages';
-import { resolveLocaleValue, defineMessages } from '../../.storybook/locale-utils';
+import { logoAltMessages, modalCloseMessages } from '@/.storybook/common-messages';
+import { resolveLocaleValue, defineMessages } from '@/.storybook/locale-utils';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**

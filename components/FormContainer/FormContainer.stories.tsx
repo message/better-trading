@@ -1,8 +1,8 @@
 import FormContainer from './index';
-import { defineMessages, resolveLocaleValue } from '../../.storybook/locale-utils';
 import Button from '@/components/Button';
 import FormCheckbox from '@/components/FormCheckbox';
 import FormInput from '@/components/FormInput';
+import { defineMessages, resolveLocaleValue } from '@/.storybook/locale-utils';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 

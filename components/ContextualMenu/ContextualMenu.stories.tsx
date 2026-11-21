@@ -1,5 +1,5 @@
 import ContextualMenu from './index.tsx';
-import { defineMessages, resolveLocaleValue } from '../../.storybook/locale-utils';
+import { defineMessages, resolveLocaleValue } from '@/.storybook/locale-utils';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
